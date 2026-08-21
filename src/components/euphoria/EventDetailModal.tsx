@@ -83,35 +83,99 @@ export function EventDetailModal({
                 {event.description}
               </p>
 
-              {/* Details placeholder */}
+              {/* Pre-filled details */}
               <div className="space-y-3">
-                <div className="flex items-center gap-3 text-sm">
-                  <span className="text-white/30 w-24 shrink-0">Category</span>
-                  <span className="text-white/60">{categoryLabel[event.category]}</span>
+                <div className="flex items-start gap-3 text-sm">
+                  <span className="text-white/30 w-24 shrink-0">Schedule</span>
+                  <span className="text-white/60">{event.time}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm">
-                  <span className="text-white/30 w-24 shrink-0">Format</span>
-                  <span className="text-white/60">To be announced</span>
+                <div className="flex items-start gap-3 text-sm">
+                  <span className="text-white/30 w-24 shrink-0">Venue</span>
+                  <span className="text-white/60">{event.venue}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm">
-                  <span className="text-white/30 w-24 shrink-0">Details</span>
-                  <span className="text-white/60">Will be shared closer to the event</span>
+                <div className="flex items-start gap-3 text-sm">
+                  <span className="text-white/30 w-24 shrink-0">Team Size</span>
+                  <span className="text-white/60">{event.teamSize}</span>
                 </div>
+                <div className="flex items-start gap-3 text-sm">
+                  <span className="text-white/30 w-24 shrink-0">Prizes</span>
+                  <span className="text-white/60">{event.prizes}</span>
+                </div>
+              </div>
+
+              {/* Rules */}
+              <div className="glass-card rounded-xl p-4">
+                <h4 className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/40 mb-2">
+                  Rules &amp; Guidelines
+                </h4>
+                <p className="text-xs text-white/35 leading-relaxed">
+                  {event.rules}
+                </p>
               </div>
 
               {/* Divider */}
               <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-              {/* Registration */}
-              <div className="glass-card rounded-xl p-5 text-center space-y-3">
+              {/* Registration form (visual placeholder) */}
+              <div className="space-y-4">
                 <div className="text-[10px] font-semibold tracking-[0.2em] uppercase text-euphoria-gold/60">
-                  Registration
+                  Register for this event
                 </div>
-                <p className="text-sm text-white/40">Not yet open</p>
-                <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/10 text-white/25 text-xs font-medium tracking-wider uppercase cursor-not-allowed">
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-[10px] tracking-[0.15em] uppercase text-white/30 block mb-1.5">
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter your full name"
+                      disabled
+                      className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white/50 placeholder:text-white/20 cursor-not-allowed"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] tracking-[0.15em] uppercase text-white/30 block mb-1.5">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      disabled
+                      className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white/50 placeholder:text-white/20 cursor-not-allowed"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] tracking-[0.15em] uppercase text-white/30 block mb-1.5">
+                      Contact Number
+                    </label>
+                    <input
+                      type="tel"
+                      placeholder="Enter your phone number"
+                      disabled
+                      className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white/50 placeholder:text-white/20 cursor-not-allowed"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] tracking-[0.15em] uppercase text-white/30 block mb-1.5">
+                      College / Department
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter your college or department"
+                      disabled
+                      className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white/50 placeholder:text-white/20 cursor-not-allowed"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  disabled
+                  className="w-full py-3 rounded-lg border border-white/10 text-white/25 text-xs font-semibold tracking-[0.15em] uppercase cursor-not-allowed flex items-center justify-center gap-2"
+                >
                   <div className="w-1.5 h-1.5 rounded-full bg-euphoria-gold/30 animate-glow-pulse" />
-                  Registration details will be available soon
-                </div>
+                  Registration opening soon
+                </button>
               </div>
 
               {/* Back */}

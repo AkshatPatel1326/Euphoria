@@ -41,44 +41,31 @@ function HeroParticles() {
   );
 }
 
-function MarqueeText() {
+function HeroBackgroundImage() {
   const reducedMotion = useReducedMotion();
-
-  const text = "SAGE Euphoria 2026";
-  const repeated = Array.from({ length: 8 }, () => text);
 
   return (
     <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none select-none">
-      <div
-        className={`flex whitespace-nowrap ${reducedMotion ? "" : "animate-marquee-slow"}`}
-        style={{ width: "max-content" }}
+      {/* Faded fest background image */}
+      <motion.div
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
+        className="relative w-full h-full"
       >
-        {repeated.map((t, i) => (
-          <span
-            key={i}
-            className="mx-8 text-[80px] sm:text-[120px] md:text-[180px] lg:text-[220px] font-black tracking-tight leading-none"
-            style={{
-              WebkitTextStroke: i % 2 === 0 ? "1.5px rgba(162, 50, 160, 0.25)" : undefined,
-              color: i % 2 === 0 ? "transparent" : "rgba(162, 50, 160, 0.06)",
-              textShadow:
-                i % 2 === 0
-                  ? "0 0 60px rgba(162, 50, 160, 0.15)"
-                  : "0 0 40px rgba(62, 238, 213, 0.05)",
-            }}
-          >
-            {t.includes("EUPHORIA") ? (
-              <>
-                <span className="text-white/[0.04]">SAGE </span>
-                <span style={{ WebkitTextStroke: "1.5px rgba(162, 50, 160, 0.2)", color: "transparent" }}>
-                  EUPHORIA
-                </span>
-              </>
-            ) : (
-              t
-            )}
-          </span>
-        ))}
-      </div>
+        <img
+          src="/assets/images.jpg"
+          alt=""
+          aria-hidden="true"
+          className={`absolute inset-0 w-full h-full object-cover opacity-[0.07] ${
+            reducedMotion ? "" : "animate-float"
+          }`}
+          style={{ filter: "blur(1px) saturate(0.6)" }}
+        />
+        {/* Vignette overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-euphoria-dark via-transparent to-euphoria-dark" />
+        <div className="absolute inset-0 bg-gradient-to-r from-euphoria-dark via-transparent to-euphoria-dark" />
+      </motion.div>
     </div>
   );
 }
@@ -152,11 +139,11 @@ export function Hero() {
       />
 
       <HeroParticles />
-      <MarqueeText />
+      <HeroBackgroundImage />
 
       {/* Main content */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mx-auto">
-        {/* Logo placeholder — decorative emblem */}
+        {/* SAGE Euphoria logo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -164,14 +151,12 @@ export function Hero() {
           className="mb-8"
         >
           <div className="relative">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-2 border-euphoria-gold/40 flex items-center justify-center mx-auto shadow-[0_0_40px_rgba(175,153,71,0.15)]">
-              <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full border border-euphoria-purple/30 flex items-center justify-center">
-                <span className="text-3xl sm:text-4xl font-black text-euphoria-gold tracking-wider">
-                  SE
-                </span>
-              </div>
-            </div>
-            <div className="absolute -inset-4 rounded-full border border-euphoria-aqua/10 animate-spin-slow" />
+            <img
+              src="/assets/logo.png"
+              alt="SAGE Euphoria 2026 logo"
+              className="w-40 h-40 sm:w-52 sm:h-52 md:w-60 md:h-60 object-contain mx-auto drop-shadow-[0_0_40px_rgba(175,153,71,0.2)]"
+            />
+            <div className="absolute -inset-4 rounded-full border border-euphoria-aqua/10 animate-spin-slow pointer-events-none" />
           </div>
         </motion.div>
 

@@ -49,17 +49,11 @@ export function Sponsors() {
           className="flex justify-center mb-14"
         >
           <div className="glass-card rounded-2xl px-10 py-8 flex flex-col items-center gap-4 max-w-xs transition-all duration-300 hover:border-euphoria-gold/25">
-            {/* Radio SAGE logo placeholder */}
-            <div className="w-20 h-20 rounded-full border-2 border-euphoria-gold/30 flex items-center justify-center bg-euphoria-gold/5">
-              <div className="text-center">
-                <div className="text-lg font-black text-euphoria-gold tracking-wider leading-none">
-                  RADIO
-                </div>
-                <div className="text-[10px] font-bold tracking-[0.3em] text-euphoria-gold/60 mt-0.5">
-                  SAGE
-                </div>
-              </div>
-            </div>
+            <img
+              src="/assets/sponcers1.png"
+              alt="Radio SAGE logo"
+              className="w-20 h-20 object-contain rounded-full border-2 border-euphoria-gold/30 bg-euphoria-gold/5 p-2"
+            />
             <div className="text-center">
               <p className="text-xs font-semibold tracking-[0.2em] uppercase text-euphoria-gold/70">
                 Official Media Partner

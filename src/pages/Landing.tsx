@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/euphoria/Navbar";
 import { Hero } from "@/components/euphoria/Hero";
 import { About } from "@/components/euphoria/About";
-import { Events } from "@/components/euphoria/Events";
+import { CategoryCards } from "@/components/euphoria/CategoryCards";
 import { Sponsors } from "@/components/euphoria/Sponsors";
 import { Footer } from "@/components/euphoria/Footer";
 
@@ -12,7 +12,7 @@ export default function Landing() {
       <main>
         <Hero />
         <About />
-        <Events />
+        <CategoryCards />
         <Sponsors />
       </main>
       <Footer />
