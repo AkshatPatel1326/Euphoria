@@ -58,7 +58,7 @@ export function Navbar() {
                 SAGE
               </span>
               <span className="text-lg font-light tracking-widest text-white/70 transition-colors group-hover:text-white">
-                EUPHORIA
+                Euphoria
               </span>
               <span className="ml-1 text-[10px] font-semibold tracking-wider text-euphoria-gold/80 border border-euphoria-gold/30 rounded px-1.5 py-0.5">
                 2026
@@ -120,7 +120,7 @@ export function Navbar() {
                 transition={{ delay: 0.5 }}
                 className="mt-8 text-xs tracking-[0.3em] uppercase text-euphoria-gold/40"
               >
-                SAGE EUPHORIA 2026
+                SAGE Euphoria 2026
               </motion.div>
             </div>
           </motion.div>

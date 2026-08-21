@@ -44,15 +44,15 @@ export function Footer() {
                 SAGE
               </span>
               <span className="text-xl font-light tracking-widest text-white/70">
-                EUPHORIA
+                Euphoria
               </span>
               <span className="text-[9px] font-semibold tracking-wider text-euphoria-gold/70 border border-euphoria-gold/25 rounded px-1.5 py-0.5">
                 2026
               </span>
             </div>
             <p className="text-xs text-white/25 max-w-xs leading-relaxed">
-              SAGE University&apos;s premier cultural, literary, management, science &amp;
-              technology, and sports fest.
+              SAGE University&apos;s flagship annual festival of culture, innovation,
+              and sport.
             </p>
           </div>
 
@@ -95,7 +95,7 @@ export function Footer() {
           className="mb-10"
         >
           <p className="text-xs text-white/15 tracking-wider">
-            Contact details and social links will be available soon.
+            Full contact details and social channels will be available ahead of the event.
           </p>
         </motion.div>
 

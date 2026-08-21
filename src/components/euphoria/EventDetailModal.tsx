@@ -91,11 +91,11 @@ export function EventDetailModal({
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <span className="text-white/30 w-24 shrink-0">Format</span>
-                  <span className="text-white/60">Details coming soon</span>
+                  <span className="text-white/60">To be announced</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <span className="text-white/30 w-24 shrink-0">Prizes</span>
-                  <span className="text-white/60">To be announced</span>
+                  <span className="text-white/30 w-24 shrink-0">Details</span>
+                  <span className="text-white/60">Will be shared closer to the event</span>
                 </div>
               </div>
 
@@ -107,10 +107,10 @@ export function EventDetailModal({
                 <div className="text-[10px] font-semibold tracking-[0.2em] uppercase text-euphoria-gold/60">
                   Registration
                 </div>
-                <p className="text-sm text-white/40">Coming Soon</p>
+                <p className="text-sm text-white/40">Not yet open</p>
                 <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/10 text-white/25 text-xs font-medium tracking-wider uppercase cursor-not-allowed">
                   <div className="w-1.5 h-1.5 rounded-full bg-euphoria-gold/30 animate-glow-pulse" />
-                  Registration opening soon
+                  Registration details will be available soon
                 </div>
               </div>
 

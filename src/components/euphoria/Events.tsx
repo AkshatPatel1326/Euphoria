@@ -49,13 +49,13 @@ export function Events() {
             Events
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">
-            <span className="text-white">Choose Your </span>
+            <span className="text-white">Find Your </span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-purple to-euphoria-aqua">
               Arena
             </span>
           </h2>
           <p className="mt-4 text-sm sm:text-base text-white/35 max-w-xl mx-auto">
-            Four categories. Forty-plus events. One unforgettable experience.
+            Four disciplines. Over forty events. One standard-setting program.
           </p>
         </motion.div>
 
@@ -101,7 +101,7 @@ export function Events() {
           className="text-center mb-8"
         >
           <span className="text-xs text-white/20 tracking-wider">
-            {filtered.length} event{filtered.length !== 1 ? "s" : ""} found
+            {filtered.length} event{filtered.length !== 1 ? "s" : ""} available
           </span>
         </motion.div>
 

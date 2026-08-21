@@ -52,10 +52,10 @@ export function About() {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.05]"
             >
-              <span className="text-white">More than an event.</span>
+              <span className="text-white">Not just a fest.</span>
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-purple to-euphoria-aqua">
-                An experience.
+                A tradition.
               </span>
             </motion.h2>
 
@@ -66,17 +66,18 @@ export function About() {
               className="mt-8 space-y-4"
             >
               <p className="text-base sm:text-lg text-white/50 leading-relaxed font-light">
-                SAGE Euphoria is where creativity meets culture, competition ignites passion, and
-                campus energy transforms into something extraordinary.
+                SAGE Euphoria is the flagship annual celebration at SAGE University — a
+                convergence of artistic expression, intellectual competition, and athletic
+                excellence that defines the campus experience.
               </p>
               <p className="text-base sm:text-lg text-white/50 leading-relaxed font-light">
-                Across four electrifying categories — Cultural, Literary &amp; Management,
-                Science &amp; Technology, and Sports — Euphoria brings together the boldest
-                minds, the most talented artists, and the fiercest competitors for one
-                unforgettable celebration.
+                Across four disciplines — Cultural, Literary &amp; Management,
+                Science &amp; Technology, and Sports — Euphoria assembles the most
+                talented, driven, and creative individuals for a multi-day program that
+                sets the standard for collegiate festivals.
               </p>
               <p className="text-base sm:text-lg text-white/50 leading-relaxed font-light">
-                This is not just a fest. This is Euphoria.
+                This is where ambition meets the stage.
               </p>
             </motion.div>
           </div>

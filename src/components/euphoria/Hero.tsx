@@ -44,7 +44,7 @@ function HeroParticles() {
 function MarqueeText() {
   const reducedMotion = useReducedMotion();
 
-  const text = "SAGE EUPHORIA 2026";
+  const text = "SAGE Euphoria 2026";
   const repeated = Array.from({ length: 8 }, () => text);
 
   return (
@@ -196,7 +196,7 @@ export function Hero() {
         >
           <span className="text-white">SAGE </span>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-purple via-euphoria-aqua to-euphoria-purple">
-            EUPHORIA
+            Euphoria
           </span>
         </motion.h1>
 
@@ -207,7 +207,7 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.8 }}
           className="mt-6 sm:mt-8 text-lg sm:text-xl md:text-2xl font-light tracking-[0.15em] uppercase text-white/70"
         >
-          The Campus Comes Alive
+          The Defining Campus Experience
         </motion.p>
 
         {/* Subtext */}
@@ -217,7 +217,7 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 1.0 }}
           className="mt-3 text-xs sm:text-sm tracking-[0.25em] uppercase text-euphoria-gold/50"
         >
-          Culture &middot; Competition &middot; Creativity &middot; Euphoria
+          Artistry &middot; Ambition &middot; Innovation &middot; Excellence
         </motion.p>
 
         {/* CTAs */}

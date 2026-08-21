@@ -34,10 +34,10 @@ export function Sponsors() {
             Partners &amp; Sponsors
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white">
-            Powered By
+            Our Partners
           </h2>
           <p className="mt-4 text-sm text-white/30 max-w-md mx-auto">
-            Celebrating the partners who make Euphoria possible.
+            SAGE Euphoria is made possible by the support of our valued partners.
           </p>
         </motion.div>
 
@@ -92,7 +92,7 @@ export function Sponsors() {
           transition={{ delay: 0.5 }}
           className="text-center mt-8 text-[10px] text-white/15 tracking-wider"
         >
-          Interested in sponsoring? Contact us for partnership opportunities.
+          For partnership inquiries, please reach out to the organizing committee.
         </motion.p>
       </div>
 
