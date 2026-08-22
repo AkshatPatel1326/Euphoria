@@ -251,7 +251,7 @@ export function Hero() {
         >
           <div className="relative">
             <img
-              src="/logo.svg"
+              src="/assets/2.png"
               alt="SAGE Euphoria logo"
               className="w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 object-contain mx-auto drop-shadow-[0_0_60px_rgba(175,153,71,0.15)]"
             />

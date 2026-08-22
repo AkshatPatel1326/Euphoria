@@ -68,7 +68,7 @@ export function Sponsors() {
           <div className="flex flex-col items-center gap-3">
             <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-euphoria-gold/15 bg-euphoria-gold/[0.03] p-2 flex items-center justify-center">
               <img
-                src="/logo.svg"
+                src="/assets/2.png"
                 alt="SAGE Euphoria logo"
                 className="w-full h-full object-contain"
               />
