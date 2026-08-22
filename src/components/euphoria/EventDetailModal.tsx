@@ -16,6 +16,13 @@ const categoryLabel: Record<string, string> = {
   sports: "Sports",
 };
 
+const categoryGradients: Record<string, string> = {
+  cultural: "from-euphoria-plum via-euphoria-purple/60 to-euphoria-dark",
+  "literary-management": "from-amber-800/40 via-euphoria-gold/20 to-euphoria-dark",
+  "science-tech": "from-euphoria-teal/60 via-emerald-700/30 to-euphoria-dark",
+  sports: "from-emerald-900/40 via-euphoria-teal/30 to-euphoria-dark",
+};
+
 export function EventDetailModal({
   event,
   onClose,
@@ -43,24 +50,43 @@ export function EventDetailModal({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 100 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-lg bg-euphoria-surface/95 backdrop-blur-xl border-l border-euphoria-purple/15 overflow-y-auto"
+            className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-lg bg-euphoria-surface/95 backdrop-blur-xl border-l border-white/[0.06] overflow-y-auto"
           >
             {/* Close */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 z-10 p-2 rounded-full text-white/40 hover:text-white/80 hover:bg-white/5 transition-all"
+              className="absolute top-4 right-4 z-10 p-2 rounded-full text-white/30 hover:text-white/80 hover:bg-white/5 transition-all"
               aria-label="Close"
             >
               <X className="size-5" />
             </button>
 
-            {/* Poster placeholder */}
-            <div className="w-full aspect-[16/9] bg-gradient-to-br from-euphoria-plum via-euphoria-purple/60 to-euphoria-dark relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full border-2 border-white/10 flex items-center justify-center">
-                  <span className="text-2xl font-black text-white/15">SE</span>
+            {/* Poster area */}
+            <div className="relative w-full aspect-[16/9] overflow-hidden">
+              {event.poster ? (
+                <img
+                  src={event.poster}
+                  alt={`${event.name} poster`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div
+                  className={`w-full h-full bg-gradient-to-br ${categoryGradients[event.category]}`}
+                >
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-full border-2 border-white/[0.06] flex items-center justify-center">
+                      <span className="text-2xl font-black text-white/10">
+                        {event.name
+                          .split("—")[0]
+                          .split(" ")
+                          .map((w) => w[0])
+                          .slice(0, 2)
+                          .join("")}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-euphoria-surface to-transparent" />
             </div>
 
@@ -79,109 +105,64 @@ export function EventDetailModal({
               </h2>
 
               {/* Description */}
-              <p className="text-sm text-white/45 leading-relaxed">
+              <p className="text-sm text-white/40 leading-relaxed">
                 {event.description}
               </p>
 
-              {/* Pre-filled details */}
+              {/* Details */}
               <div className="space-y-3">
-                <div className="flex items-start gap-3 text-sm">
-                  <span className="text-white/30 w-24 shrink-0">Schedule</span>
-                  <span className="text-white/60">{event.time}</span>
-                </div>
-                <div className="flex items-start gap-3 text-sm">
-                  <span className="text-white/30 w-24 shrink-0">Venue</span>
-                  <span className="text-white/60">{event.venue}</span>
-                </div>
-                <div className="flex items-start gap-3 text-sm">
-                  <span className="text-white/30 w-24 shrink-0">Team Size</span>
-                  <span className="text-white/60">{event.teamSize}</span>
-                </div>
-                <div className="flex items-start gap-3 text-sm">
-                  <span className="text-white/30 w-24 shrink-0">Prizes</span>
-                  <span className="text-white/60">{event.prizes}</span>
-                </div>
+                {[
+                  { label: "Schedule", value: event.time },
+                  { label: "Venue", value: event.venue },
+                  { label: "Team Size", value: event.teamSize },
+                  { label: "Prizes", value: event.prizes },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="flex items-start gap-3 text-sm"
+                  >
+                    <span className="text-white/25 w-24 shrink-0 text-xs">
+                      {item.label}
+                    </span>
+                    <span className="text-white/55 text-xs">
+                      {item.value}
+                    </span>
+                  </div>
+                ))}
               </div>
 
               {/* Rules */}
               <div className="glass-card rounded-xl p-4">
-                <h4 className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/40 mb-2">
+                <h4 className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/30 mb-2">
                   Rules &amp; Guidelines
                 </h4>
-                <p className="text-xs text-white/35 leading-relaxed">
+                <p className="text-xs text-white/30 leading-relaxed">
                   {event.rules}
                 </p>
               </div>
 
               {/* Divider */}
-              <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
-              {/* Registration form (visual placeholder) */}
-              <div className="space-y-4">
-                <div className="text-[10px] font-semibold tracking-[0.2em] uppercase text-euphoria-gold/60">
-                  Register for this event
+              {/* Registration placeholder */}
+              <div className="space-y-3">
+                <div className="text-[10px] font-semibold tracking-[0.2em] uppercase text-euphoria-gold/50">
+                  Registration
                 </div>
-
-                <div className="space-y-3">
-                  <div>
-                    <label className="text-[10px] tracking-[0.15em] uppercase text-white/30 block mb-1.5">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your full name"
-                      disabled
-                      className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white/50 placeholder:text-white/20 cursor-not-allowed"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] tracking-[0.15em] uppercase text-white/30 block mb-1.5">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      disabled
-                      className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white/50 placeholder:text-white/20 cursor-not-allowed"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] tracking-[0.15em] uppercase text-white/30 block mb-1.5">
-                      Contact Number
-                    </label>
-                    <input
-                      type="tel"
-                      placeholder="Enter your phone number"
-                      disabled
-                      className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white/50 placeholder:text-white/20 cursor-not-allowed"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] tracking-[0.15em] uppercase text-white/30 block mb-1.5">
-                      College / Department
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your college or department"
-                      disabled
-                      className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white/50 placeholder:text-white/20 cursor-not-allowed"
-                    />
+                <div className="glass-card rounded-xl p-4 flex items-center justify-center py-6">
+                  <div className="text-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-euphoria-gold/30 animate-glow-pulse mx-auto mb-3" />
+                    <p className="text-xs text-white/30 tracking-wider uppercase">
+                      Registration details will be available soon
+                    </p>
                   </div>
                 </div>
-
-                <button
-                  disabled
-                  className="w-full py-3 rounded-lg border border-white/10 text-white/25 text-xs font-semibold tracking-[0.15em] uppercase cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  <div className="w-1.5 h-1.5 rounded-full bg-euphoria-gold/30 animate-glow-pulse" />
-                  Registration opening soon
-                </button>
               </div>
 
               {/* Back */}
               <button
                 onClick={onClose}
-                className="w-full py-3 text-sm text-white/30 hover:text-white/60 transition-colors tracking-wider uppercase"
+                className="w-full py-3 text-sm text-white/25 hover:text-white/50 transition-colors tracking-wider uppercase"
               >
                 Back to events
               </button>

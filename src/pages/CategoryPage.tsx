@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import {
   events,
@@ -22,7 +22,6 @@ export default function CategoryPage() {
   const navigate = useNavigate();
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   const isValid = validCategories.includes(category as EventCategory);
   const cat = category as EventCategory;
@@ -36,10 +35,10 @@ export default function CategoryPage() {
     return (
       <div className="min-h-screen bg-euphoria-dark flex items-center justify-center">
         <div className="text-center">
-          <p className="text-white/40 mb-4">Category not found.</p>
+          <p className="text-white/30 mb-4">Category not found.</p>
           <button
             onClick={() => navigate("/")}
-            className="text-euphoria-aqua text-sm tracking-wider uppercase"
+            className="text-euphoria-aqua/60 text-sm tracking-wider uppercase hover:text-euphoria-aqua transition-colors"
           >
             Back to home
           </button>
@@ -50,20 +49,25 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-euphoria-dark text-white overflow-x-hidden">
-      {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-euphoria-dark/90 backdrop-blur-xl border-b border-white/5">
+      {/* Fixed header */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-euphoria-dark/90 backdrop-blur-xl border-b border-white/[0.04]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center gap-4">
             <button
               onClick={() => navigate("/")}
-              className="flex items-center gap-2 text-white/40 hover:text-white/80 transition-colors group"
+              className="flex items-center gap-2 text-white/30 hover:text-white/70 transition-colors group"
             >
               <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
               <span className="text-sm tracking-wider">Back</span>
             </button>
-            <div className="h-4 w-px bg-white/10" />
+            <div className="h-4 w-px bg-white/[0.06]" />
             <div className="flex items-center gap-3">
-              <span className="text-xl">{meta.icon}</span>
+              <span
+                className="text-[10px] font-bold tracking-[0.15em]"
+                style={{ color: meta.color }}
+              >
+                {meta.number}
+              </span>
               <span
                 className="text-sm font-semibold tracking-[0.15em] uppercase"
                 style={{ color: meta.color }}
@@ -91,17 +95,27 @@ export default function CategoryPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-5xl sm:text-6xl mb-4 block opacity-30 select-none">
-              {meta.icon}
+            {/* Large number */}
+            <span
+              className="text-[80px] sm:text-[100px] md:text-[120px] font-black leading-none select-none block mb-2"
+              style={{
+                color: "transparent",
+                WebkitTextStroke: `1px ${meta.color}30`,
+              }}
+            >
+              {meta.number}
             </span>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">
-              <span className="text-white">{meta.label}</span>
+              <span className="text-white/80">{meta.label}</span>
             </h1>
-            <p className="mt-4 text-sm sm:text-base text-white/40 max-w-lg mx-auto">
+            <p className="mt-3 text-[11px] tracking-[0.25em] uppercase text-white/20 font-light">
+              {meta.keywords}
+            </p>
+            <p className="mt-4 text-sm sm:text-base text-white/30 max-w-lg mx-auto">
               {meta.description}
             </p>
-            <p className="mt-2 text-xs text-white/20 tracking-wider">
-              {categoryEvents.length} events available
+            <p className="mt-3 text-xs text-white/15 tracking-wider">
+              {categoryEvents.length} events
             </p>
           </motion.div>
         </div>

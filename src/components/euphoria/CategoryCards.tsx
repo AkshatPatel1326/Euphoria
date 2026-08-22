@@ -1,7 +1,7 @@
-import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { useNavigate } from "react-router";
-import { categoryMeta, events, type EventCategory } from "@/data/events";
+import { categoryMeta, events, categoryOrder, type EventCategory } from "@/data/events";
 
 const categoryRoute: Record<EventCategory, string> = {
   cultural: "/events/cultural",
@@ -10,7 +10,8 @@ const categoryRoute: Record<EventCategory, string> = {
   sports: "/events/sports",
 };
 
-function CategoryCard({
+/* ── Single category row ────────────────────────────────────── */
+function CategoryRow({
   category,
   index,
 }: {
@@ -18,139 +19,208 @@ function CategoryCard({
   index: number;
 }) {
   const navigate = useNavigate();
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
   const meta = categoryMeta[category];
   const eventCount = events.filter((e) => e.category === category).length;
 
+  const isEven = index % 2 === 0;
+
   return (
-    <motion.button
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      whileHover={{ y: -6, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={() => navigate(categoryRoute[category])}
-      className="group relative text-left"
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay: index * 0.1 }}
+      className={`group relative grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 lg:gap-12 items-center py-12 sm:py-16 lg:py-20 border-b border-white/[0.04] last:border-b-0 ${
+        isEven ? "" : "lg:direction-rtl"
+      }`}
     >
-      <div className="glass-card rounded-2xl overflow-hidden transition-all duration-500 hover:border-white/15 hover:shadow-[0_12px_50px_rgba(0,0,0,0.4)]">
-        {/* Gradient header */}
-        <div
-          className={`relative h-44 sm:h-52 bg-gradient-to-br ${meta.gradient} overflow-hidden`}
-        >
-          {/* Decorative shapes */}
-          <div className="absolute inset-0">
-            <div className="absolute top-6 right-6 w-20 h-20 rounded-full border border-white/10" />
-            <div className="absolute bottom-8 left-8 w-14 h-14 rounded-full border border-white/5" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent rotate-12" />
-            <div className="absolute top-8 left-1/3 w-px h-16 bg-gradient-to-b from-transparent via-white/15 to-transparent -rotate-12" />
-            {/* Star */}
-            <svg
-              className="absolute top-5 left-5 w-5 h-5 text-white/20"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
-          </div>
-
-          {/* Large icon */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-6xl sm:text-7xl opacity-20 select-none group-hover:opacity-30 transition-opacity duration-500">
-              {meta.icon}
-            </span>
-          </div>
-
-          {/* Event count badge */}
-          <div className="absolute top-4 right-4">
-            <span className="text-[10px] font-bold tracking-wider text-white/40 bg-black/20 backdrop-blur-sm rounded-full px-3 py-1">
-              {eventCount} events
-            </span>
-          </div>
-
-          {/* Bottom fade */}
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-euphoria-card to-transparent" />
+      {/* Left / Right — Category number + label */}
+      <div
+        className={`relative ${isEven ? "lg:text-left" : "lg:text-right lg:order-2"}`}
+        style={{ direction: "ltr" }}
+      >
+        {/* Oversized number */}
+        <div className="relative mb-2 sm:mb-3">
+          <span
+            className="text-[80px] sm:text-[100px] md:text-[130px] lg:text-[160px] font-black leading-none select-none tracking-tighter"
+            style={{
+              color: "transparent",
+              WebkitTextStroke: `1.5px ${meta.color}20`,
+              textShadow: `0 0 80px ${meta.color}08`,
+            }}
+          >
+            {meta.number}
+          </span>
         </div>
 
-        {/* Content */}
-        <div className="px-6 py-5">
-          <div className="flex items-center justify-between mb-2">
-            <span
-              className="text-[10px] font-bold tracking-[0.2em] uppercase"
-              style={{ color: meta.color }}
-            >
-              {meta.label}
+        {/* Category name */}
+        <h3
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight uppercase"
+          style={{ color: meta.color }}
+        >
+          {meta.label}
+        </h3>
+
+        {/* Keywords */}
+        <p className="mt-3 text-[11px] sm:text-xs tracking-[0.2em] uppercase text-white/25 font-light">
+          {meta.keywords}
+        </p>
+
+        {/* Description */}
+        <p className="mt-4 text-sm sm:text-base text-white/35 max-w-md leading-relaxed font-light">
+          {meta.description}
+        </p>
+
+        {/* Event count + CTA */}
+        <div
+          className={`mt-6 flex items-center gap-4 ${isEven ? "" : "lg:justify-end"}`}
+          style={{ direction: "ltr" }}
+        >
+          <span className="text-xs text-white/20 tracking-wider">
+            {eventCount} events
+          </span>
+          <motion.button
+            whileHover={{ x: 4 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => navigate(categoryRoute[category])}
+            className="flex items-center gap-2 text-xs font-semibold tracking-[0.15em] uppercase transition-colors duration-300"
+            style={{ color: `${meta.color}99` }}
+          >
+            <span className="group-hover:text-white transition-colors">
+              Explore
             </span>
-            <motion.span
-              className="text-euphoria-aqua/50 group-hover:text-euphoria-aqua transition-colors"
-              whileHover={{ x: 4 }}
-            >
-              →
-            </motion.span>
-          </div>
-          <p className="text-sm text-white/40 leading-relaxed line-clamp-2">
-            {meta.description}
-          </p>
+            <span className="transition-transform group-hover:translate-x-1">→</span>
+          </motion.button>
         </div>
       </div>
-    </motion.button>
+
+      {/* Right / Left — Decorative gradient block */}
+      <div
+        className={`relative ${isEven ? "" : "lg:order-1"}`}
+        style={{ direction: "ltr" }}
+      >
+        <div
+          className="relative w-full h-48 sm:h-56 lg:h-64 rounded-2xl overflow-hidden group-hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)] transition-shadow duration-500 cursor-pointer"
+          onClick={() => navigate(categoryRoute[category])}
+        >
+          {/* Gradient background */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${meta.gradient} opacity-40`} />
+
+          {/* Accent gradient overlay on hover */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${meta.accentGradient} opacity-0 group-hover:opacity-15 transition-opacity duration-700`} />
+
+          {/* Abstract decorative shapes */}
+          <div className="absolute inset-0">
+            {/* Large circle */}
+            <div
+              className="absolute -top-8 -right-8 w-32 h-32 sm:w-40 sm:h-40 rounded-full border opacity-10"
+              style={{ borderColor: meta.color }}
+            />
+            {/* Diagonal line */}
+            <div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent rotate-45"
+            />
+            {/* Corner accent */}
+            <div
+              className="absolute bottom-4 left-4 w-12 h-12 border-l-2 border-b-2 opacity-10 rounded-bl-lg"
+              style={{ borderColor: meta.color }}
+            />
+            <div
+              className="absolute top-4 right-4 w-12 h-12 border-r-2 border-t-2 opacity-10 rounded-tr-lg"
+              style={{ borderColor: meta.color }}
+            />
+          </div>
+
+          {/* Center number watermark */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span
+              className="text-[100px] sm:text-[120px] font-black opacity-[0.04] select-none"
+              style={{ color: meta.color }}
+            >
+              {meta.number}
+            </span>
+          </div>
+
+          {/* "Explore" label that appears on hover */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <span
+              className="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase px-6 py-2.5 rounded-full border backdrop-blur-sm"
+              style={{
+                color: meta.color,
+                borderColor: `${meta.color}40`,
+                backgroundColor: `${meta.color}10`,
+              }}
+            >
+              View Events
+            </span>
+          </div>
+
+          {/* Bottom gradient */}
+          <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-euphoria-dark to-transparent" />
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
+/* ── Main section ───────────────────────────────────────────── */
 export function CategoryCards() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
-  const categories: EventCategory[] = [
-    "cultural",
-    "literary-management",
-    "science-tech",
-    "sports",
-  ];
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(sectionRef, { once: true, margin: "-80px" });
 
   return (
-    <section id="events" className="relative py-24 sm:py-32 overflow-hidden">
+    <section id="events" className="relative py-20 sm:py-28 lg:py-36 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-euphoria-darker" />
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 60% 40% at 50% 20%, rgba(162, 50, 160, 0.08) 0%, transparent 60%)",
+            "radial-gradient(ellipse 60% 40% at 50% 10%, rgba(91, 27, 82, 0.1) 0%, transparent 60%)",
+        }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 40% 40% at 80% 80%, rgba(23, 111, 99, 0.06) 0%, transparent 50%)",
         }}
       />
 
-      <div ref={ref} className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div ref={sectionRef} className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12 sm:mb-16"
+          className="mb-12 sm:mb-16 lg:mb-20"
         >
-          <span className="inline-block text-[10px] sm:text-xs font-semibold tracking-[0.35em] uppercase text-euphoria-aqua/70 border border-euphoria-aqua/20 rounded-full px-4 py-1.5 bg-euphoria-aqua/5 mb-6">
-            Events
+          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-aqua/60 mb-4">
+            Disciplines
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight">
             <span className="text-white">Find Your </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-purple to-euphoria-aqua">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua">
               Arena
             </span>
           </h2>
-          <p className="mt-4 text-sm sm:text-base text-white/35 max-w-xl mx-auto">
+          <p className="mt-5 text-sm sm:text-base text-white/30 max-w-xl leading-relaxed">
             Four disciplines. Over forty events. One standard-setting program.
           </p>
         </motion.div>
 
-        {/* Category cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-          {categories.map((cat, i) => (
-            <CategoryCard key={cat} category={cat} index={i} />
+        {/* Category rows */}
+        <div>
+          {categoryOrder.map((cat, i) => (
+            <CategoryRow key={cat} category={cat} index={i} />
           ))}
         </div>
       </div>
 
-      {/* Divider */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-euphoria-purple/15 to-transparent" />
+      {/* Bottom divider */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-euphoria-purple/10 to-transparent" />
     </section>
   );
 }

@@ -16,51 +16,68 @@ export interface EuphoriaEvent {
 
 export const categoryMeta: Record<
   EventCategory,
-  { label: string; icon: string; color: string; gradient: string; description: string }
+  { label: string; number: string; color: string; gradient: string; accentGradient: string; description: string; keywords: string }
 > = {
   cultural: {
     label: "Cultural",
-    icon: "🎭",
+    number: "01",
     color: "#A232A0",
-    gradient: "from-euphoria-plum to-euphoria-purple",
+    gradient: "from-euphoria-plum via-euphoria-purple to-euphoria-plum",
+    accentGradient: "from-euphoria-purple via-fuchsia-600 to-euphoria-gold",
     description:
       "Dance, music, fashion, and visual arts — where raw talent meets the stage.",
+    keywords: "Dance · Music · Fashion · Performance",
   },
   "literary-management": {
     label: "Literary & Management",
-    icon: "📚",
+    number: "02",
     color: "#AF9947",
-    gradient: "from-amber-700 to-euphoria-gold",
+    gradient: "from-amber-800/40 via-euphoria-gold/30 to-amber-900/20",
+    accentGradient: "from-euphoria-gold via-amber-600 to-euphoria-plum",
     description:
       "Debate, strategy, branding, and innovation — where ideas are sharpened.",
+    keywords: "Ideas · Strategy · Debate · Marketing",
   },
   "science-tech": {
     label: "Science & Technology",
-    icon: "🔬",
+    number: "03",
     color: "#3EEED5",
-    gradient: "from-euphoria-teal to-euphoria-aqua",
+    gradient: "from-euphoria-teal via-emerald-700/50 to-euphoria-aqua/20",
+    accentGradient: "from-euphoria-teal via-euphoria-aqua to-cyan-400",
     description:
       "Innovation, research, and AI — where the future is built.",
+    keywords: "Innovation · AI · Science · Technology",
   },
   sports: {
     label: "Sports",
-    icon: "⚡",
+    number: "04",
     color: "#176F63",
-    gradient: "from-emerald-800 to-euphoria-teal",
+    gradient: "from-emerald-900/50 via-euphoria-teal/40 to-emerald-800/30",
+    accentGradient: "from-euphoria-teal via-emerald-600 to-euphoria-purple",
     description:
       "Competition, endurance, and strategy — where champions are made.",
+    keywords: "Competition · Strength · Skill · Teamwork",
   },
 };
 
+export const categoryOrder: EventCategory[] = [
+  "cultural",
+  "literary-management",
+  "science-tech",
+  "sports",
+];
+
 export const events: EuphoriaEvent[] = [
-  // Cultural
+  // ═══════════════════════════════════════════
+  // CULTURAL
+  // ═══════════════════════════════════════════
   {
     id: "cultural-1",
     name: "Move & Groove — Solo Dance",
     category: "cultural",
     description:
       "A solo dance competition celebrating artistry, rhythm, and stage presence.",
-    poster: null,
+    poster: "/assets/1_1_.jpg",
     registrationStatus: "coming-soon",
     time: "Day 1, 10:00 AM",
     venue: "Main Stage",
@@ -75,7 +92,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "Choreographed group performances judged on synchronization, creativity, and impact.",
-    poster: null,
+    poster: "/assets/2_1_.jpg",
     registrationStatus: "coming-soon",
     time: "Day 1, 2:00 PM",
     venue: "Main Stage",
@@ -90,7 +107,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "A solo singing competition for vocalists who command the stage with range and emotion.",
-    poster: null,
+    poster: "/assets/3_1_.jpg",
     registrationStatus: "coming-soon",
     time: "Day 1, 11:00 AM",
     venue: "Auditorium",
@@ -105,7 +122,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "Live band performances competing for the title of best ensemble on campus.",
-    poster: null,
+    poster: "/assets/4_1_.jpg",
     registrationStatus: "coming-soon",
     time: "Day 2, 6:00 PM",
     venue: "Main Stage",
@@ -120,7 +137,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "A head-to-head rap competition testing lyrical skill, delivery, and crowd presence.",
-    poster: null,
+    poster: "/assets/6_1_.jpg",
     registrationStatus: "coming-soon",
     time: "Day 2, 4:00 PM",
     venue: "Main Stage",
@@ -135,7 +152,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "Solo runway competition for models who combine confidence with craft.",
-    poster: null,
+    poster: "/assets/7_1_.jpg",
     registrationStatus: "coming-soon",
     time: "Day 2, 11:00 AM",
     venue: "Fashion Arena",
@@ -150,7 +167,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "A design showcase where emerging fashion talent presents original collections.",
-    poster: null,
+    poster: "/assets/8_1_.jpg",
     registrationStatus: "coming-soon",
     time: "Day 2, 2:00 PM",
     venue: "Fashion Arena",
@@ -165,7 +182,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "Open auditions for aspiring models seeking their break into the spotlight.",
-    poster: null,
+    poster: "/assets/9_1_.jpg",
     registrationStatus: "coming-soon",
     time: "Day 1, 9:00 AM",
     venue: "Fashion Arena",
@@ -180,7 +197,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "A visual storytelling competition spanning reels, photography, and short-form content.",
-    poster: null,
+    poster: "/assets/10_1_.jpg",
     registrationStatus: "coming-soon",
     time: "Day 1, 3:00 PM",
     venue: "Digital Lab",
@@ -190,7 +207,9 @@ export const events: EuphoriaEvent[] = [
       "Submit 1 reel (60–90 seconds) and 5 photographs. Theme: Euphoria on campus. Edited content accepted.",
   },
 
-  // Literary & Management
+  // ═══════════════════════════════════════════
+  // LITERARY & MANAGEMENT
+  // ═══════════════════════════════════════════
   {
     id: "lit-1",
     name: "Crack the Clue — Treasure Hunt",
@@ -249,7 +268,7 @@ export const events: EuphoriaEvent[] = [
     teamSize: "3–5 members",
     prizes: "Cash prizes + Internship opportunities",
     rules:
-      "Teams present a brand strategy for a fictional product. 15-minute pitch + 10-minute Q&A. Judged on strategy, presentation, and defend.",
+      "Teams present a brand strategy for a fictional product. 15-minute pitch + 10-minute Q&A. Judged on strategy, presentation, and defense.",
   },
   {
     id: "lit-5",
@@ -271,7 +290,7 @@ export const events: EuphoriaEvent[] = [
     name: "The Great Debate",
     category: "literary-management",
     description:
-      "A formal debate competition for participants who can argue with precision and conviction.",
+      "A formal debate competition for participants who argue with precision and conviction.",
     poster: null,
     registrationStatus: "coming-soon",
     time: "Day 2, 3:00 PM",
@@ -297,7 +316,9 @@ export const events: EuphoriaEvent[] = [
       "Original work only. 3 minutes per performance. No props or costumes. Judged on delivery, originality, and emotional impact.",
   },
 
-  // Science & Technology
+  // ═══════════════════════════════════════════
+  // SCIENCE & TECHNOLOGY
+  // ═══════════════════════════════════════════
   {
     id: "sci-1",
     name: "IdeaSpark — Single",
@@ -374,7 +395,9 @@ export const events: EuphoriaEvent[] = [
       "Three rounds of increasing difficulty. Participants must achieve specified outputs using AI tools. Time limit per round: 20 minutes.",
   },
 
-  // Sports
+  // ═══════════════════════════════════════════
+  // SPORTS
+  // ═══════════════════════════════════════════
   {
     id: "sport-1",
     name: "Cricket",
