@@ -1,7 +1,7 @@
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import { categoryMeta, events, categoryOrder, type EventCategory } from "@/data/events";
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 const categoryRoute: Record<EventCategory, string> = {
   cultural: "/events/cultural",
@@ -19,19 +19,18 @@ function CategoryRow({
   index: number;
 }) {
   const navigate = useNavigate();
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+
   const meta = categoryMeta[category];
   const eventCount = events.filter((e) => e.category === category).length;
 
   const isEven = index % 2 === 0;
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay: index * 0.1 }}
+    <BlurFade
+      delay={index * 0.1}
+      duration={0.7}
+      yOffset={50}
+      inViewMargin="-60px"
       className={`group relative grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 lg:gap-12 items-center py-12 sm:py-16 lg:py-20 border-b border-white/[0.04] last:border-b-0 ${
         isEven ? "" : "lg:direction-rtl"
       }`}
@@ -161,14 +160,13 @@ function CategoryRow({
           <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-euphoria-dark to-transparent" />
         </div>
       </div>
-    </motion.div>
+    </BlurFade>
   );
 }
 
 /* ── Main section ───────────────────────────────────────────── */
 export function CategoryCards() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(sectionRef, { once: true, margin: "-80px" });
+
 
   return (
     <section id="events" className="relative py-20 sm:py-28 lg:py-36 overflow-hidden">
@@ -189,14 +187,9 @@ export function CategoryCards() {
         }}
       />
 
-      <div ref={sectionRef} className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-12 sm:mb-16 lg:mb-20"
-        >
+        <BlurFade inViewMargin="-80px" className="mb-12 sm:mb-16 lg:mb-20">
           <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-aqua/60 mb-4">
             Disciplines
           </span>
@@ -209,7 +202,7 @@ export function CategoryCards() {
           <p className="mt-5 text-sm sm:text-base text-white/30 max-w-xl leading-relaxed">
             Four disciplines. Over forty events. One standard-setting program.
           </p>
-        </motion.div>
+        </BlurFade>
 
         {/* Category rows */}
         <div>

@@ -1,47 +1,10 @@
 import { useMemo, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-
-/* ── Deterministic particles ─────────────────────────────────── */
-function HeroParticles() {
-  const particles = useMemo(() => {
-    const seed = 42;
-    let s = seed;
-    const rand = () => {
-      s = (s * 16807 + 0) % 2147483647;
-      return s / 2147483647;
-    };
-    return Array.from({ length: 35 }, (_, i) => ({
-      id: i,
-      x: rand() * 100,
-      y: rand() * 100,
-      size: rand() * 3 + 1,
-      delay: rand() * 5,
-      duration: rand() * 8 + 6,
-      opacity: rand() * 0.25 + 0.05,
-      color: rand() > 0.5 ? "bg-euphoria-aqua/20" : rand() > 0.5 ? "bg-euphoria-gold/20" : "bg-euphoria-purple/15",
-    }));
-  }, []);
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      {particles.map((p) => (
-        <div
-          key={p.id}
-          className={`absolute rounded-full ${p.color} animate-float`}
-          style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: `${p.size}px`,
-            height: `${p.size}px`,
-            opacity: p.opacity,
-            animationDelay: `${p.delay}s`,
-            animationDuration: `${p.duration}s`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+import { LightRays } from "@/components/magicui/light-rays";
+import { Particles } from "@/components/magicui/particles";
+import { Marquee, MarqueeItem } from "@/components/magicui/marquee";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 
 /* ── Cinematic animated background ──────────────────────────── */
 function HeroBackground() {
@@ -97,6 +60,20 @@ function HeroBackground() {
         }}
       />
 
+      {/* Light Rays — atmospheric stage lighting */}
+      <LightRays
+        colors={[
+          "rgba(162, 50, 160, 0.10)",
+          "rgba(91, 27, 82, 0.12)",
+          "rgba(23, 111, 99, 0.08)",
+          "rgba(175, 153, 71, 0.05)",
+          "rgba(62, 238, 213, 0.04)",
+        ]}
+        rayCount={16}
+        opacity={0.4}
+        speed={40}
+      />
+
       {/* Faded fest background image */}
       <motion.div
         initial={{ opacity: 0, scale: 1.05 }}
@@ -125,35 +102,54 @@ function HeroBackground() {
   );
 }
 
-/* ── Cinematic marquee typography ───────────────────────────── */
+/* ── Magic UI Marquee typography ────────────────────────────── */
 function MarqueeTypography() {
   const reducedMotion = useReducedMotion();
   const text = "SAGE EUPHORIA 2026  ·  ";
+
+  if (reducedMotion) {
+    return (
+      <div
+        className="absolute inset-0 flex items-center overflow-hidden pointer-events-none select-none"
+        aria-hidden="true"
+        style={{ opacity: 0.03 }}
+      >
+        <span
+          className="text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5vw] font-black tracking-wider whitespace-nowrap"
+          style={{
+            WebkitTextStroke: "1px rgba(162, 50, 160, 0.3)",
+            color: "transparent",
+            textShadow: "0 0 40px rgba(162, 50, 160, 0.08)",
+          }}
+        >
+          {text}
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div
       className="absolute inset-0 flex items-center overflow-hidden pointer-events-none select-none"
       aria-hidden="true"
-      style={{ opacity: reducedMotion ? 0.03 : 0.04 }}
+      style={{ opacity: 0.04 }}
     >
-      <div
-        className={`whitespace-nowrap ${reducedMotion ? "" : "animate-marquee"}`}
-      >
-        {/* Repeat enough to fill the screen and loop seamlessly */}
-        {Array.from({ length: 8 }).map((_, i) => (
-          <span
-            key={i}
-            className="text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5vw] font-black tracking-wider"
-            style={{
-              WebkitTextStroke: "1px rgba(162, 50, 160, 0.3)",
-              color: "transparent",
-              textShadow: "0 0 40px rgba(162, 50, 160, 0.08)",
-            }}
-          >
-            {text}
-          </span>
+      <Marquee speed={45} direction="left" pauseOnHover={false}>
+        {Array.from({ length: 6 }).map((_, i) => (
+          <MarqueeItem key={i}>
+            <span
+              className="text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5vw] font-black tracking-wider mx-0"
+              style={{
+                WebkitTextStroke: "1px rgba(162, 50, 160, 0.3)",
+                color: "transparent",
+                textShadow: "0 0 40px rgba(162, 50, 160, 0.08)",
+              }}
+            >
+              {text}
+            </span>
+          </MarqueeItem>
         ))}
-      </div>
+      </Marquee>
     </div>
   );
 }
@@ -186,41 +182,6 @@ function OrbitalRing() {
   );
 }
 
-/* ── CTA Buttons ────────────────────────────────────────────── */
-function CTAButton({
-  children,
-  primary,
-  onClick,
-}: {
-  children: React.ReactNode;
-  primary?: boolean;
-  onClick: () => void;
-}) {
-  if (primary) {
-    return (
-      <motion.button
-        whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(62, 238, 213, 0.25)" }}
-        whileTap={{ scale: 0.97 }}
-        onClick={onClick}
-        className="relative group px-8 sm:px-10 py-3.5 sm:py-4 bg-euphoria-aqua/10 border border-euphoria-aqua/50 text-euphoria-aqua font-semibold tracking-[0.2em] uppercase text-xs sm:text-sm rounded-lg transition-all duration-300 hover:bg-euphoria-aqua/20 hover:border-euphoria-aqua/80 hover:text-white overflow-hidden"
-      >
-        <span className="absolute inset-0 bg-gradient-to-r from-euphoria-aqua/0 via-euphoria-aqua/10 to-euphoria-aqua/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <span className="relative z-10">{children}</span>
-      </motion.button>
-    );
-  }
-  return (
-    <motion.button
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-      onClick={onClick}
-      className="px-8 sm:px-10 py-3.5 sm:py-4 text-white/40 font-medium tracking-[0.15em] uppercase text-xs sm:text-sm border border-white/10 rounded-lg transition-all duration-300 hover:text-white/70 hover:border-white/20 hover:bg-white/[0.02]"
-    >
-      {children}
-    </motion.button>
-  );
-}
-
 /* ── Main Hero ──────────────────────────────────────────────── */
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -238,7 +199,19 @@ export function Hero() {
       <HeroBackground />
       <MarqueeTypography />
       <OrbitalRing />
-      <HeroParticles />
+
+      {/* Magic UI Particles — subtle floating lights */}
+      <Particles
+        count={30}
+        colors={[
+          "rgba(62, 238, 213, 0.20)",
+          "rgba(175, 153, 71, 0.18)",
+          "rgba(162, 50, 160, 0.12)",
+          "rgba(23, 111, 99, 0.15)",
+        ]}
+        maxSize={2.5}
+        speed={0.8}
+      />
 
       {/* ── Main content ── */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mx-auto">
@@ -283,14 +256,19 @@ export function Hero() {
           </span>
         </motion.h1>
 
-        {/* Headline */}
+        {/* Headline — Magic UI Animated Gradient Text */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.9 }}
-          className="mt-6 sm:mt-8 text-base sm:text-lg md:text-xl font-light tracking-[0.2em] uppercase text-white/60"
+          className="mt-6 sm:mt-8 text-base sm:text-lg md:text-xl font-light tracking-[0.2em] uppercase"
         >
-          Where Culture Meets Competition
+          <AnimatedGradientText
+            gradient="linear-gradient(90deg, #A232A0, #AF9947, #176F63, #3EEED5, #A232A0)"
+            speed={4}
+          >
+            Where Culture Meets Competition
+          </AnimatedGradientText>
         </motion.p>
 
         {/* Subtext */}
@@ -303,19 +281,32 @@ export function Hero() {
           Dance &middot; Music &middot; Ideas &middot; Innovation &middot; Sport
         </motion.p>
 
-        {/* CTAs */}
+        {/* CTAs — Magic UI ShimmerButton for primary */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.3 }}
           className="mt-10 sm:mt-14 flex flex-col sm:flex-row gap-4"
         >
-          <CTAButton primary onClick={() => scrollTo("#events")}>
-            Explore Events
-          </CTAButton>
-          <CTAButton onClick={() => scrollTo("#about")}>
+          <ShimmerButton
+            shimmerColor="rgba(62, 238, 213, 0.35)"
+            shimmerDuration="3s"
+            background="rgba(62, 238, 213, 0.08)"
+            className="px-8 sm:px-10 py-3.5 sm:py-4"
+            onClick={() => scrollTo("#events")}
+          >
+            <span className="text-euphoria-aqua font-semibold tracking-[0.2em] uppercase text-xs sm:text-sm">
+              Explore Events
+            </span>
+          </ShimmerButton>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => scrollTo("#about")}
+            className="px-8 sm:px-10 py-3.5 sm:py-4 text-white/40 font-medium tracking-[0.15em] uppercase text-xs sm:text-sm border border-white/10 rounded-lg transition-all duration-300 hover:text-white/70 hover:border-white/20 hover:bg-white/[0.02]"
+          >
             Discover Euphoria
-          </CTAButton>
+          </motion.button>
         </motion.div>
       </div>
 

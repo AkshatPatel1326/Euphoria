@@ -1,10 +1,6 @@
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 export function About() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <section id="about" className="relative py-24 sm:py-32 lg:py-40 overflow-hidden">
       {/* Background */}
@@ -24,39 +20,26 @@ export function About() {
         }}
       />
 
-      <div ref={ref} className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16 items-start">
           {/* Left — Large headline + copy */}
           <div className="lg:col-span-7">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6 }}
-              className="mb-6"
-            >
+            <BlurFade className="mb-6" delay={0} inViewMargin="-100px">
               <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/50">
                 About
               </span>
-            </motion.div>
+            </BlurFade>
 
-            <motion.h2
-              initial={{ opacity: 0, y: 40 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.0]"
-            >
-              <span className="text-white block">Not just a fest.</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua block mt-2">
-                A tradition.
-              </span>
-            </motion.h2>
+            <BlurFade delay={0.1} inViewMargin="-100px">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.0]">
+                <span className="text-white block">Not just a fest.</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua block mt-2">
+                  A tradition.
+                </span>
+              </h2>
+            </BlurFade>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-8 sm:mt-10 space-y-5 max-w-xl"
-            >
+            <BlurFade delay={0.3} inViewMargin="-100px" className="mt-8 sm:mt-10 space-y-5 max-w-xl">
               <p className="text-base sm:text-lg text-white/40 leading-relaxed font-light">
                 SAGE Euphoria is the flagship annual celebration at SAGE
                 University — a convergence of artistic expression, intellectual
@@ -73,27 +56,19 @@ export function About() {
               <p className="text-sm sm:text-base text-white/25 leading-relaxed font-light italic border-l-2 border-euphoria-gold/20 pl-5">
                 This is where ambition meets the stage.
               </p>
-            </motion.div>
+            </BlurFade>
           </div>
 
           {/* Right — Stats / decorative */}
           <div className="lg:col-span-5 lg:pt-16">
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="space-y-0"
-            >
+            <BlurFade delay={0.3} yOffset={20} blur={8} inViewMargin="-100px" className="space-y-0">
               {[
                 { value: "40+", label: "Events", accent: "text-euphoria-aqua/70" },
                 { value: "04", label: "Disciplines", accent: "text-euphoria-purple/70" },
                 { value: "∞", label: "Energy", accent: "text-euphoria-gold/70" },
               ].map((h, i) => (
-                <motion.div
+                <div
                   key={h.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
                   className="flex items-baseline gap-4 py-5 border-b border-white/[0.04] last:border-b-0 group"
                 >
                   <span
@@ -104,9 +79,9 @@ export function About() {
                   <span className="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-white/20 font-medium">
                     {h.label}
                   </span>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </BlurFade>
           </div>
         </div>
       </div>

@@ -1,5 +1,4 @@
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 const footerLinks = [
   { label: "Home", href: "#home" },
@@ -10,9 +9,6 @@ const footerLinks = [
 ];
 
 export function Footer() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-
   const scrollTo = (href: string) => {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -29,14 +25,9 @@ export function Footer() {
         }}
       />
 
-      <div ref={ref} className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Top section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col md:flex-row items-start md:items-center justify-between gap-10 mb-14"
-        >
+        <BlurFade inViewMargin="-40px" className="flex flex-col md:flex-row items-start md:items-center justify-between gap-10 mb-14">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-3">
@@ -68,15 +59,10 @@ export function Footer() {
               </button>
             ))}
           </nav>
-        </motion.div>
+        </BlurFade>
 
         {/* Radio SAGE + SAGE University */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-10 pb-8 border-b border-white/[0.04]"
-        >
+        <BlurFade delay={0.2} inViewMargin="-40px" className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-10 pb-8 border-b border-white/[0.04]">
           <div className="flex items-center gap-3">
             <img
               src="/assets/sponcers1.png"
@@ -87,20 +73,15 @@ export function Footer() {
               Radio SAGE — Official Media Partner
             </p>
           </div>
-        </motion.div>
+        </BlurFade>
 
         {/* Contact placeholder */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          className="mb-10"
-        >
+        <BlurFade delay={0.3} inViewMargin="-40px" className="mb-10">
           <p className="text-xs text-white/12 tracking-wider">
             Full contact details and social channels will be available ahead of
             the event.
           </p>
-        </motion.div>
+        </BlurFade>
 
         {/* Bottom */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/[0.04]">

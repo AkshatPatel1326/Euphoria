@@ -1,10 +1,6 @@
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 export function ReliveTheEnergy() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
   return (
     <section className="relative py-24 sm:py-32 lg:py-40 overflow-hidden">
       {/* Background */}
@@ -17,28 +13,18 @@ export function ReliveTheEnergy() {
         }}
       />
 
-      <div ref={ref} className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 sm:mb-16"
-        >
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <BlurFade inViewMargin="-80px" className="text-center mb-12 sm:mb-16">
           <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-aqua/50 mb-4">
             Relive the Energy
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white/80">
             The Moments That Made Euphoria.
           </h2>
-        </motion.div>
+        </BlurFade>
 
         {/* Media placeholder — cinematic dark frame */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          className="relative aspect-video max-w-4xl mx-auto rounded-2xl overflow-hidden border border-white/[0.06]"
-        >
+        <BlurFade delay={0.15} inViewMargin="-80px" className="relative aspect-video max-w-4xl mx-auto rounded-2xl overflow-hidden border border-white/[0.06]">
           {/* Cinematic gradient background */}
           <div className="absolute inset-0 bg-gradient-to-br from-euphoria-plum/30 via-euphoria-dark to-euphoria-teal/10" />
 
@@ -68,7 +54,7 @@ export function ReliveTheEnergy() {
           {/* Top-left and bottom-right accent lines */}
           <div className="absolute top-4 left-4 w-8 h-8 border-l border-t border-white/10 rounded-tl-sm" />
           <div className="absolute bottom-4 right-4 w-8 h-8 border-r border-b border-white/10 rounded-br-sm" />
-        </motion.div>
+        </BlurFade>
       </div>
 
       {/* Divider */}

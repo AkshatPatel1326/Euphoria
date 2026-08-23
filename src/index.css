@@ -218,6 +218,11 @@
   animation: spin-slow 20s linear infinite;
 }
 
+/* Pause marquee on hover */
+.group:hover > div[style*="animation: marquee"] {
+  animation-play-state: paused;
+}
+
 /* Noise texture overlay */
 .noise-overlay::before {
   content: "";

@@ -1,8 +1,9 @@
-import { useState, useRef } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { events, categoryMeta, type EventCategory } from "@/data/events";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { events, type EventCategory } from "@/data/events";
 import { EventCard } from "./EventCard";
 import { EventDetailModal } from "./EventDetailModal";
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 const categories: (EventCategory | "all")[] = [
   "all",
@@ -23,8 +24,6 @@ const tabLabels: Record<string, string> = {
 export function Events() {
   const [activeCategory, setActiveCategory] = useState<EventCategory | "all">("all");
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   const filtered =
     activeCategory === "all"
@@ -45,14 +44,9 @@ export function Events() {
         }}
       />
 
-      <div ref={ref} className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 sm:mb-16"
-        >
+        <BlurFade inViewMargin="-80px" className="text-center mb-12 sm:mb-16">
           <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-aqua/60 mb-4">
             Events
           </span>
@@ -65,15 +59,10 @@ export function Events() {
           <p className="mt-4 text-sm sm:text-base text-white/30 max-w-xl mx-auto">
             Four disciplines. Over forty events. One standard-setting program.
           </p>
-        </motion.div>
+        </BlurFade>
 
-        {/* Category tabs - no emojis */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 sm:mb-14"
-        >
+        {/* Category tabs */}
+        <BlurFade delay={0.15} inViewMargin="-80px" className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 sm:mb-14">
           {categories.map((cat) => {
             const isActive = activeCategory === cat;
             return (
@@ -90,19 +79,14 @@ export function Events() {
               </button>
             );
           })}
-        </motion.div>
+        </BlurFade>
 
         {/* Event count */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.3 }}
-          className="text-center mb-8"
-        >
+        <div className="text-center mb-8">
           <span className="text-xs text-white/15 tracking-wider">
             {filtered.length} event{filtered.length !== 1 ? "s" : ""}
           </span>
-        </motion.div>
+        </div>
 
         {/* Event grid */}
         <AnimatePresence mode="wait">

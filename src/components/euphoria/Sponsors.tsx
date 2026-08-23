@@ -1,5 +1,4 @@
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 /* All sponsor/partner logos uploaded to assets */
 const sponsorLogos = [
@@ -22,9 +21,6 @@ const sponsorLogos = [
 ];
 
 export function Sponsors() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
   return (
     <section id="sponsors" className="relative py-24 sm:py-32 lg:py-40 overflow-hidden">
       {/* Background */}
@@ -37,14 +33,9 @@ export function Sponsors() {
         }}
       />
 
-      <div ref={ref} className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <BlurFade inViewMargin="-80px" className="text-center mb-16">
           <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/40 mb-4">
             Supported By
           </span>
@@ -55,15 +46,10 @@ export function Sponsors() {
             SAGE Euphoria is made possible through the valued support of our
             partners.
           </p>
-        </motion.div>
+        </BlurFade>
 
         {/* Euphoria + Radio SAGE — featured row */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 mb-16"
-        >
+        <BlurFade delay={0.1} inViewMargin="-80px" className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 mb-16">
           {/* SAGE Euphoria logo */}
           <div className="flex flex-col items-center gap-3">
             <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-euphoria-gold/15 bg-euphoria-gold/[0.03] p-2 flex items-center justify-center">
@@ -102,14 +88,10 @@ export function Sponsors() {
               </p>
             </div>
           </div>
-        </motion.div>
+        </BlurFade>
 
         {/* Sponsor logos grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.25, duration: 0.5 }}
-        >
+        <BlurFade delay={0.25} inViewMargin="-80px">
           <div className="text-center mb-6">
             <span className="text-[9px] tracking-[0.25em] uppercase text-white/15">
               Confirmed Partners
@@ -117,11 +99,11 @@ export function Sponsors() {
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4">
             {sponsorLogos.map((logo, i) => (
-              <motion.div
+              <BlurFade
                 key={logo.src}
-                initial={{ opacity: 0, y: 15 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.3 + i * 0.03, duration: 0.4 }}
+                delay={0.3 + i * 0.03}
+                duration={0.4}
+                inViewMargin="-60px"
                 className="group flex items-center justify-center aspect-square rounded-xl border border-white/[0.04] bg-white/[0.01] p-3 transition-all duration-300 hover:border-euphoria-gold/15 hover:bg-white/[0.03]"
               >
                 <img
@@ -130,20 +112,15 @@ export function Sponsors() {
                   className="w-full h-full object-contain opacity-60 group-hover:opacity-90 transition-opacity duration-300"
                   loading="lazy"
                 />
-              </motion.div>
+              </BlurFade>
             ))}
           </div>
-        </motion.div>
+        </BlurFade>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.6 }}
-          className="text-center mt-10 text-[10px] text-white/12 tracking-wider"
-        >
+        <BlurFade delay={0.6} inViewMargin="-60px" className="text-center mt-10 text-[10px] text-white/12 tracking-wider">
           For partnership inquiries, please reach out to the organizing
           committee.
-        </motion.p>
+        </BlurFade>
       </div>
 
       {/* Divider */}
