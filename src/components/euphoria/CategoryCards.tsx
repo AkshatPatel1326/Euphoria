@@ -40,6 +40,8 @@ function CategoryVisual({
           ? "/events/science-tech"
           : "/events/sports";
 
+  const sharedVisualClass = "relative w-full lg:w-[420px] xl:w-[480px] aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden group-hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)] transition-shadow duration-500 cursor-pointer";
+
   /* ── Cultural: real poster collage ── */
   if (category === "cultural") {
     return (
@@ -48,7 +50,7 @@ function CategoryVisual({
         style={{ direction: "ltr" }}
       >
         <div
-          className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden group-hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)] transition-shadow duration-500 cursor-pointer"
+          className={sharedVisualClass}
           onClick={() => navigate(route)}
         >
           {/* Base dark bg */}
@@ -119,7 +121,7 @@ function CategoryVisual({
         style={{ direction: "ltr" }}
       >
         <div
-          className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden group-hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)] transition-shadow duration-500 cursor-pointer"
+          className={sharedVisualClass}
           onClick={() => navigate(route)}
         >
           {/* Deep teal + aqua gradient base */}
@@ -201,7 +203,7 @@ function CategoryVisual({
       style={{ direction: "ltr" }}
     >
       <div
-        className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden group-hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)] transition-shadow duration-500 cursor-pointer"
+        className={sharedVisualClass}
         onClick={() => navigate(route)}
       >
         {/* Gradient background */}
