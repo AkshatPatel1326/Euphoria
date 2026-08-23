@@ -161,7 +161,7 @@ function OrbitalRing() {
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
       <div
-        className={`w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] rounded-full border border-euphoria-purple/[0.04] ${
+        className={`w-[450px] h-[450px] sm:w-[560px] sm:h-[560px] md:w-[700px] md:h-[700px] lg:w-[850px] lg:h-[850px] rounded-full border border-euphoria-purple/[0.04] ${
           reducedMotion ? "" : "animate-spin-slow"
         }`}
         style={{ animationDuration: "40s" }}
@@ -171,7 +171,7 @@ function OrbitalRing() {
       </div>
       {/* Inner orbit */}
       <div
-        className={`absolute w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] md:w-[460px] md:h-[460px] rounded-full border border-euphoria-gold/[0.04] ${
+        className={`absolute w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[540px] md:h-[540px] lg:w-[660px] lg:h-[660px] rounded-full border border-euphoria-gold/[0.04] ${
           reducedMotion ? "" : "animate-spin-slow"
         }`}
         style={{ animationDuration: "55s", animationDirection: "reverse" }}
@@ -218,30 +218,30 @@ export function Hero() {
       <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-5xl mx-auto">
         {/* ── Euphoria Logo — cinematic entrance ── */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.85, filter: "blur(12px)" }}
+          initial={{ opacity: 0, scale: 0.82, filter: "blur(16px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{
-            duration: 1.3,
+            duration: 1.5,
             delay: 0.3,
-            ease: [0.25, 0.1, 0.25, 1],
+            ease: [0.22, 0.61, 0.36, 1],
           }}
-          className="mb-6 sm:mb-8 relative"
+          className="mb-4 sm:mb-6 relative"
         >
           <div className="relative">
             <img
               src="/assets/2.png"
               alt="SAGE Euphoria logo"
-              className="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 object-contain mx-auto drop-shadow-[0_0_80px_rgba(175,153,71,0.12)]"
+              className="w-56 h-56 sm:w-72 sm:h-72 md:w-[22rem] md:h-[22rem] lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] object-contain mx-auto drop-shadow-[0_0_120px_rgba(175,153,71,0.15)]"
             />
 
             {/* ── One-time light sweep across logo ── */}
             {!reducedMotion && (
               <motion.div
                 initial={{ x: "-100%", opacity: 0 }}
-                animate={{ x: "200%", opacity: [0, 0.35, 0] }}
+                animate={{ x: "200%", opacity: [0, 0.5, 0] }}
                 transition={{
-                  duration: 1.8,
-                  delay: 1.8,
+                  duration: 1.6,
+                  delay: 2.0,
                   ease: "easeInOut",
                 }}
                 className="absolute inset-0 pointer-events-none overflow-hidden"
@@ -276,7 +276,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[0.9]"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[0.9]"
         >
           <span className="text-white">SAGE </span>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua">
