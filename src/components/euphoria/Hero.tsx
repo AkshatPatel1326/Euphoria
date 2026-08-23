@@ -115,11 +115,11 @@ function MarqueeTypography() {
         style={{ opacity: 0.025 }}
       >
         <span
-          className="text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5vw] font-black tracking-wider whitespace-nowrap"
+          className="text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[12vw] font-black tracking-wider whitespace-nowrap"
           style={{
-            WebkitTextStroke: "1px rgba(162, 50, 160, 0.25)",
+            WebkitTextStroke: "2px rgba(162, 50, 160, 0.20)",
             color: "transparent",
-            textShadow: "0 0 40px rgba(162, 50, 160, 0.06)",
+            textShadow: "0 0 80px rgba(162, 50, 160, 0.05)",
           }}
         >
           {text}
@@ -138,11 +138,11 @@ function MarqueeTypography() {
         {Array.from({ length: 6 }).map((_, i) => (
           <MarqueeItem key={i}>
             <span
-              className="text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5vw] font-black tracking-wider mx-0"
+              className="text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[12vw] font-black tracking-wider mx-0"
               style={{
-                WebkitTextStroke: "1px rgba(162, 50, 160, 0.25)",
+                WebkitTextStroke: "2px rgba(162, 50, 160, 0.20)",
                 color: "transparent",
-                textShadow: "0 0 40px rgba(162, 50, 160, 0.06)",
+                textShadow: "0 0 80px rgba(162, 50, 160, 0.05)",
               }}
             >
               {text}
