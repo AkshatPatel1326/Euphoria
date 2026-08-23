@@ -20,7 +20,7 @@ function HeroBackground() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(91, 27, 82, 0.4) 0%, transparent 60%)",
+            "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(91, 27, 82, 0.35) 0%, transparent 60%)",
         }}
       />
 
@@ -29,7 +29,7 @@ function HeroBackground() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 50% 60% at 20% 60%, rgba(162, 50, 160, 0.15) 0%, transparent 50%)",
+            "radial-gradient(ellipse 50% 60% at 20% 60%, rgba(162, 50, 160, 0.10) 0%, transparent 50%)",
         }}
       />
 
@@ -38,7 +38,7 @@ function HeroBackground() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 50% 50% at 75% 70%, rgba(23, 111, 99, 0.2) 0%, transparent 50%)",
+            "radial-gradient(ellipse 50% 50% at 75% 70%, rgba(23, 111, 99, 0.15) 0%, transparent 50%)",
         }}
       />
 
@@ -47,7 +47,7 @@ function HeroBackground() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 30% 30% at 80% 20%, rgba(62, 238, 213, 0.05) 0%, transparent 40%)",
+            "radial-gradient(ellipse 30% 30% at 80% 20%, rgba(62, 238, 213, 0.03) 0%, transparent 40%)",
         }}
       />
 
@@ -56,22 +56,22 @@ function HeroBackground() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 25% 25% at 15% 25%, rgba(175, 153, 71, 0.06) 0%, transparent 40%)",
+            "radial-gradient(ellipse 25% 25% at 15% 25%, rgba(175, 153, 71, 0.04) 0%, transparent 40%)",
         }}
       />
 
-      {/* Light Rays — atmospheric stage lighting */}
+      {/* Light Rays — reduced intensity so logo dominates */}
       <LightRays
         colors={[
-          "rgba(162, 50, 160, 0.10)",
-          "rgba(91, 27, 82, 0.12)",
-          "rgba(23, 111, 99, 0.08)",
-          "rgba(175, 153, 71, 0.05)",
-          "rgba(62, 238, 213, 0.04)",
+          "rgba(162, 50, 160, 0.06)",
+          "rgba(91, 27, 82, 0.08)",
+          "rgba(23, 111, 99, 0.05)",
+          "rgba(175, 153, 71, 0.03)",
+          "rgba(62, 238, 213, 0.02)",
         ]}
-        rayCount={16}
-        opacity={0.4}
-        speed={40}
+        rayCount={14}
+        opacity={0.3}
+        speed={45}
       />
 
       {/* Faded fest background image */}
@@ -85,10 +85,10 @@ function HeroBackground() {
           src="/assets/images.jpg"
           alt=""
           aria-hidden="true"
-          className={`absolute inset-0 w-full h-full object-cover opacity-[0.05] ${
+          className={`absolute inset-0 w-full h-full object-cover opacity-[0.04] ${
             reducedMotion ? "" : "animate-float"
           }`}
-          style={{ filter: "blur(2px) saturate(0.4)" }}
+          style={{ filter: "blur(3px) saturate(0.3)" }}
         />
       </motion.div>
 
@@ -112,14 +112,14 @@ function MarqueeTypography() {
       <div
         className="absolute inset-0 flex items-center overflow-hidden pointer-events-none select-none"
         aria-hidden="true"
-        style={{ opacity: 0.03 }}
+        style={{ opacity: 0.025 }}
       >
         <span
           className="text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5vw] font-black tracking-wider whitespace-nowrap"
           style={{
-            WebkitTextStroke: "1px rgba(162, 50, 160, 0.3)",
+            WebkitTextStroke: "1px rgba(162, 50, 160, 0.25)",
             color: "transparent",
-            textShadow: "0 0 40px rgba(162, 50, 160, 0.08)",
+            textShadow: "0 0 40px rgba(162, 50, 160, 0.06)",
           }}
         >
           {text}
@@ -132,7 +132,7 @@ function MarqueeTypography() {
     <div
       className="absolute inset-0 flex items-center overflow-hidden pointer-events-none select-none"
       aria-hidden="true"
-      style={{ opacity: 0.04 }}
+      style={{ opacity: 0.03 }}
     >
       <Marquee speed={45} direction="left" pauseOnHover={false}>
         {Array.from({ length: 6 }).map((_, i) => (
@@ -140,9 +140,9 @@ function MarqueeTypography() {
             <span
               className="text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5vw] font-black tracking-wider mx-0"
               style={{
-                WebkitTextStroke: "1px rgba(162, 50, 160, 0.3)",
+                WebkitTextStroke: "1px rgba(162, 50, 160, 0.25)",
                 color: "transparent",
-                textShadow: "0 0 40px rgba(162, 50, 160, 0.08)",
+                textShadow: "0 0 40px rgba(162, 50, 160, 0.06)",
               }}
             >
               {text}
@@ -161,22 +161,22 @@ function OrbitalRing() {
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
       <div
-        className={`w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[520px] md:h-[520px] rounded-full border border-euphoria-purple/[0.06] ${
+        className={`w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] rounded-full border border-euphoria-purple/[0.04] ${
           reducedMotion ? "" : "animate-spin-slow"
         }`}
         style={{ animationDuration: "40s" }}
       >
         {/* Dot on orbit */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-euphoria-aqua/30" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-euphoria-aqua/25" />
       </div>
       {/* Inner orbit */}
       <div
-        className={`absolute w-[260px] h-[260px] sm:w-[340px] sm:h-[340px] md:w-[400px] md:h-[400px] rounded-full border border-euphoria-gold/[0.05] ${
+        className={`absolute w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] md:w-[460px] md:h-[460px] rounded-full border border-euphoria-gold/[0.04] ${
           reducedMotion ? "" : "animate-spin-slow"
         }`}
         style={{ animationDuration: "55s", animationDirection: "reverse" }}
       >
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-1 h-1 rounded-full bg-euphoria-gold/25" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-1 h-1 rounded-full bg-euphoria-gold/20" />
       </div>
     </div>
   );
@@ -185,6 +185,7 @@ function OrbitalRing() {
 /* ── Main Hero ──────────────────────────────────────────────── */
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
 
   const scrollTo = (id: string) => {
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
@@ -202,32 +203,59 @@ export function Hero() {
 
       {/* Magic UI Particles — subtle floating lights */}
       <Particles
-        count={30}
+        count={25}
         colors={[
-          "rgba(62, 238, 213, 0.20)",
-          "rgba(175, 153, 71, 0.18)",
-          "rgba(162, 50, 160, 0.12)",
-          "rgba(23, 111, 99, 0.15)",
+          "rgba(62, 238, 213, 0.18)",
+          "rgba(175, 153, 71, 0.15)",
+          "rgba(162, 50, 160, 0.10)",
+          "rgba(23, 111, 99, 0.12)",
         ]}
-        maxSize={2.5}
-        speed={0.8}
+        maxSize={2}
+        speed={0.6}
       />
 
       {/* ── Main content ── */}
-      <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mx-auto">
-        {/* Euphoria Logo */}
+      <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-5xl mx-auto">
+        {/* ── Euphoria Logo — cinematic entrance ── */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
-          className="mb-6 sm:mb-8"
+          initial={{ opacity: 0, scale: 0.85, filter: "blur(12px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          transition={{
+            duration: 1.3,
+            delay: 0.3,
+            ease: [0.25, 0.1, 0.25, 1],
+          }}
+          className="mb-6 sm:mb-8 relative"
         >
           <div className="relative">
             <img
               src="/assets/2.png"
               alt="SAGE Euphoria logo"
-              className="w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 object-contain mx-auto drop-shadow-[0_0_60px_rgba(175,153,71,0.15)]"
+              className="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 object-contain mx-auto drop-shadow-[0_0_80px_rgba(175,153,71,0.12)]"
             />
+
+            {/* ── One-time light sweep across logo ── */}
+            {!reducedMotion && (
+              <motion.div
+                initial={{ x: "-100%", opacity: 0 }}
+                animate={{ x: "200%", opacity: [0, 0.35, 0] }}
+                transition={{
+                  duration: 1.8,
+                  delay: 1.8,
+                  ease: "easeInOut",
+                }}
+                className="absolute inset-0 pointer-events-none overflow-hidden"
+                aria-hidden="true"
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(105deg, transparent 30%, rgba(175, 153, 71, 0.15) 45%, rgba(255, 255, 255, 0.08) 50%, rgba(62, 238, 213, 0.10) 55%, transparent 70%)",
+                  }}
+                />
+              </motion.div>
+            )}
           </div>
         </motion.div>
 
@@ -235,7 +263,7 @@ export function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
           className="mb-5 sm:mb-6"
         >
           <span className="inline-block px-5 py-1.5 text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/70 border border-euphoria-gold/20 rounded-full bg-euphoria-gold/[0.04]">
@@ -247,7 +275,7 @@ export function Hero() {
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[0.9]"
         >
           <span className="text-white">SAGE </span>
@@ -260,7 +288,7 @@ export function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.9 }}
+          transition={{ duration: 0.7, delay: 1.1 }}
           className="mt-6 sm:mt-8 text-base sm:text-lg md:text-xl font-light tracking-[0.2em] uppercase"
         >
           <AnimatedGradientText
@@ -275,7 +303,7 @@ export function Hero() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 1.1 }}
+          transition={{ duration: 0.7, delay: 1.3 }}
           className="mt-3 text-[11px] sm:text-xs tracking-[0.3em] uppercase text-euphoria-gold/40"
         >
           Dance &middot; Music &middot; Ideas &middot; Innovation &middot; Sport
@@ -285,7 +313,7 @@ export function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.3 }}
+          transition={{ duration: 0.6, delay: 1.5 }}
           className="mt-10 sm:mt-14 flex flex-col sm:flex-row gap-4"
         >
           <ShimmerButton
@@ -314,7 +342,7 @@ export function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.2, duration: 1 }}
+        transition={{ delay: 2.5, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <span className="text-[9px] tracking-[0.35em] uppercase text-white/15">
