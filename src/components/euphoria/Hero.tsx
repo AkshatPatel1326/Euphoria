@@ -388,11 +388,11 @@ export function Hero() {
           className="mb-5 sm:mb-7 w-full"
           style={{ filter: heroReady ? "blur(0px)" : "blur(10px)", transition: "filter 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)" }}
         >
-          <h1 className="leading-[0.92] tracking-tight pb-2">
-            <span className="block text-[12vw] sm:text-[10vw] md:text-[8.5vw] lg:text-[7vw] font-black text-white/90">
+          <h1 className="tracking-tight">
+            <span className="block text-[12vw] sm:text-[10vw] md:text-[8.5vw] lg:text-[7vw] font-black text-white/90 leading-[0.88]">
               SAGE
             </span>
-            <span className="block text-[14vw] sm:text-[12vw] md:text-[10vw] lg:text-[8vw] font-black text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua">
+            <span className="block text-[14vw] sm:text-[12vw] md:text-[10vw] lg:text-[8vw] font-black text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua leading-[1.15]">
               Euphoria
             </span>
           </h1>
