@@ -72,7 +72,7 @@ export function Navbar() {
             : "bg-transparent backdrop-blur-sm border-b border-white/[0.02] py-2"
         }`}
       >
-        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8">
           <div
             className={`flex items-center justify-between transition-all duration-500 ${
               scrolled ? "h-14" : "h-16 md:h-20"
@@ -88,12 +88,11 @@ export function Navbar() {
               <span className="text-base sm:text-lg font-bold tracking-widest text-euphoria-aqua/70 transition-colors duration-300 group-hover:text-euphoria-aqua">
                 SAGE
               </span>
-              <span className="text-base sm:text-lg font-light tracking-widest text-white/50 transition-colors duration-300 group-hover:text-white/70">
-                Euphoria
-              </span>
-              <span className="ml-1 text-[9px] font-semibold tracking-wider text-euphoria-gold/50 border border-euphoria-gold/20 rounded px-1.5 py-0.5 transition-colors duration-300 group-hover:text-euphoria-gold/70 group-hover:border-euphoria-gold/30">
-                2026
-              </span>
+              <img
+                src="/assets/Sage_euphoria_logp.png"
+                alt="SAGE Euphoria logo"
+                className="h-7 sm:h-8 w-auto object-contain transition-opacity duration-300 group-hover:opacity-90"
+              />
             </motion.button>
 
             {/* Desktop Nav */}

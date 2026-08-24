@@ -44,7 +44,7 @@ export function Events() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <BlurFade inViewMargin="-80px" className="text-center mb-12 sm:mb-16">
           <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-aqua/60 mb-4">

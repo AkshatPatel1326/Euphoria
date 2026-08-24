@@ -24,7 +24,13 @@ function CategoryVisual({
 
   const sharedVisualClass = "relative w-full lg:w-[420px] xl:w-[480px] aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden group-hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)] transition-shadow duration-500 cursor-pointer";
 
-  /* ── All categories: uniform gradient visual ── */
+  /* ── Category poster images ── */
+  const categoryPosters: Partial<Record<EventCategory, string>> = {
+    "literary-management": "/assets/L_M_Category_Poster.jpg",
+  };
+  const posterSrc = categoryPosters[category];
+
+  /* ── All categories: uniform visual treatment ── */
   return (
     <div
       className={`relative ${isEven ? "" : "lg:order-1"}`}
@@ -34,28 +40,41 @@ function CategoryVisual({
         className={sharedVisualClass}
         onClick={() => navigate(route)}
       >
-        {/* Gradient background */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${meta.gradient} opacity-40`} />
+        {/* Poster image or gradient background */}
+        {posterSrc ? (
+          <>
+            <img
+              src={posterSrc}
+              alt={`${meta.label} category poster`}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-euphoria-dark/80 via-euphoria-dark/20 to-transparent" />
+          </>
+        ) : (
+          <div className={`absolute inset-0 bg-gradient-to-br ${meta.gradient} opacity-40`} />
+        )}
 
         {/* Accent gradient overlay on hover */}
         <div className={`absolute inset-0 bg-gradient-to-br ${meta.accentGradient} opacity-0 group-hover:opacity-15 transition-opacity duration-700`} />
 
-        {/* Abstract decorative shapes */}
-        <div className="absolute inset-0">
-          <div
-            className="absolute -top-8 -right-8 w-32 h-32 sm:w-40 sm:h-40 rounded-full border opacity-10"
-            style={{ borderColor: meta.color }}
-          />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent rotate-45" />
-          <div
-            className="absolute bottom-4 left-4 w-12 h-12 border-l-2 border-b-2 opacity-10 rounded-bl-lg"
-            style={{ borderColor: meta.color }}
-          />
-          <div
-            className="absolute top-4 right-4 w-12 h-12 border-r-2 border-t-2 opacity-10 rounded-tr-lg"
-            style={{ borderColor: meta.color }}
-          />
-        </div>
+        {/* Abstract decorative shapes (only for non-poster categories) */}
+        {!posterSrc && (
+          <div className="absolute inset-0">
+            <div
+              className="absolute -top-8 -right-8 w-32 h-32 sm:w-40 sm:h-40 rounded-full border opacity-10"
+              style={{ borderColor: meta.color }}
+            />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent rotate-45" />
+            <div
+              className="absolute bottom-4 left-4 w-12 h-12 border-l-2 border-b-2 opacity-10 rounded-bl-lg"
+              style={{ borderColor: meta.color }}
+            />
+            <div
+              className="absolute top-4 right-4 w-12 h-12 border-r-2 border-t-2 opacity-10 rounded-tr-lg"
+              style={{ borderColor: meta.color }}
+            />
+          </div>
+        )}
 
         {/* Center number watermark */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -205,7 +224,7 @@ export function CategoryCards() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <BlurFade inViewMargin="-80px" className="mb-12 sm:mb-16 lg:mb-20">
           <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-aqua/60 mb-4">
