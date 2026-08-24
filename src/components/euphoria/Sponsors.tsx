@@ -2,22 +2,21 @@ import { BlurFade } from "@/components/magicui/blur-fade";
 
 /* All sponsor/partner logos uploaded to assets */
 const sponsorLogos = [
-  { src: "/assets/42.png", alt: "Partner" },
-  { src: "/assets/44.png", alt: "Partner" },
-  { src: "/assets/45.png", alt: "Partner" },
-  { src: "/assets/46.png", alt: "Partner" },
-  { src: "/assets/47.png", alt: "Partner" },
-  { src: "/assets/48.png", alt: "Partner" },
-  { src: "/assets/49.png", alt: "Partner" },
-  { src: "/assets/50.png", alt: "Partner" },
-  { src: "/assets/51.png", alt: "Partner" },
-  { src: "/assets/52.png", alt: "Partner" },
-  { src: "/assets/54.png", alt: "Partner" },
-  { src: "/assets/56.png", alt: "Partner" },
-  { src: "/assets/58.png", alt: "Partner" },
-  { src: "/assets/59.png", alt: "Partner" },
-  { src: "/assets/61.png", alt: "Partner" },
-  { src: "/assets/62.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__7_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__8_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__9_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__12_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__14_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__21_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__22_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__23_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__24_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__26_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__27_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__29_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__30_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__36_.png", alt: "Partner" },
+  { src: "/assets/Past_Sponsors__39_.png", alt: "Partner" },
 ];
 
 export function Sponsors() {
