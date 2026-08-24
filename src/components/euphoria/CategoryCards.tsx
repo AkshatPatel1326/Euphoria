@@ -93,7 +93,7 @@ function CategoryVisual({
         {/* Center number watermark */}
         <div className="absolute inset-0 flex items-center justify-center">
           <span
-            className="text-[100px] sm:text-[120px] font-black opacity-[0.04] select-none"
+            className="text-[80px] sm:text-[100px] font-black opacity-[0.04] select-none"
             style={{ color: meta.color }}
           >
             {meta.number}
@@ -165,7 +165,7 @@ function CategoryRow({
         {/* Oversized number */}
         <div className="relative mb-2 sm:mb-3">
           <span
-            className="text-[80px] sm:text-[100px] md:text-[130px] lg:text-[160px] font-black leading-none select-none tracking-tighter"
+            className="text-[65px] sm:text-[80px] md:text-[105px] lg:text-[130px] font-black leading-none select-none tracking-tighter"
             style={{
               color: "transparent",
               WebkitTextStroke: `1.5px ${meta.color}20`,
@@ -178,7 +178,7 @@ function CategoryRow({
 
         {/* Category name */}
         <h3
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight uppercase"
+          className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-tight uppercase"
           style={{ color: meta.color }}
         >
           {meta.label}
@@ -252,7 +252,7 @@ export function CategoryCards() {
           <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-aqua/60 mb-4">
             Disciplines
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight">
             <span className="text-white">Find Your </span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua">
               Arena

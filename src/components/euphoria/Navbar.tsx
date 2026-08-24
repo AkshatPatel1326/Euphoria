@@ -103,18 +103,21 @@ export function Navbar() {
             {/* Brand */}
             <motion.button
               onClick={handleLogoClick}
-              className="flex items-center gap-2.5 group"
+              className="flex items-center gap-2 group"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span className="text-sm sm:text-base font-bold tracking-[0.15em] text-euphoria-aqua/80 transition-colors duration-300 group-hover:text-euphoria-aqua">
-                SAGE
-              </span>
               <img
                 src="/assets/Sage_euphoria_logp.png"
                 alt="SAGE Euphoria logo"
-                className="h-8 sm:h-9 w-auto object-contain transition-all duration-300 group-hover:opacity-100 opacity-85"
+                className="h-8 sm:h-9 w-auto object-contain transition-all duration-300 group-hover:opacity-100 opacity-90"
               />
+              <span className="text-sm sm:text-base font-bold tracking-[0.15em] text-white/70 transition-colors duration-300 group-hover:text-white/90">
+                SAGE
+              </span>
+              <span className="text-sm sm:text-base font-light tracking-[0.15em] text-white/40 transition-colors duration-300 group-hover:text-white/60">
+                EUPHORIA
+              </span>
             </motion.button>
 
             {/* Desktop Nav */}

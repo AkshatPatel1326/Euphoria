@@ -210,10 +210,10 @@ function ColourReveal({ phase }: { phase: number }) {
         }}
         className="text-center select-none"
       >
-        <span className="block text-[8vw] sm:text-[6.5vw] md:text-[5vw] lg:text-[4vw] font-black tracking-[0.12em] text-white/80">
+        <span className="block text-[7vw] sm:text-[5.5vw] md:text-[4vw] lg:text-[3.2vw] font-black tracking-[0.12em] text-white/80">
           JOY OF
         </span>
-        <span className="block text-[12vw] sm:text-[10vw] md:text-[7.5vw] lg:text-[6vw] font-black tracking-[0.08em] bg-clip-text text-transparent bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua">
+        <span className="block text-[10vw] sm:text-[8.5vw] md:text-[6vw] lg:text-[5vw] font-black tracking-[0.08em] bg-clip-text text-transparent bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua">
           COLOURS
         </span>
         <span className="block mt-3 text-[9px] sm:text-[10px] tracking-[0.5em] uppercase text-white/15">
@@ -236,8 +236,7 @@ function MarqueeTypography() {
         aria-hidden="true"
         style={{ opacity: 0.03 }}
       >
-        <span
-          className="text-[22vw] sm:text-[20vw] md:text-[18vw] lg:text-[16vw] font-black tracking-wider whitespace-nowrap"
+        <span              className="text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[12vw] font-black tracking-wider whitespace-nowrap"
           style={{
             WebkitTextStroke: "2px rgba(162, 50, 160, 0.20)",
             color: "transparent",
@@ -260,7 +259,7 @@ function MarqueeTypography() {
         {Array.from({ length: 8 }).map((_, i) => (
           <MarqueeItem key={i}>
             <span
-              className="text-[22vw] sm:text-[20vw] md:text-[18vw] lg:text-[16vw] font-black tracking-wider mx-0"
+              className="text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[12vw] font-black tracking-wider mx-0"
               style={{
                 WebkitTextStroke: "2px rgba(162, 50, 160, 0.22)",
                 color: "transparent",
@@ -385,14 +384,14 @@ export function Hero() {
             delay: heroReady ? 0 : 0,
             ease: [0.25, 0.1, 0.25, 1],
           }}
-          className="mb-5 sm:mb-7 w-full"
+          className="mb-4 sm:mb-6 w-full"
           style={{ filter: heroReady ? "blur(0px)" : "blur(10px)", transition: "filter 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)" }}
         >
           <h1 className="tracking-tight">
-            <span className="block text-[12vw] sm:text-[10vw] md:text-[8.5vw] lg:text-[7vw] font-black text-white/90 leading-[0.88]">
+            <span className="block text-[10vw] sm:text-[8.5vw] md:text-[7vw] lg:text-[5.5vw] font-black text-white/90 leading-[0.88]">
               SAGE
             </span>
-            <span className="block text-[14vw] sm:text-[12vw] md:text-[10vw] lg:text-[8vw] font-black text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua leading-[1.15]">
+            <span className="block text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-[6.5vw] font-black text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua leading-[1.15]">
               Euphoria
             </span>
           </h1>
@@ -405,7 +404,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: heroSettled ? 0 : 0 }}
           className="mb-5 sm:mb-6"
         >
-          <span className="inline-block px-5 py-1.5 text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/70 border border-euphoria-gold/20 rounded-full bg-euphoria-gold/[0.04]">
+          <span className="inline-block px-4 py-1.5 text-[9px] sm:text-[10px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/70 border border-euphoria-gold/20 rounded-full bg-euphoria-gold/[0.04]">
             2026 Edition
           </span>
         </motion.div>
@@ -415,7 +414,7 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={heroSettled ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, delay: heroSettled ? 0.15 : 0 }}
-          className="text-base sm:text-lg md:text-xl font-light tracking-[0.2em] uppercase"
+          className="text-sm sm:text-base md:text-lg font-light tracking-[0.2em] uppercase"
         >
           <AnimatedGradientText
             gradient="linear-gradient(90deg, #AF9947, #A232A0, #176F63, #3EEED5, #AF9947)"
@@ -430,7 +429,7 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={heroSettled ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, delay: heroSettled ? 0.3 : 0 }}
-          className="mt-4 text-[11px] sm:text-xs tracking-[0.2em] uppercase text-white/25 max-w-md"
+          className="mt-3 text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-white/25 max-w-md"
         >
           Celebrating diversity, creativity, and the emotions that colours bring to life
         </motion.p>
@@ -446,7 +445,7 @@ export function Hero() {
             shimmerColor="rgba(62, 238, 213, 0.35)"
             shimmerDuration="3s"
             background="rgba(62, 238, 213, 0.08)"
-            className="px-8 sm:px-10 py-3.5 sm:py-4"
+            className="px-7 sm:px-9 py-3 sm:py-3.5"
             onClick={() => scrollTo("#events")}
           >
             <span className="text-euphoria-aqua font-semibold tracking-[0.2em] uppercase text-xs sm:text-sm">
@@ -457,7 +456,7 @@ export function Hero() {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => scrollTo("#about")}
-            className="px-8 sm:px-10 py-3.5 sm:py-4 text-white/40 font-medium tracking-[0.15em] uppercase text-xs sm:text-sm border border-white/10 rounded-lg transition-all duration-300 hover:text-white/70 hover:border-white/20 hover:bg-white/[0.02]"
+            className="px-7 sm:px-9 py-3 sm:py-3.5 text-white/40 font-medium tracking-[0.15em] uppercase text-[11px] sm:text-xs border border-white/10 rounded-lg transition-all duration-300 hover:text-white/70 hover:border-white/20 hover:bg-white/[0.02]"
           >
             Discover Euphoria
           </motion.button>

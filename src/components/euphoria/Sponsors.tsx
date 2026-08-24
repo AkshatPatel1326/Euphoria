@@ -38,7 +38,7 @@ export function Sponsors() {
           <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/40 mb-4">
             Our Partners
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white/80">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white/80">
             Sponsors &amp; Partners
           </h2>
           <p className="mt-4 text-sm text-white/25 max-w-md mx-auto">
@@ -51,7 +51,7 @@ export function Sponsors() {
         <BlurFade delay={0.1} inViewMargin="-80px" className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 mb-16">
           {/* SAGE Euphoria logo */}
           <div className="flex flex-col items-center gap-3">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-euphoria-gold/15 bg-euphoria-gold/[0.03] p-2 flex items-center justify-center">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-euphoria-gold/15 bg-euphoria-gold/[0.03] p-2 flex items-center justify-center">
               <img
                 src="/assets/2.png"
                 alt="SAGE Euphoria logo"
@@ -71,7 +71,7 @@ export function Sponsors() {
 
           {/* Radio SAGE */}
           <div className="flex flex-col items-center gap-3">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-euphoria-gold/15 bg-euphoria-gold/[0.03] p-2 flex items-center justify-center">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-euphoria-gold/15 bg-euphoria-gold/[0.03] p-2 flex items-center justify-center">
               <img
                 src="/assets/sponcers1.png"
                 alt="Radio SAGE logo"

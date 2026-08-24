@@ -70,7 +70,7 @@ function FooterMarquee() {
         {Array.from({ length: 8 }).map((_, i) => (
           <MarqueeItem key={i}>
             <span
-              className="text-[14vw] sm:text-[12vw] md:text-[10vw] font-black tracking-wider mx-0"
+              className="text-[11vw] sm:text-[9vw] md:text-[7.5vw] font-black tracking-wider mx-0"
               style={{
                 WebkitTextStroke: "1.5px rgba(162, 50, 160, 0.20)",
                 color: "transparent",

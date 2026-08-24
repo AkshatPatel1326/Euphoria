@@ -50,7 +50,7 @@ export function Events() {
           <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-aqua/60 mb-4">
             Events
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">
             <span className="text-white">Find Your </span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua">
               Arena

@@ -31,7 +31,7 @@ export function About() {
             </BlurFade>
 
             <BlurFade delay={0.1} inViewMargin="-100px">
-              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.0]">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.0]">
                 <span className="text-white block">The Fourth</span>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua block mt-2">
                   Edition.
@@ -72,7 +72,7 @@ export function About() {
                   className="flex items-baseline gap-4 py-5 border-b border-white/[0.04] last:border-b-0 group"
                 >
                   <span
-                    className={`text-4xl sm:text-5xl font-black ${h.accent} group-hover:text-white transition-colors duration-300 min-w-[100px]`}
+                    className={`text-3xl sm:text-4xl font-black ${h.accent} group-hover:text-white transition-colors duration-300 min-w-[100px]`}
                   >
                     {h.value}
                   </span>
@@ -96,7 +96,7 @@ export function About() {
                   { value: "800K+", label: "Website Visits" },
                 ].map((stat) => (
                   <div key={stat.label} className="flex items-center justify-between py-2 border-b border-white/[0.03] last:border-b-0">
-                    <span className="text-lg sm:text-xl font-bold text-white/30">{stat.value}</span>
+                    <span className="text-base sm:text-lg font-bold text-white/30">{stat.value}</span>
                     <span className="text-[9px] tracking-[0.2em] uppercase text-white/12">{stat.label}</span>
                   </div>
                 ))}
