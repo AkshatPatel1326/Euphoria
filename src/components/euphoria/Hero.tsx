@@ -1,5 +1,5 @@
-import { useMemo, useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { LightRays } from "@/components/magicui/light-rays";
 import { Particles } from "@/components/magicui/particles";
 import { Marquee, MarqueeItem } from "@/components/magicui/marquee";
@@ -12,10 +12,7 @@ function HeroBackground() {
 
   return (
     <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-      {/* Deep base */}
       <div className="absolute inset-0 bg-euphoria-dark" />
-
-      {/* Large plum glow — top center */}
       <div
         className="absolute inset-0"
         style={{
@@ -23,8 +20,6 @@ function HeroBackground() {
             "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(91, 27, 82, 0.35) 0%, transparent 60%)",
         }}
       />
-
-      {/* Purple atmospheric — left */}
       <div
         className="absolute inset-0"
         style={{
@@ -32,8 +27,6 @@ function HeroBackground() {
             "radial-gradient(ellipse 50% 60% at 20% 60%, rgba(162, 50, 160, 0.10) 0%, transparent 50%)",
         }}
       />
-
-      {/* Teal glow — bottom right */}
       <div
         className="absolute inset-0"
         style={{
@@ -41,8 +34,6 @@ function HeroBackground() {
             "radial-gradient(ellipse 50% 50% at 75% 70%, rgba(23, 111, 99, 0.15) 0%, transparent 50%)",
         }}
       />
-
-      {/* Aqua accent — subtle top-right */}
       <div
         className="absolute inset-0"
         style={{
@@ -50,8 +41,6 @@ function HeroBackground() {
             "radial-gradient(ellipse 30% 30% at 80% 20%, rgba(62, 238, 213, 0.03) 0%, transparent 40%)",
         }}
       />
-
-      {/* Gold light orb — top left */}
       <div
         className="absolute inset-0"
         style={{
@@ -59,8 +48,6 @@ function HeroBackground() {
             "radial-gradient(ellipse 25% 25% at 15% 25%, rgba(175, 153, 71, 0.04) 0%, transparent 40%)",
         }}
       />
-
-      {/* Light Rays — reduced intensity so logo dominates */}
       <LightRays
         colors={[
           "rgba(162, 50, 160, 0.06)",
@@ -73,8 +60,6 @@ function HeroBackground() {
         opacity={0.3}
         speed={45}
       />
-
-      {/* Faded fest background image */}
       <motion.div
         initial={{ opacity: 0, scale: 1.05 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -91,13 +76,191 @@ function HeroBackground() {
           style={{ filter: "blur(3px) saturate(0.3)" }}
         />
       </motion.div>
-
-      {/* Vignette */}
       <div className="absolute inset-0 bg-gradient-to-b from-euphoria-dark/80 via-transparent to-euphoria-dark" />
       <div className="absolute inset-0 bg-gradient-to-r from-euphoria-dark/60 via-transparent to-euphoria-dark/60" />
-
-      {/* Very subtle grain */}
       <div className="noise-overlay absolute inset-0" />
+    </div>
+  );
+}
+
+/* ── "JOY OF COLOURS" cinematic reveal ─────────────────────── */
+function ColourReveal({ phase }: { phase: number }) {
+  const reducedMotion = useReducedMotion();
+
+  /* phase 0 = waiting, 1 = appearing, 2 = holding, 3 = fading out */
+  const show = phase >= 1 && phase <= 3;
+
+  const textOpacity =
+    phase === 0
+      ? 0
+      : phase === 1
+        ? 1
+        : phase === 2
+          ? 1
+          : 0;
+
+  const textScale =
+    phase === 0
+      ? 0.88
+      : phase === 1
+        ? 1
+        : phase === 2
+          ? 1
+          : 0.96;
+
+  const textBlur =
+    phase === 0
+      ? "blur(14px)"
+      : phase === 1
+        ? "blur(0px)"
+        : phase === 2
+          ? "blur(0px)"
+          : "blur(8px)";
+
+  const textTransition =
+    phase === 1
+      ? "all 1.4s cubic-bezier(0.22, 0.61, 0.36, 1)"
+      : phase === 3
+        ? "all 0.8s ease-in"
+        : "all 0.3s ease";
+
+  /* Colour glows — converge during phase 1–2, dissipate in phase 3 */
+  const glowOpacity = phase === 0 ? 0 : phase === 3 ? 0 : 1;
+  const glowTransition =
+    phase === 1
+      ? "opacity 2s ease-out"
+      : phase === 3
+        ? "opacity 0.8s ease-in"
+        : "opacity 0.3s ease";
+
+  if (reducedMotion) {
+    return null;
+  }
+
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20" aria-hidden="true">
+      {/* Flowing colour glows behind the text */}
+      <div
+        className="absolute inset-0"
+        style={{ opacity: glowOpacity, transition: glowTransition }}
+      >
+        {/* Gold — bottom-left drift */}
+        <motion.div
+          animate={{
+            x: [0, 40, -20, 0],
+            y: [0, -30, 20, 0],
+            scale: [1, 1.15, 0.95, 1],
+          }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute"
+          style={{
+            left: "25%",
+            top: "35%",
+            width: "280px",
+            height: "280px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(175,153,71,0.18) 0%, transparent 70%)",
+            filter: "blur(60px)",
+          }}
+        />
+        {/* Purple — center-right */}
+        <motion.div
+          animate={{
+            x: [0, -35, 25, 0],
+            y: [0, 25, -20, 0],
+            scale: [1, 0.9, 1.1, 1],
+          }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          className="absolute"
+          style={{
+            right: "20%",
+            top: "30%",
+            width: "300px",
+            height: "300px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(162,50,160,0.16) 0%, transparent 70%)",
+            filter: "blur(65px)",
+          }}
+        />
+        {/* Teal — top-left */}
+        <motion.div
+          animate={{
+            x: [0, 30, -15, 0],
+            y: [0, -20, 35, 0],
+            scale: [1, 1.05, 0.92, 1],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute"
+          style={{
+            left: "15%",
+            top: "25%",
+            width: "220px",
+            height: "220px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(23,111,99,0.15) 0%, transparent 70%)",
+            filter: "blur(55px)",
+          }}
+        />
+        {/* Aqua — right */}
+        <motion.div
+          animate={{
+            x: [0, -25, 30, 0],
+            y: [0, 30, -10, 0],
+            scale: [1, 1.08, 0.95, 1],
+          }}
+          transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+          className="absolute"
+          style={{
+            right: "30%",
+            bottom: "30%",
+            width: "200px",
+            height: "200px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(62,238,213,0.12) 0%, transparent 70%)",
+            filter: "blur(50px)",
+          }}
+        />
+        {/* Magenta — center */}
+        <motion.div
+          animate={{
+            x: [0, 20, -30, 0],
+            y: [0, -25, 15, 0],
+            scale: [1, 0.95, 1.12, 1],
+          }}
+          transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+          className="absolute"
+          style={{
+            left: "40%",
+            top: "40%",
+            width: "260px",
+            height: "260px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(180,40,140,0.10) 0%, transparent 70%)",
+            filter: "blur(60px)",
+          }}
+        />
+      </div>
+
+      {/* "JOY OF COLOURS" text */}
+      <div
+        style={{
+          opacity: textOpacity,
+          transform: `scale(${textScale})`,
+          filter: textBlur,
+          transition: textTransition,
+        }}
+        className="text-center select-none"
+      >
+        <span className="block text-[8vw] sm:text-[6.5vw] md:text-[5vw] lg:text-[4vw] font-black tracking-[0.12em] text-white/80">
+          JOY OF
+        </span>
+        <span className="block text-[12vw] sm:text-[10vw] md:text-[7.5vw] lg:text-[6vw] font-black tracking-[0.08em] bg-clip-text text-transparent bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua">
+          COLOURS
+        </span>
+        <span className="block mt-3 text-[9px] sm:text-[10px] tracking-[0.5em] uppercase text-white/15">
+          SAGE Euphoria 2026
+        </span>
+      </div>
     </div>
   );
 }
@@ -185,6 +348,30 @@ export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
 
+  /* 0 = initial dark, 1 = colour reveal appearing, 2 = holding, 3 = fading to hero */
+  const [introPhase, setIntroPhase] = useState<number>(() =>
+    reducedMotion ? 3 : 0
+  );
+
+  useEffect(() => {
+    if (reducedMotion) return;
+
+    /* Phase 0→1: "JOY OF COLOURS" appears (starts after 0.3s) */
+    const t1 = setTimeout(() => setIntroPhase(1), 300);
+    /* Phase 1→2: hold (after 1.7s from phase 1) */
+    const t2 = setTimeout(() => setIntroPhase(2), 2000);
+    /* Phase 2→3: transition to hero (after 0.8s hold) */
+    const t3 = setTimeout(() => setIntroPhase(3), 2800);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, [reducedMotion]);
+
+  const heroReady = introPhase >= 3;
+
   const scrollTo = (id: string) => {
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -199,7 +386,7 @@ export function Hero() {
       <MarqueeTypography />
       <OrbitalRing />
 
-      {/* Magic UI Particles — subtle floating lights */}
+      {/* Magic UI Particles */}
       <Particles
         count={25}
         colors={[
@@ -212,15 +399,22 @@ export function Hero() {
         speed={0.6}
       />
 
-      {/* ── Main content ── */}
+      {/* ── Cinematic Intro: JOY OF COLOURS ── */}
+      <ColourReveal phase={introPhase} />
+
+      {/* ── Main content — revealed after intro ── */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-5xl mx-auto">
-        {/* ── Euphoria Logo — cinematic entrance ── */}
+        {/* ── Euphoria Logo — cinematic entrance after intro ── */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.82, filter: "blur(16px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          initial={{ opacity: 0, scale: 0.96, filter: "blur(8px)" }}
+          animate={
+            heroReady
+              ? { opacity: 1, scale: 1, filter: "blur(0px)" }
+              : { opacity: 0, scale: 0.96, filter: "blur(8px)" }
+          }
           transition={{
-            duration: 1.5,
-            delay: 0.3,
+            duration: 1.2,
+            delay: heroReady ? 0.2 : 0,
             ease: [0.22, 0.61, 0.36, 1],
           }}
           className="mb-4 sm:mb-6 relative"
@@ -233,13 +427,13 @@ export function Hero() {
             />
 
             {/* ── One-time light sweep across logo ── */}
-            {!reducedMotion && (
+            {!reducedMotion && heroReady && (
               <motion.div
                 initial={{ x: "-100%", opacity: 0 }}
                 animate={{ x: "200%", opacity: [0, 0.5, 0] }}
                 transition={{
                   duration: 1.6,
-                  delay: 2.0,
+                  delay: 1.6,
                   ease: "easeInOut",
                 }}
                 className="absolute inset-0 pointer-events-none overflow-hidden"
@@ -259,11 +453,15 @@ export function Hero() {
 
         {/* ── Large written SAGE EUPHORIA typography ── */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)", y: 20 }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)", y: 0 }}
+          initial={{ opacity: 0, scale: 0.92, y: 15 }}
+          animate={
+            heroReady
+              ? { opacity: 1, scale: 1, y: 0 }
+              : { opacity: 0, scale: 0.92, y: 15 }
+          }
           transition={{
-            duration: 1.2,
-            delay: 0.6,
+            duration: 1.0,
+            delay: heroReady ? 0.5 : 0,
             ease: [0.25, 0.1, 0.25, 1],
           }}
           className="mb-5 sm:mb-7 w-full"
@@ -281,8 +479,8 @@ export function Hero() {
         {/* Year badge */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.0 }}
+          animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+          transition={{ duration: 0.6, delay: heroReady ? 0.8 : 0 }}
           className="mb-5 sm:mb-6"
         >
           <span className="inline-block px-5 py-1.5 text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/70 border border-euphoria-gold/20 rounded-full bg-euphoria-gold/[0.04]">
@@ -293,8 +491,8 @@ export function Hero() {
         {/* Theme — Joy of Colours */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.2 }}
+          animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.7, delay: heroReady ? 1.0 : 0 }}
           className="text-base sm:text-lg md:text-xl font-light tracking-[0.2em] uppercase"
         >
           <AnimatedGradientText
@@ -305,21 +503,21 @@ export function Hero() {
           </AnimatedGradientText>
         </motion.p>
 
-        {/* Subtext — authentic brochure messaging */}
+        {/* Subtext */}
         <motion.p
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 1.4 }}
+          animate={heroReady ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.7, delay: heroReady ? 1.2 : 0 }}
           className="mt-4 text-[11px] sm:text-xs tracking-[0.2em] uppercase text-white/25 max-w-md"
         >
           Celebrating diversity, creativity, and the emotions that colours bring to life
         </motion.p>
 
-        {/* CTAs — Magic UI ShimmerButton for primary */}
+        {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.6 }}
+          animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: heroReady ? 1.4 : 0 }}
           className="mt-10 sm:mt-14 flex flex-col sm:flex-row gap-4"
         >
           <ShimmerButton
@@ -347,8 +545,8 @@ export function Hero() {
       {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.5, duration: 1 }}
+        animate={heroReady ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ delay: heroReady ? 2.2 : 0, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <span className="text-[9px] tracking-[0.35em] uppercase text-white/15">
