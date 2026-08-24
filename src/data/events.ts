@@ -80,7 +80,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "A solo dance competition celebrating artistry, rhythm, and stage presence.",
-    poster: "/assets/1_1_.jpg",
+    poster: "/assets/Move___Groove_Solo.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹299",
     date: "8 April 2026",
@@ -97,7 +97,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "Choreographed group performances judged on synchronization, creativity, and impact.",
-    poster: "/assets/2_1_.jpg",
+    poster: "/assets/Move___Groove_Group.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹899",
     date: "8 April 2026",
@@ -114,7 +114,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "A solo singing competition for vocalists who command the stage with range and emotion.",
-    poster: "/assets/3_1_.jpg",
+    poster: "/assets/Singing.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹299",
     date: "8 April 2026",
@@ -131,7 +131,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "Live band performances competing for the title of best ensemble on campus.",
-    poster: "/assets/4_1_.jpg",
+    poster: "/assets/Battle_of_bands.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹2,499",
     date: "9 April 2026",
@@ -152,7 +152,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "Solo runway competition for models presenting a single original dress design.",
-    poster: "/assets/7_1_.jpg",
+    poster: "/assets/Fashion_Fiesta.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹999",
     date: "9 April 2026",
@@ -186,7 +186,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "A design showcase where emerging fashion talent presents up to six original pieces.",
-    poster: "/assets/8_1_.jpg",
+    poster: null,
     registrationStatus: "coming-soon",
     registrationFee: "₹4,999",
     date: "TBA",
@@ -203,7 +203,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "Open auditions for aspiring models seeking their break into the spotlight.",
-    poster: "/assets/9_1_.jpg",
+    poster: "/assets/Model_Hunt.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹199",
     date: "TBA",
@@ -241,7 +241,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "A visual storytelling competition spanning reels, photography, and short-form content.",
-    poster: "/assets/10_1_.jpg",
+    poster: "/assets/Reel_Making.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹199",
     date: "6 April 2026 to 10 April 2026",
@@ -275,7 +275,7 @@ export const events: EuphoriaEvent[] = [
     category: "literary-management",
     description:
       "A simulated IPL auction where teams compete to build the strongest squad under budget.",
-    poster: null,
+    poster: "/assets/Bid_to_win.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹499",
     date: "9 April 2026",
@@ -296,7 +296,7 @@ export const events: EuphoriaEvent[] = [
     category: "literary-management",
     description:
       "A marketing competition where strategy and humor combine to drive audience engagement.",
-    poster: null,
+    poster: "/assets/Meme_Battle.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹250",
     date: "TBA",
@@ -330,7 +330,7 @@ export const events: EuphoriaEvent[] = [
     category: "literary-management",
     description:
       "An innovation pitch competition where participants present original ideas to a panel.",
-    poster: null,
+    poster: "/assets/Idea_Verse.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹250",
     date: "TBA",
@@ -347,7 +347,7 @@ export const events: EuphoriaEvent[] = [
     category: "literary-management",
     description:
       "A formal debate competition for participants who argue with precision and conviction.",
-    poster: null,
+    poster: "/assets/The_great_debate.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹249",
     date: "9 April 2026",
@@ -364,7 +364,7 @@ export const events: EuphoriaEvent[] = [
     category: "literary-management",
     description:
       "A spoken-word competition where original poetry is performed live for a judging panel.",
-    poster: null,
+    poster: "/assets/VI.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹249",
     date: "10 April 2026",
@@ -381,7 +381,7 @@ export const events: EuphoriaEvent[] = [
     category: "science-tech",
     description:
       "A solo innovation pitch competition for individuals with a prototype or concept.",
-    poster: null,
+    poster: "/assets/Idea_spark.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹99",
     date: "TBA",
@@ -453,7 +453,7 @@ export const events: EuphoriaEvent[] = [
     category: "science-tech",
     description:
       "A competition testing the ability to craft effective prompts for artificial intelligence systems.",
-    poster: null,
+    poster: "/assets/AI_Prompt.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹149",
     date: "TBA",
