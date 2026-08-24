@@ -3,6 +3,14 @@ import { useNavigate } from "react-router";
 import { categoryMeta, events, categoryOrder, type EventCategory } from "@/data/events";
 import { BlurFade } from "@/components/magicui/blur-fade";
 
+/* ── Category-specific atmospheric glow colors ──────────────── */
+const categoryAtmosphere: Record<EventCategory, string> = {
+  cultural: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(162,50,160,0.08) 0%, transparent 70%)",
+  "literary-management": "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(175,153,71,0.06) 0%, transparent 70%)",
+  "science-tech": "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(62,238,213,0.06) 0%, transparent 70%)",
+  sports: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(23,111,99,0.07) 0%, transparent 70%)",
+};
+
 /* ── Category visual area — consistent across all four ─────── */
 function CategoryVisual({
   category,
@@ -22,7 +30,7 @@ function CategoryVisual({
           ? "/events/science-tech"
           : "/events/sports";
 
-  const sharedVisualClass = "relative w-full lg:w-[420px] xl:w-[480px] aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden group-hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)] transition-shadow duration-500 cursor-pointer";
+  const sharedVisualClass = "relative w-full lg:w-[420px] xl:w-[480px] aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden cursor-pointer";
 
   /* ── Category poster images ── */
   const categoryPosters: Partial<Record<EventCategory, string>> = {
@@ -36,8 +44,14 @@ function CategoryVisual({
       className={`relative ${isEven ? "" : "lg:order-1"}`}
       style={{ direction: "ltr" }}
     >
+      {/* Atmospheric glow behind the visual */}
       <div
-        className={sharedVisualClass}
+        className="absolute -inset-8 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+        style={{ background: categoryAtmosphere[category] }}
+      />
+
+      <div
+        className={`${sharedVisualClass} border border-white/[0.04] group-hover:border-white/[0.1] transition-all duration-500 group-hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)]`}
         onClick={() => navigate(route)}
       >
         {/* Poster image or gradient background */}
@@ -46,12 +60,12 @@ function CategoryVisual({
             <img
               src={posterSrc}
               alt={`${meta.label} category poster`}
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-euphoria-dark/80 via-euphoria-dark/20 to-transparent" />
           </>
         ) : (
-          <div className={`absolute inset-0 bg-gradient-to-br ${meta.gradient} opacity-40`} />
+          <div className={`absolute inset-0 bg-gradient-to-br ${meta.gradient} opacity-40 transition-transform duration-700 group-hover:scale-[1.03]`} />
         )}
 
         {/* Accent gradient overlay on hover */}
@@ -59,7 +73,7 @@ function CategoryVisual({
 
         {/* Abstract decorative shapes (only for non-poster categories) */}
         {!posterSrc && (
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.03]">
             <div
               className="absolute -top-8 -right-8 w-32 h-32 sm:w-40 sm:h-40 rounded-full border opacity-10"
               style={{ borderColor: meta.color }}
@@ -131,12 +145,18 @@ function CategoryRow({
 
   return (
     <BlurFade
-      delay={index * 0.1}
-      duration={0.7}
-      yOffset={50}
-      inViewMargin="-60px"
-      className={`group relative grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 lg:gap-12 items-center py-12 sm:py-16 lg:py-20 border-b border-white/[0.04] last:border-b-0`}
+      delay={index * 0.12}
+      duration={0.8}
+      yOffset={40}
+      inViewMargin="-80px"
+      className="group relative grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 lg:gap-12 items-center py-12 sm:py-16 lg:py-20 border-b border-white/[0.04] last:border-b-0"
     >
+      {/* Subtle category atmosphere glow on the row */}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none rounded-3xl"
+        style={{ background: categoryAtmosphere[category] }}
+      />
+
       {/* Left — Category info */}
       <div
         className={`relative ${isEven ? "lg:text-left" : "lg:text-right lg:order-2"}`}
@@ -186,13 +206,15 @@ function CategoryRow({
             whileHover={{ x: 4 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => navigate(route)}
-            className="flex items-center gap-2 text-xs font-semibold tracking-[0.15em] uppercase transition-colors duration-300"
+            className="flex items-center gap-2 text-xs font-semibold tracking-[0.15em] uppercase transition-all duration-300 group/cta"
             style={{ color: `${meta.color}99` }}
           >
-            <span className="group-hover:text-white transition-colors">
+            <span className="group-hover:text-white group-hover/cta:text-white transition-colors">
               Explore Events
             </span>
-            <span className="transition-transform group-hover:translate-x-1">→</span>
+            <span className="transition-transform group-hover:translate-x-1 group-hover/cta:translate-x-1.5">
+              →
+            </span>
           </motion.button>
         </div>
       </div>

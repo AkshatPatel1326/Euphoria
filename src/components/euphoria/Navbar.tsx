@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
@@ -11,6 +12,7 @@ const navLinks = [
 ];
 
 export function Navbar() {
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#home");
@@ -56,9 +58,29 @@ export function Navbar() {
 
   const handleNavClick = useCallback((href: string) => {
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  }, []);
+    // If on homepage, smooth-scroll to section
+    if (window.location.pathname === "/") {
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Navigate to homepage, then scroll to section after render
+      navigate("/");
+      setTimeout(() => {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  }, [navigate]);
+
+  const handleLogoClick = useCallback(() => {
+    setMobileOpen(false);
+    if (window.location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate("/");
+      setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" }), 50);
+    }
+  }, [navigate]);
 
   return (
     <>
@@ -80,18 +102,18 @@ export function Navbar() {
           >
             {/* Brand */}
             <motion.button
-              onClick={() => handleNavClick("#home")}
-              className="flex items-center gap-2 group"
+              onClick={handleLogoClick}
+              className="flex items-center gap-2.5 group"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span className="text-base sm:text-lg font-bold tracking-widest text-euphoria-aqua/70 transition-colors duration-300 group-hover:text-euphoria-aqua">
+              <span className="text-sm sm:text-base font-bold tracking-[0.15em] text-euphoria-aqua/80 transition-colors duration-300 group-hover:text-euphoria-aqua">
                 SAGE
               </span>
               <img
                 src="/assets/Sage_euphoria_logp.png"
                 alt="SAGE Euphoria logo"
-                className="h-7 sm:h-8 w-auto object-contain transition-opacity duration-300 group-hover:opacity-90"
+                className="h-8 sm:h-9 w-auto object-contain transition-all duration-300 group-hover:opacity-100 opacity-85"
               />
             </motion.button>
 
