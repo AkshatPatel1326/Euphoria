@@ -20,7 +20,7 @@ export function About() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16 items-start">
           {/* Left — Large headline + copy */}
           <div className="lg:col-span-7">
