@@ -371,7 +371,7 @@ export function Hero() {
       <ColourReveal phase={introPhase} />
 
       {/* ── ACT 3: SAGE EUPHORIA hero — same center position, no vertical movement ── */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 max-w-7xl mx-auto">
+      <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 max-w-[1440px] mx-auto">
         {/* Large written SAGE EUPHORIA typography — enters from center, scale+opacity only */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}

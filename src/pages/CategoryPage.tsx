@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
@@ -22,6 +22,11 @@ export default function CategoryPage() {
   const navigate = useNavigate();
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
+
+  // Scroll to top when navigating to this category page
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
 
   const isValid = validCategories.includes(category as EventCategory);
   const cat = category as EventCategory;
@@ -51,7 +56,7 @@ export default function CategoryPage() {
     <div className="min-h-screen bg-euphoria-dark text-white overflow-x-hidden">
       {/* Fixed header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-euphoria-dark/90 backdrop-blur-xl border-b border-white/[0.04]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center gap-4">
             <button
               onClick={() => navigate("/")}
@@ -89,7 +94,7 @@ export default function CategoryPage() {
               "radial-gradient(ellipse 70% 60% at 50% 100%, rgba(10,6,18,1) 0%, transparent 70%)",
           }}
         />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
+        <div className="relative z-10 mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -122,7 +127,7 @@ export default function CategoryPage() {
       </div>
 
       {/* Events grid */}
-      <div ref={ref} className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-24">
+      <div ref={ref} className="relative z-10 mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 pb-24">
         <AnimatePresence mode="wait">
           <motion.div
             key={cat}

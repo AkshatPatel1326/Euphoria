@@ -72,7 +72,7 @@ export function Navbar() {
             : "bg-transparent backdrop-blur-sm border-b border-white/[0.02] py-2"
         }`}
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
           <div
             className={`flex items-center justify-between transition-all duration-500 ${
               scrolled ? "h-14" : "h-16 md:h-20"
