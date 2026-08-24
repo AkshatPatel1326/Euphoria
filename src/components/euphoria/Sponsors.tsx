@@ -37,14 +37,14 @@ export function Sponsors() {
         {/* Header */}
         <BlurFade inViewMargin="-80px" className="text-center mb-16">
           <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/40 mb-4">
-            Supported By
+            Our Partners
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white/80">
-            Our Partners
+            Sponsors &amp; Partners
           </h2>
           <p className="mt-4 text-sm text-white/25 max-w-md mx-auto">
             SAGE Euphoria is made possible through the valued support of our
-            partners.
+            partners and sponsors across previous editions.
           </p>
         </BlurFade>
 
@@ -94,7 +94,7 @@ export function Sponsors() {
         <BlurFade delay={0.25} inViewMargin="-80px">
           <div className="text-center mb-6">
             <span className="text-[9px] tracking-[0.25em] uppercase text-white/15">
-              Confirmed Partners
+              Past Sponsors &amp; Partners
             </span>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4">
@@ -117,9 +117,19 @@ export function Sponsors() {
           </div>
         </BlurFade>
 
-        <BlurFade delay={0.6} inViewMargin="-60px" className="text-center mt-10 text-[10px] text-white/12 tracking-wider">
-          For partnership inquiries, please reach out to the organizing
-          committee.
+        {/* Pro Night — accurate brochure content */}
+        <BlurFade delay={0.5} inViewMargin="-60px" className="text-center mt-16">
+          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-purple/40 mb-3">
+            Pro Night
+          </span>
+          <p className="text-xs text-white/15 tracking-wider">
+            Headliner artist to be announced
+          </p>
+        </BlurFade>
+
+        {/* Partnership inquiry */}
+        <BlurFade delay={0.6} inViewMargin="-60px" className="text-center mt-6 text-[10px] text-white/12 tracking-wider">
+          For partnership inquiries: sponsorship@sageuniversity.in
         </BlurFade>
       </div>
 

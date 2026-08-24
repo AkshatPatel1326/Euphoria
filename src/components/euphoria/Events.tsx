@@ -56,8 +56,9 @@ export function Events() {
               Arena
             </span>
           </h2>
-          <p className="mt-4 text-sm sm:text-base text-white/30 max-w-xl mx-auto">
-            Four disciplines. Over forty events. One standard-setting program.
+          <p className="mt-4 text-sm sm:text-base text-white/30 max-w-xl mx-auto leading-relaxed">
+            A vibrant blend of art, music, culture, innovation, competitions, and performance —
+            across four disciplines and over twenty-five events.
           </p>
         </BlurFade>
 

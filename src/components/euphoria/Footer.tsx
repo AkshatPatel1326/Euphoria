@@ -140,8 +140,8 @@ export function Footer() {
                 </span>
               </div>
               <p className="text-xs text-white/20 max-w-xs leading-relaxed">
-                SAGE University&apos;s flagship annual festival of culture,
-                innovation, and sport.
+                SAGE University Indore&apos;s flagship annual festival — a
+                three-day celebration of culture, innovation, and sport.
               </p>
             </div>
 
@@ -179,11 +179,40 @@ export function Footer() {
           </div>
         </BlurFade>
 
-        {/* Contact placeholder */}
+        {/* Contact details — from brochure */}
         <BlurFade delay={0.25} inViewMargin="-40px" className="mb-10">
-          <p className="text-xs text-white/12 tracking-wider">
-            Full contact details and social channels will be available ahead of
-            the event.
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <span className="text-[9px] tracking-[0.3em] uppercase text-white/15 font-semibold block mb-2">
+                Contact
+              </span>
+              <p className="text-xs text-white/20 mb-1">
+                sage.euphoria@sageuniversity.in
+              </p>
+              <p className="text-xs text-white/20">
+                sponsorship@sageuniversity.in
+              </p>
+            </div>
+            <div>
+              <span className="text-[9px] tracking-[0.3em] uppercase text-white/15 font-semibold block mb-2">
+                Follow Us
+              </span>
+              <p className="text-xs text-white/20">
+                Instagram: @sage.euphoria
+              </p>
+            </div>
+          </div>
+        </BlurFade>
+
+        {/* University info */}
+        <BlurFade delay={0.3} inViewMargin="-40px" className="mb-10 pb-8 border-b border-white/[0.04]">
+          <span className="text-[9px] tracking-[0.3em] uppercase text-white/12 font-semibold block mb-2">
+            About SAGE University
+          </span>
+          <p className="text-[11px] text-white/12 leading-relaxed max-w-lg">
+            Established in 2007, SAGE University Indore is NAAC A+ accredited and
+            approved by UGC and AICTE, offering 131 programs across 14
+            multidisciplinary institutes.
           </p>
         </BlurFade>
 
@@ -193,7 +222,7 @@ export function Footer() {
             &copy; 2026 SAGE Euphoria. All rights reserved.
           </p>
           <p className="text-[10px] text-white/8 tracking-wider">
-            SAGE University
+            SAGE University, Indore
           </p>
         </div>
       </div>

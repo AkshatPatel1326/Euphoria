@@ -32,29 +32,28 @@ export function About() {
 
             <BlurFade delay={0.1} inViewMargin="-100px">
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.0]">
-                <span className="text-white block">Not just a fest.</span>
+                <span className="text-white block">The Fourth</span>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua block mt-2">
-                  A tradition.
+                  Edition.
                 </span>
               </h2>
             </BlurFade>
 
             <BlurFade delay={0.3} inViewMargin="-100px" className="mt-8 sm:mt-10 space-y-5 max-w-xl">
               <p className="text-base sm:text-lg text-white/40 leading-relaxed font-light">
-                SAGE Euphoria is the flagship annual celebration at SAGE
-                University — a convergence of artistic expression, intellectual
-                competition, and athletic excellence that defines the campus
-                experience.
+                SAGE Euphoria 2026 marks the fourth edition of SAGE University
+                Indore&apos;s flagship annual university fest — a three-day
+                celebration of art, music, culture, and innovation.
               </p>
               <p className="text-base sm:text-lg text-white/40 leading-relaxed font-light">
-                Across four disciplines — Cultural, Literary &amp; Management,
-                Science &amp; Technology, and Sports — Euphoria assembles the
-                most talented, driven, and creative individuals for a
-                multi-day program that sets the standard for collegiate
-                festivals.
+                Featuring live music, thrilling competitions, tech showcases,
+                dynamic forums, and high-energy performances, Euphoria brings
+                together thousands of students for an unforgettable experience
+                where diversity, creativity, and the emotions that colours bring
+                to life take centre stage.
               </p>
               <p className="text-sm sm:text-base text-white/25 leading-relaxed font-light italic border-l-2 border-euphoria-gold/20 pl-5">
-                This is where ambition meets the stage.
+                Joy of Colours — each colour representing a different expression of Euphoria.
               </p>
             </BlurFade>
           </div>
@@ -63,9 +62,10 @@ export function About() {
           <div className="lg:col-span-5 lg:pt-16">
             <BlurFade delay={0.3} yOffset={20} blur={8} inViewMargin="-100px" className="space-y-0">
               {[
-                { value: "40+", label: "Events", accent: "text-euphoria-aqua/70" },
-                { value: "04", label: "Disciplines", accent: "text-euphoria-purple/70" },
-                { value: "∞", label: "Energy", accent: "text-euphoria-gold/70" },
+                { value: "20K+", label: "Expected Attendees — 2026", accent: "text-euphoria-aqua/70" },
+                { value: "3K+", label: "Expected Participants — 2026", accent: "text-euphoria-gold/70" },
+                { value: "03", label: "Days of Celebration", accent: "text-euphoria-purple/70" },
+                { value: "25+", label: "Events Across Various Genres", accent: "text-euphoria-aqua/70" },
               ].map((h, i) => (
                 <div
                   key={h.label}
@@ -81,6 +81,26 @@ export function About() {
                   </span>
                 </div>
               ))}
+            </BlurFade>
+
+            {/* Historical reach */}
+            <BlurFade delay={0.5} yOffset={15} blur={6} inViewMargin="-100px" className="mt-8">
+              <span className="text-[9px] tracking-[0.3em] uppercase text-white/15 font-semibold mb-3 block">
+                Previous Edition — Digital Reach
+              </span>
+              <div className="space-y-2">
+                {[
+                  { value: "500K+", label: "Facebook Reach" },
+                  { value: "2M+", label: "Instagram Impressions" },
+                  { value: "100K+", label: "Video Views" },
+                  { value: "800K+", label: "Website Visits" },
+                ].map((stat) => (
+                  <div key={stat.label} className="flex items-center justify-between py-2 border-b border-white/[0.03] last:border-b-0">
+                    <span className="text-lg sm:text-xl font-bold text-white/30">{stat.value}</span>
+                    <span className="text-[9px] tracking-[0.2em] uppercase text-white/12">{stat.label}</span>
+                  </div>
+                ))}
+              </div>
             </BlurFade>
           </div>
         </div>
