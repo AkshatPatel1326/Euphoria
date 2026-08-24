@@ -371,7 +371,7 @@ export function Hero() {
       <ColourReveal phase={introPhase} />
 
       {/* ── ACT 3: SAGE EUPHORIA hero — same center position, no vertical movement ── */}
-      <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-5xl mx-auto">
+      <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 max-w-7xl mx-auto">
         {/* Large written SAGE EUPHORIA typography — enters from center, scale+opacity only */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
@@ -388,7 +388,7 @@ export function Hero() {
           className="mb-5 sm:mb-7 w-full"
           style={{ filter: heroReady ? "blur(0px)" : "blur(10px)", transition: "filter 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)" }}
         >
-          <h1 className="leading-[0.85] tracking-tight">
+          <h1 className="leading-[0.92] tracking-tight pb-2">
             <span className="block text-[12vw] sm:text-[10vw] md:text-[8.5vw] lg:text-[7vw] font-black text-white/90">
               SAGE
             </span>
