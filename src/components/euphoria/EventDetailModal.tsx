@@ -112,16 +112,19 @@ export function EventDetailModal({
               {/* Details */}
               <div className="space-y-3">
                 {[
-                  { label: "Schedule", value: event.time },
+                  { label: "Registration Fee", value: event.registrationFee },
+                  { label: "Date", value: event.date },
+                  { label: "Day", value: event.day },
+                  { label: "Time", value: event.time },
                   { label: "Venue", value: event.venue },
                   { label: "Team Size", value: event.teamSize },
                   { label: "Prizes", value: event.prizes },
-                ].map((item) => (
+                ].filter((item) => item.value && item.value !== "TBA").map((item) => (
                   <div
                     key={item.label}
                     className="flex items-start gap-3 text-sm"
                   >
-                    <span className="text-white/25 w-24 shrink-0 text-xs">
+                    <span className="text-white/25 w-28 shrink-0 text-xs">
                       {item.label}
                     </span>
                     <span className="text-white/55 text-xs">
