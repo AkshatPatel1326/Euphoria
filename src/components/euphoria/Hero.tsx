@@ -404,53 +404,6 @@ export function Hero() {
 
       {/* ── Main content — revealed after intro ── */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-5xl mx-auto">
-        {/* ── Euphoria Logo — cinematic entrance after intro ── */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96, filter: "blur(8px)" }}
-          animate={
-            heroReady
-              ? { opacity: 1, scale: 1, filter: "blur(0px)" }
-              : { opacity: 0, scale: 0.96, filter: "blur(8px)" }
-          }
-          transition={{
-            duration: 1.2,
-            delay: heroReady ? 0.2 : 0,
-            ease: [0.22, 0.61, 0.36, 1],
-          }}
-          className="mb-4 sm:mb-6 relative"
-        >
-          <div className="relative">
-            <img
-              src="/assets/2.png"
-              alt="SAGE Euphoria logo"
-              className="w-56 h-56 sm:w-72 sm:h-72 md:w-[22rem] md:h-[22rem] lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] object-contain mx-auto drop-shadow-[0_0_120px_rgba(175,153,71,0.15)]"
-            />
-
-            {/* ── One-time light sweep across logo ── */}
-            {!reducedMotion && heroReady && (
-              <motion.div
-                initial={{ x: "-100%", opacity: 0 }}
-                animate={{ x: "200%", opacity: [0, 0.5, 0] }}
-                transition={{
-                  duration: 1.6,
-                  delay: 1.6,
-                  ease: "easeInOut",
-                }}
-                className="absolute inset-0 pointer-events-none overflow-hidden"
-                aria-hidden="true"
-              >
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "linear-gradient(105deg, transparent 30%, rgba(175, 153, 71, 0.15) 45%, rgba(255, 255, 255, 0.08) 50%, rgba(62, 238, 213, 0.10) 55%, transparent 70%)",
-                  }}
-                />
-              </motion.div>
-            )}
-          </div>
-        </motion.div>
-
         {/* ── Large written SAGE EUPHORIA typography ── */}
         <motion.div
           initial={{ opacity: 0, scale: 0.92, y: 15 }}
