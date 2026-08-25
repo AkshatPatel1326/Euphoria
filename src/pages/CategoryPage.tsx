@@ -80,8 +80,9 @@ function CategoryContent({
             <img
               src={posterSrc}
               alt=""
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
             />
+            <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(10,6,18,0.7) 100%)" }} />
             <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-euphoria-dark to-transparent pointer-events-none" />
           </div>
         ) : (
