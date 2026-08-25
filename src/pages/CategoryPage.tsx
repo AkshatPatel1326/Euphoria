@@ -31,10 +31,11 @@ export default function CategoryPage() {
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
-  // Scroll to top when navigating to this category page
+  // Scroll to top and reset state when navigating to this category page
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
-  }, []);
+    setSelectedEvent(null);
+  }, [category]);
 
   const isValid = validCategories.includes(category as EventCategory);
   const cat = category as EventCategory;
@@ -62,7 +63,7 @@ export default function CategoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-euphoria-dark text-white overflow-x-hidden">
+    <div key={cat} className="min-h-screen bg-euphoria-dark text-white overflow-x-hidden">
       {/* Fixed header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-euphoria-dark/90 backdrop-blur-xl border-b border-white/[0.04]">
         <div className="mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8">
