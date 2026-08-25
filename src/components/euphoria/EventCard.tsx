@@ -85,13 +85,13 @@ export function EventCard({
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.4) }}
-      className="group"
+      className="group h-full"
     >
-      <div className="glass-card rounded-xl overflow-hidden transition-all duration-500 hover:border-white/15 hover:shadow-[0_8px_50px_rgba(0,0,0,0.4)] hover:-translate-y-1">
-        <div className="p-3">
+      <div className="glass-card rounded-xl overflow-hidden transition-all duration-500 hover:border-white/15 hover:shadow-[0_8px_50px_rgba(0,0,0,0.4)] hover:-translate-y-1 h-full flex flex-col">
+        <div className="p-3 flex-shrink-0">
           <EventPoster event={event} />
         </div>
-        <div className="px-4 pb-4 pt-1">
+        <div className="px-4 pb-4 pt-1 flex flex-col flex-1">
           <span
             className={`text-[10px] font-semibold tracking-[0.2em] uppercase ${categoryAccent[event.category]}`}
           >
@@ -103,12 +103,14 @@ export function EventCard({
           <p className="mt-1.5 text-xs text-white/30 leading-relaxed line-clamp-2">
             {event.description}
           </p>
-          <button
-            onClick={onViewEvent}
-            className="mt-3 w-full text-center py-2 text-[11px] font-semibold tracking-[0.15em] uppercase text-euphoria-aqua/60 border border-euphoria-aqua/15 rounded-md transition-all duration-300 hover:bg-euphoria-aqua/10 hover:border-euphoria-aqua/40 hover:text-euphoria-aqua"
-          >
-            View Event
-          </button>
+          <div className="mt-auto pt-3">
+            <button
+              onClick={onViewEvent}
+              className="w-full text-center py-2 text-[11px] font-semibold tracking-[0.15em] uppercase text-euphoria-aqua/60 border border-euphoria-aqua/15 rounded-md transition-all duration-300 hover:bg-euphoria-aqua/10 hover:border-euphoria-aqua/40 hover:text-euphoria-aqua"
+            >
+              View Event
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>
