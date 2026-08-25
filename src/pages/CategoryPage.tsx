@@ -25,45 +25,24 @@ const categoryPosters: Record<EventCategory, string> = {
   sports: "/assets/Sports_.jpeg",
 };
 
-export default function CategoryPage() {
-  const { category } = useParams<{ category: string }>();
-  const navigate = useNavigate();
-  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
-  const ref = useRef<HTMLDivElement>(null);
-
-  // Scroll to top and reset state when navigating to this category page
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
-    setSelectedEvent(null);
-  }, [category]);
-
-  const isValid = validCategories.includes(category as EventCategory);
-  const cat = category as EventCategory;
-  const meta = isValid ? categoryMeta[cat] : null;
-  const categoryEvents = isValid
-    ? events.filter((e) => e.category === cat)
-    : [];
-  const selectedEventData = events.find((e) => e.id === selectedEvent) ?? null;
-  const posterSrc = isValid ? categoryPosters[cat] : null;
-
-  if (!isValid || !meta) {
-    return (
-      <div className="min-h-screen bg-euphoria-dark flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-white/30 mb-4">Category not found.</p>
-          <button
-            onClick={() => navigate("/")}
-            className="text-euphoria-aqua/60 text-sm tracking-wider uppercase hover:text-euphoria-aqua transition-colors"
-          >
-            Back to home
-          </button>
-        </div>
-      </div>
-    );
-  }
-
+/* ── Inner content component — keyed by category so it fully remounts ── */
+function CategoryContent({
+  cat,
+  meta,
+  posterSrc,
+  categoryEvents,
+  navigate,
+  onSelectEvent,
+}: {
+  cat: EventCategory;
+  meta: (typeof categoryMeta)[EventCategory];
+  posterSrc: string | null;
+  categoryEvents: typeof events;
+  navigate: (path: string) => void;
+  onSelectEvent: (id: string) => void;
+}) {
   return (
-    <div key={cat} className="min-h-screen bg-euphoria-dark text-white overflow-x-hidden">
+    <div className="min-h-screen bg-euphoria-dark text-white overflow-x-hidden">
       {/* Fixed header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-euphoria-dark/90 backdrop-blur-xl border-b border-white/[0.04]">
         <div className="mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8">
@@ -185,34 +164,84 @@ export default function CategoryPage() {
         </div>
       </div>
 
-      {/* Events grid with staggered reveal */}
-      <div ref={ref} className="relative z-10 mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8 pb-24">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={cat}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5"
-          >
-            {categoryEvents.map((event, i) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                index={i}
-                onViewEvent={() => setSelectedEvent(event.id)}
-              />
-            ))}
-          </motion.div>
-        </AnimatePresence>
+      {/* Events grid */}
+      <div className="relative z-10 mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8 pb-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+          {categoryEvents.map((event, i) => (
+            <EventCard
+              key={event.id}
+              event={event}
+              index={i}
+              onViewEvent={() => onSelectEvent(event.id)}
+            />
+          ))}
+        </div>
       </div>
+    </div>
+  );
+}
 
-      {/* Event detail modal */}
+export default function CategoryPage() {
+  const { category } = useParams<{ category: string }>();
+  const navigate = useNavigate();
+  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
+
+  // Scroll to top when navigating
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [category]);
+
+  const isValid = validCategories.includes(category as EventCategory);
+  const cat = category as EventCategory;
+  const meta = isValid ? categoryMeta[cat] : null;
+  const categoryEvents = isValid
+    ? events.filter((e) => e.category === cat)
+    : [];
+  const selectedEventData = events.find((e) => e.id === selectedEvent) ?? null;
+  const posterSrc = isValid ? categoryPosters[cat] : null;
+
+  if (!isValid || !meta) {
+    return (
+      <div className="min-h-screen bg-euphoria-dark flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-white/30 mb-4">Category not found.</p>
+          <button
+            onClick={() => navigate("/")}
+            className="text-euphoria-aqua/60 text-sm tracking-wider uppercase hover:text-euphoria-aqua transition-colors"
+          >
+            Back to home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={cat}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <CategoryContent
+            cat={cat}
+            meta={meta}
+            posterSrc={posterSrc}
+            categoryEvents={categoryEvents}
+            navigate={navigate}
+            onSelectEvent={setSelectedEvent}
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Event detail modal — rendered outside AnimatePresence to persist */}
       <EventDetailModal
         event={selectedEventData}
         onClose={() => setSelectedEvent(null)}
       />
-    </div>
+    </>
   );
 }
