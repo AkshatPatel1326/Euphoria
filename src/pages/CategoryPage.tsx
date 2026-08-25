@@ -76,22 +76,18 @@ function CategoryContent({
       {/* Hero banner — poster only */}
       <div className="relative pt-16 overflow-hidden">
         {posterSrc ? (
-          <div className="relative w-full overflow-hidden" style={{ aspectRatio: "2.2 / 1" }}>
+          <div className="relative w-full overflow-hidden" style={{ aspectRatio: "2 / 1" }}>
             <img
               src={posterSrc}
               alt=""
               className="w-full h-full object-cover"
-              style={{ objectPosition: "50% 55%" }}
+              style={{ objectPosition: "50% 48%" }}
             />
-            {/* Top mask — hide logos at top of poster */}
-            <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-euphoria-dark via-euphoria-dark/80 to-transparent pointer-events-none" />
-            {/* Bottom mask — hide "EVENTS" and bottom text */}
-            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-euphoria-dark via-euphoria-dark/80 to-transparent pointer-events-none" />
-            {/* Left/right soft vignette */}
-            <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 50%, rgba(10,6,18,0.5) 100%)" }} />
+            {/* Subtle bottom fade into page background */}
+            <div className="absolute bottom-0 left-0 right-0 h-1/6 bg-gradient-to-t from-euphoria-dark to-transparent pointer-events-none" />
           </div>
         ) : (
-          <div className={`relative w-full bg-gradient-to-br ${meta.gradient}`} style={{ aspectRatio: "2.2 / 1" }} />
+          <div className={`relative w-full bg-gradient-to-br ${meta.gradient}`} style={{ aspectRatio: "2 / 1" }} />
         )}
       </div>
 
