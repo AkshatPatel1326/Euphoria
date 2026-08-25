@@ -34,7 +34,7 @@ function CategoryVisual({
 
   /* ── Category poster images ── */
   const categoryPosters: Partial<Record<EventCategory, string>> = {
-    cultural: "/assets/Cultural_Category_Poster.jpeg",
+    cultural: "/assets/Cultural_Category_Poster_2.jpeg",
     "literary-management": "/assets/L_M_Category_Poster.jpg",
   };
   const posterSrc = categoryPosters[category];
