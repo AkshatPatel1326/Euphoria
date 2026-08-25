@@ -258,7 +258,7 @@ export const events: EuphoriaEvent[] = [
     category: "literary-management",
     description:
       "A multi-stage campus treasure hunt testing observation, logic, and speed.",
-    poster: null as string | null,
+    poster: "/assets/Crack_the_Clue.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹999",
     date: "8 April 2026",
