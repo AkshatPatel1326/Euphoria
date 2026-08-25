@@ -6,7 +6,7 @@ const sponsorLogos = [
   { src: "/assets/Past_Sponsors__8_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__9_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__12_.png", alt: "Partner" },
-  { src: "/assets/Past_Sponsors__14_.png", alt: "Partner" },
+
   { src: "/assets/Past_Sponsors__21_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__22_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__23_.png", alt: "Partner" },
@@ -73,7 +73,7 @@ export function Sponsors() {
           <div className="flex flex-col items-center gap-3 w-40">
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-euphoria-gold/15 bg-euphoria-gold/[0.03] p-2 flex items-center justify-center">
               <img
-                src="/assets/Sage_euphoria_logp.png"
+                src="/assets/Past_Sponsors__14_.png"
                 alt="Radio SAGE logo"
                 className="w-full h-full object-contain"
               />
