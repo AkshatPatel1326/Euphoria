@@ -99,42 +99,20 @@ function CategoryContent({
           </div>
         )}
 
-        {/* Large background watermark — category identity only, no "EVENTS" */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-          <span
-            className="text-[12vw] sm:text-[10vw] md:text-[8vw] font-black leading-none select-none whitespace-nowrap opacity-[0.03]"
-            style={{ color: meta.color }}
-          >
-            {meta.number} — {meta.label.toUpperCase()}
-          </span>
-        </div>
-
         <div className="relative z-10 mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
           >
-            {/* Large number */}
-            <motion.span
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-[80px] sm:text-[100px] md:text-[120px] font-black leading-none select-none block mb-2"
-              style={{
-                color: "transparent",
-                WebkitTextStroke: `1px ${meta.color}30`,
-              }}
-            >
-              {meta.number}
-            </motion.span>
+            {/* Category heading — clean white text only */}
             <motion.h1
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight"
+              initial={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }}
+              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 0.61, 0.36, 1] }}
+              className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white/90"
             >
-              <span className="text-white/80">{meta.label}</span>
+              {meta.label}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
