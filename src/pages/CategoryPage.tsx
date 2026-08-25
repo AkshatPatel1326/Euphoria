@@ -125,14 +125,6 @@ function CategoryContent({
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.45 }}
-              className="mt-4 text-sm sm:text-base text-white/30 max-w-lg mx-auto"
-            >
-              {meta.description}
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.55 }}
               className="mt-3 text-xs text-white/15 tracking-wider"
             >
