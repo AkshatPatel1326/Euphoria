@@ -17,6 +17,8 @@ const sponsorLogos = [
   { src: "/assets/Past_Sponsors__30_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__36_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__39_.png", alt: "Partner" },
+  { src: "/assets/JH.png", alt: "JH Partner" },
+  { src: "/assets/RE.png", alt: "RE Partner" },
 ];
 
 export function Sponsors() {
