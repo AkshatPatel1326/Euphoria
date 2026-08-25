@@ -73,57 +73,20 @@ function CategoryContent({
         </div>
       </div>
 
-      {/* Hero banner with category poster */}
+      {/* Hero banner — poster only */}
       <div className="relative pt-16 overflow-hidden">
-        <div className={`absolute inset-0 bg-gradient-to-br ${meta.gradient} opacity-15`} />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 50% 100%, rgba(10,6,18,1) 0%, transparent 70%)",
-          }}
-        />
-
-        {/* Category poster background — exact same image as homepage category card */}
-        {posterSrc && (
-          <div className="absolute inset-0">
+        {posterSrc ? (
+          <div className="relative w-full" style={{ aspectRatio: "16 / 7" }}>
             <img
               src={posterSrc}
               alt=""
               className="w-full h-full object-cover"
-              style={{ filter: "saturate(0.5) brightness(0.35)" }}
             />
-            {/* Strong dark gradient overlay for readability */}
-            <div className="absolute inset-0 bg-gradient-to-b from-euphoria-dark/60 via-euphoria-dark/50 to-euphoria-dark" />
-            <div className="absolute inset-0 bg-gradient-to-t from-euphoria-dark via-transparent to-euphoria-dark/70" />
+            <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-euphoria-dark to-transparent pointer-events-none" />
           </div>
+        ) : (
+          <div className={`relative w-full bg-gradient-to-br ${meta.gradient}`} style={{ aspectRatio: "16 / 7" }} />
         )}
-
-        <div className="relative z-10 mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
-          >
-            {/* Category heading — clean white text only */}
-            <motion.h1
-              initial={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 0.61, 0.36, 1] }}
-              className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white/90"
-            >
-              {meta.label}
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.55 }}
-              className="mt-3 text-xs text-white/15 tracking-wider"
-            >
-              {categoryEvents.length} events
-            </motion.p>
-          </motion.div>
-        </div>
       </div>
 
       {/* Events grid */}
