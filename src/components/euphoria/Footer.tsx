@@ -210,7 +210,7 @@ export function Footer() {
             About SAGE University
           </span>
           <p className="text-[11px] text-white/12 leading-relaxed max-w-lg">
-            Established in 2007, SAGE University Indore is NAAC A+ accredited and
+            Established in 2017, SAGE University Indore is NAAC A+ accredited and
             approved by UGC and AICTE, offering 131 programs across 14
             multidisciplinary institutes.
           </p>
