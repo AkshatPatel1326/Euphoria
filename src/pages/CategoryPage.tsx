@@ -17,9 +17,12 @@ const validCategories: EventCategory[] = [
   "sports",
 ];
 
-/* Category poster images for the hero banner */
-const categoryPosters: Partial<Record<EventCategory, string>> = {
-  "literary-management": "/assets/L_M_Category_Poster.jpg",
+/* Category poster images for the hero banner — EXACT same assets as homepage category cards */
+const categoryPosters: Record<EventCategory, string> = {
+  cultural: "/assets/Cultural_.jpeg",
+  "literary-management": "/assets/Literary___Management.jpeg",
+  "science-tech": "/assets/Science_and_Technology.jpeg",
+  sports: "/assets/Sports_.jpeg",
 };
 
 export default function CategoryPage() {
@@ -40,7 +43,7 @@ export default function CategoryPage() {
     ? events.filter((e) => e.category === cat)
     : [];
   const selectedEventData = events.find((e) => e.id === selectedEvent) ?? null;
-  const posterSrc = isValid ? categoryPosters[cat] : undefined;
+  const posterSrc = isValid ? categoryPosters[cat] : null;
 
   if (!isValid || !meta) {
     return (
@@ -101,15 +104,18 @@ export default function CategoryPage() {
           }}
         />
 
-        {/* Category poster background (if available) */}
+        {/* Category poster background — exact same image as homepage category card */}
         {posterSrc && (
           <div className="absolute inset-0">
             <img
               src={posterSrc}
               alt=""
-              className="w-full h-full object-cover opacity-[0.08]"
-              style={{ filter: "blur(2px) saturate(0.4)" }}
+              className="w-full h-full object-cover"
+              style={{ filter: "saturate(0.5) brightness(0.35)" }}
             />
+            {/* Strong dark gradient overlay for readability */}
+            <div className="absolute inset-0 bg-gradient-to-b from-euphoria-dark/60 via-euphoria-dark/50 to-euphoria-dark" />
+            <div className="absolute inset-0 bg-gradient-to-t from-euphoria-dark via-transparent to-euphoria-dark/70" />
           </div>
         )}
 
