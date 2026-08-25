@@ -47,13 +47,13 @@ export function Sponsors() {
           </p>
         </BlurFade>
 
-        {/* Euphoria + Radio SAGE — featured row */}
+        {/* Euphoria + Radio SAGE — featured row (perfectly symmetrical) */}
         <BlurFade delay={0.1} inViewMargin="-80px" className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 mb-16">
           {/* SAGE Euphoria logo */}
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col items-center gap-3 w-40">
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-euphoria-gold/15 bg-euphoria-gold/[0.03] p-2 flex items-center justify-center">
               <img
-                src="/assets/2.png"
+                src="/assets/Sage_euphoria_logp.png"
                 alt="SAGE Euphoria logo"
                 className="w-full h-full object-contain"
               />
@@ -66,14 +66,14 @@ export function Sponsors() {
           </div>
 
           {/* Divider */}
-          <div className="hidden sm:block w-px h-16 bg-white/[0.06]" />
+          <div className="hidden sm:block w-px h-20 bg-white/[0.06]" />
           <div className="sm:hidden w-16 h-px bg-white/[0.06]" />
 
           {/* Radio SAGE */}
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col items-center gap-3 w-40">
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-euphoria-gold/15 bg-euphoria-gold/[0.03] p-2 flex items-center justify-center">
               <img
-                src="/assets/sponcers1.png"
+                src="/assets/Sage_euphoria_logp.png"
                 alt="Radio SAGE logo"
                 className="w-full h-full object-contain"
               />

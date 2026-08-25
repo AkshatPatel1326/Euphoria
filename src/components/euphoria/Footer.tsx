@@ -161,24 +161,6 @@ export function Footer() {
           </div>
         </BlurFade>
 
-        {/* Radio SAGE + SAGE University */}
-        <BlurFade
-          delay={0.15}
-          inViewMargin="-40px"
-          className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-10 pb-8 border-b border-white/[0.04]"
-        >
-          <div className="flex items-center gap-3">
-            <img
-              src="/assets/sponcers1.png"
-              alt="Radio SAGE"
-              className="w-7 h-7 object-contain rounded-full border border-euphoria-gold/15"
-            />
-            <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-euphoria-gold/30">
-              Radio SAGE — Official Media Partner
-            </p>
-          </div>
-        </BlurFade>
-
         {/* Contact details — from brochure */}
         <BlurFade delay={0.25} inViewMargin="-40px" className="mb-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
