@@ -119,6 +119,16 @@ export default function CategoryPage() {
           </div>
         )}
 
+        {/* Large background watermark — category identity only, no "EVENTS" */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+          <span
+            className="text-[12vw] sm:text-[10vw] md:text-[8vw] font-black leading-none select-none whitespace-nowrap opacity-[0.03]"
+            style={{ color: meta.color }}
+          >
+            {meta.number} — {meta.label.toUpperCase()}
+          </span>
+        </div>
+
         <div className="relative z-10 mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
