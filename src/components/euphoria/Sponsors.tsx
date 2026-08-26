@@ -1,12 +1,27 @@
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { BlurFade } from "@/components/magicui/blur-fade";
 
-/* All sponsor/partner logos uploaded to assets */
-const sponsorLogos = [
+/* ── Featured sponsors (prominent placement) ───────────────── */
+const featuredSponsors = [
+  {
+    src: "/assets/Sage_euphoria_logp.png",
+    label: "SAGE Euphoria 2026",
+    sublabel: "Flagship University Fest",
+  },
+  {
+    src: "/assets/Past_Sponsors__14_.png",
+    label: "Radio SAGE",
+    sublabel: "Official Media Partner",
+  },
+];
+
+/* ── Past sponsor logos ────────────────────────────────────── */
+const pastSponsors = [
   { src: "/assets/Past_Sponsors__7_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__8_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__9_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__12_.png", alt: "Partner" },
-
   { src: "/assets/Past_Sponsors__21_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__22_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__23_.png", alt: "Partner" },
@@ -15,127 +30,198 @@ const sponsorLogos = [
   { src: "/assets/Past_Sponsors__27_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__29_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__30_.png", alt: "Partner" },
-  { src: "/assets/Past_Sponsors__36_.png", alt: "Partner" },
   { src: "/assets/Past_Sponsors__39_.png", alt: "Partner" },
   { src: "/assets/JH.png", alt: "JH Partner" },
   { src: "/assets/RE.png", alt: "RE Partner" },
 ];
 
-export function Sponsors() {
+/* ── Atmospheric background ────────────────────────────────── */
+function SponsorBackground() {
   return (
-    <section id="sponsors" className="relative py-24 sm:py-32 lg:py-40 overflow-hidden">
-      {/* Background */}
+    <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
       <div className="absolute inset-0 bg-euphoria-dark" />
+
+      {/* Deep plum glow */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 50% 40% at 50% 80%, rgba(175, 153, 71, 0.06) 0%, transparent 60%)",
+            "radial-gradient(ellipse 60% 40% at 50% 90%, rgba(91,27,82,0.12) 0%, transparent 60%)",
         }}
       />
 
+      {/* Gold accent glow — center */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 40% 30% at 50% 50%, rgba(175,153,71,0.05) 0%, transparent 50%)",
+        }}
+      />
+
+      {/* Teal accent — right */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 30% 25% at 80% 70%, rgba(23,111,99,0.06) 0%, transparent 50%)",
+        }}
+      />
+
+      {/* Subtle grain */}
+      <div
+        className="absolute inset-0 opacity-[0.015]"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+        }}
+      />
+    </div>
+  );
+}
+
+/* ── Animated gradient divider ──────────────────────────────── */
+function GradientDivider() {
+  return (
+    <div className="relative w-full h-px mb-16 overflow-hidden">
+      <div
+        className="absolute inset-0 animate-gradient-shift"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, rgba(162,50,160,0.25), rgba(175,153,71,0.35), rgba(23,111,99,0.25), transparent)",
+          backgroundSize: "200% 100%",
+        }}
+      />
+    </div>
+  );
+}
+
+/* ── Main Sponsors Section ─────────────────────────────────── */
+export function Sponsors() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { once: true, margin: "-100px" });
+
+  return (
+    <section
+      id="sponsors"
+      ref={sectionRef}
+      className="relative py-20 sm:py-28 lg:py-36 overflow-hidden"
+    >
+      <SponsorBackground />
+
       <div className="relative z-10 mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <BlurFade inViewMargin="-80px" className="text-center mb-16">
-          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/40 mb-4">
-            Our Partners
+        <GradientDivider />
+
+        {/* ── Editorial heading ─────────────────────────────── */}
+        <BlurFade inViewMargin="-80px" className="text-center mb-16 sm:mb-20">
+          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.5em] uppercase text-euphoria-gold/40 mb-5">
+            Acknowledgements
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white/80">
-            Sponsors &amp; Partners
+          <h2
+            className="font-black tracking-tight leading-[0.9]"
+            style={{ fontSize: "clamp(2rem, 5vw, 4rem)" }}
+          >
+            <span className="block text-white/75">THE</span>
+            <span className="block text-white/75">FORCE BEHIND</span>
+            <span className="block bg-clip-text text-transparent bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua">
+              EUPHORIA
+            </span>
           </h2>
-          <p className="mt-4 text-sm text-white/25 max-w-md mx-auto">
-            SAGE Euphoria is made possible through the valued support of our
-            partners and sponsors across previous editions.
+          <p className="mt-6 text-xs sm:text-sm text-white/20 max-w-md mx-auto leading-relaxed">
+            Every great festival is powered by the belief of its partners.
+            <br />
+            These are the names that made Euphoria possible.
           </p>
         </BlurFade>
 
-        {/* Euphoria + Radio SAGE — featured row (perfectly symmetrical) */}
-        <BlurFade delay={0.1} inViewMargin="-80px" className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 mb-16">
-          {/* SAGE Euphoria logo */}
-          <div className="flex flex-col items-center gap-3 w-40">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-euphoria-gold/15 bg-euphoria-gold/[0.03] p-2 flex items-center justify-center">
-              <img
-                src="/assets/Sage_euphoria_logp.png"
-                alt="SAGE Euphoria logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div className="text-center">
-              <p className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-white/40">
-                SAGE Euphoria 2026
-              </p>
-            </div>
-          </div>
+        {/* ── Featured sponsors — prominent presentation ─────── */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 mb-20">
+          {featuredSponsors.map((sponsor, i) => (
+            <BlurFade
+              key={sponsor.label}
+              delay={0.15 + i * 0.12}
+              inViewMargin="-80px"
+              className="flex flex-col items-center gap-4 group"
+            >
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-white/[0.06] bg-white/[0.02] p-2.5 flex items-center justify-center transition-all duration-500 group-hover:border-euphoria-gold/20 group-hover:bg-white/[0.04] group-hover:shadow-[0_0_40px_rgba(175,153,71,0.08)]"
+              >
+                <img
+                  src={sponsor.src}
+                  alt={sponsor.label}
+                  className="w-full h-full object-contain transition-all duration-500 opacity-70 group-hover:opacity-100"
+                />
+              </motion.div>
+              <div className="text-center">
+                <p className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-white/35 group-hover:text-white/55 transition-colors duration-300">
+                  {sponsor.label}
+                </p>
+                <p className="text-[9px] sm:text-[10px] text-white/12 tracking-wider mt-1">
+                  {sponsor.sublabel}
+                </p>
+              </div>
+            </BlurFade>
+          ))}
+        </div>
 
-          {/* Divider */}
-          <div className="hidden sm:block w-px h-20 bg-white/[0.06]" />
-          <div className="sm:hidden w-16 h-px bg-white/[0.06]" />
+        {/* ── Divider line ─────────────────────────────────── */}
+        <div className="flex items-center justify-center gap-4 mb-14">
+          <div className="h-px flex-1 max-w-[120px] bg-gradient-to-r from-transparent to-white/[0.06]" />
+          <span className="text-[9px] tracking-[0.35em] uppercase text-white/12">
+            Past Sponsors &amp; Partners
+          </span>
+          <div className="h-px flex-1 max-w-[120px] bg-gradient-to-l from-transparent to-white/[0.06]" />
+        </div>
 
-          {/* Radio SAGE */}
-          <div className="flex flex-col items-center gap-3 w-40">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-euphoria-gold/15 bg-euphoria-gold/[0.03] p-2 flex items-center justify-center">
-              <img
-                src="/assets/Past_Sponsors__14_.png"
-                alt="Radio SAGE logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div className="text-center">
-              <p className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-euphoria-gold/40">
-                Official Media Partner
-              </p>
-              <p className="text-[10px] text-white/15 mt-1 tracking-wider">
-                Radio SAGE
-              </p>
-            </div>
-          </div>
-        </BlurFade>
-
-        {/* Sponsor logos grid */}
-        <BlurFade delay={0.25} inViewMargin="-80px">
-          <div className="text-center mb-6">
-            <span className="text-[9px] tracking-[0.25em] uppercase text-white/15">
-              Past Sponsors &amp; Partners
-            </span>
-          </div>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4">
-            {sponsorLogos.map((logo, i) => (
-              <BlurFade
-                key={logo.src}
-                delay={0.3 + i * 0.03}
-                duration={0.4}
-                inViewMargin="-60px"
-                className="group flex items-center justify-center aspect-square rounded-xl border border-white/[0.04] bg-white/[0.01] p-3 transition-all duration-300 hover:border-euphoria-gold/15 hover:bg-white/[0.03]"
+        {/* ── Sponsor logo grid — staggered reveal ──────────── */}
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2.5 sm:gap-3">
+          {pastSponsors.map((logo, i) => (
+            <BlurFade
+              key={logo.src}
+              delay={0.3 + i * 0.035}
+              duration={0.45}
+              inViewMargin="-50px"
+            >
+              <motion.div
+                whileHover={{ scale: 1.06, y: -2 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="group flex items-center justify-center aspect-square rounded-xl border border-white/[0.03] bg-white/[0.01] p-2.5 transition-all duration-400 hover:border-euphoria-gold/12 hover:bg-white/[0.03] hover:shadow-[0_0_20px_rgba(175,153,71,0.05)]"
               >
                 <img
                   src={logo.src}
                   alt={logo.alt}
-                  className="w-full h-full object-contain opacity-60 group-hover:opacity-90 transition-opacity duration-300"
+                  className="w-full h-full object-contain opacity-50 group-hover:opacity-85 transition-opacity duration-300"
                   loading="lazy"
                 />
-              </BlurFade>
-            ))}
-          </div>
-        </BlurFade>
+              </motion.div>
+            </BlurFade>
+          ))}
+        </div>
 
-        {/* Pro Night — accurate brochure content */}
-        <BlurFade delay={0.5} inViewMargin="-60px" className="text-center mt-16">
-          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-purple/40 mb-3">
-            Pro Night
-          </span>
-          <p className="text-xs text-white/15 tracking-wider">
+        {/* ── Pro Night tease ──────────────────────────────── */}
+        <BlurFade delay={0.6} inViewMargin="-60px" className="text-center mt-16">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="h-px w-8 bg-euphoria-purple/20" />
+            <span className="text-[9px] sm:text-[10px] font-semibold tracking-[0.5em] uppercase text-euphoria-purple/30">
+              Pro Night
+            </span>
+            <div className="h-px w-8 bg-euphoria-purple/20" />
+          </div>
+          <p className="text-[10px] sm:text-[11px] text-white/12 tracking-wider">
             Headliner artist to be announced
           </p>
         </BlurFade>
 
-        {/* Partnership inquiry */}
-        <BlurFade delay={0.6} inViewMargin="-60px" className="text-center mt-6 text-[10px] text-white/12 tracking-wider">
-          For partnership inquiries: sponsorship@sageuniversity.in
+        {/* ── Partnership inquiry ──────────────────────────── */}
+        <BlurFade delay={0.7} inViewMargin="-60px" className="text-center mt-8">
+          <p className="text-[9px] sm:text-[10px] text-white/10 tracking-[0.2em]">
+            For partnership inquiries:{" "}
+            <span className="text-euphoria-gold/25">sponsorship@sageuniversity.in</span>
+          </p>
         </BlurFade>
       </div>
-
-      {/* Divider */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-euphoria-gold/[0.06] to-transparent" />
     </section>
   );
 }
