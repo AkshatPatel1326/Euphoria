@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
@@ -9,6 +9,11 @@ import {
 } from "@/data/events";
 import { EventCard } from "@/components/euphoria/EventCard";
 import { EventDetailModal } from "@/components/euphoria/EventDetailModal";
+import {
+  detectTitleRow,
+  titleToObjectPosition,
+  loadImage,
+} from "@/lib/posterCrop";
 
 const validCategories: EventCategory[] = [
   "cultural",
@@ -27,6 +32,45 @@ const categoryPosters: Record<EventCategory, string> = {
 
 
 
+/* ── Hook: detect poster title position → object-position string ── */
+function usePosterCrop(posterSrc: string | null) {
+  const [objectPos, setObjectPos] = useState<string>("50% 50%");
+
+  useEffect(() => {
+    if (!posterSrc) return;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const img = await loadImage(posterSrc);
+        if (cancelled) return;
+
+        // Analyse at a small size for speed
+        const ANALYSIS_W = 200;
+        const ANALYSIS_H = Math.round(200 / (img.naturalWidth / img.naturalHeight));
+
+        const canvas = document.createElement("canvas");
+        canvas.width = ANALYSIS_W;
+        canvas.height = ANALYSIS_H;
+        const ctx = canvas.getContext("2d")!;
+
+        const titleRow = detectTitleRow(canvas, ctx, img);
+        // Convert back to natural-image coordinate
+        const naturalTitleRow = (titleRow / ANALYSIS_H) * img.naturalHeight;
+        const pos = titleToObjectPosition(img.naturalHeight, naturalTitleRow);
+        if (!cancelled) setObjectPos(pos);
+      } catch {
+        // Fallback to center
+        if (!cancelled) setObjectPos("50% 50%");
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [posterSrc]);
+
+  return objectPos;
+}
+
 /* ── Inner content component — keyed by category so it fully remounts ── */
 function CategoryContent({
   cat,
@@ -43,6 +87,8 @@ function CategoryContent({
   navigate: (path: string) => void;
   onSelectEvent: (id: string) => void;
 }) {
+  const objectPos = usePosterCrop(posterSrc);
+
   return (
     <div className="min-h-screen bg-euphoria-dark text-white overflow-x-hidden">
       {/* Fixed header */}
@@ -75,20 +121,26 @@ function CategoryContent({
         </div>
       </div>
 
-      {/* Hero banner — poster cropped to show only the category title */}
+      {/* Hero banner — aggressively cropped poster showing ONLY the category title */}
       <div className="relative pt-16 overflow-hidden">
         {posterSrc ? (
-          <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3 / 1" }}>
+          <div
+            className="relative w-full overflow-hidden"
+            style={{ aspectRatio: "5 / 1" }}
+          >
             <img
               src={posterSrc}
               alt=""
-              className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+              className="absolute inset-0 h-full w-full object-cover select-none pointer-events-none"
               draggable={false}
-              style={{ objectPosition: "50% 50%" }}
+              style={{ objectPosition: objectPos }}
             />
           </div>
         ) : (
-          <div className={`relative w-full bg-gradient-to-br ${meta.gradient}`} style={{ aspectRatio: "3 / 1" }} />
+          <div
+            className={`relative w-full bg-gradient-to-br ${meta.gradient}`}
+            style={{ aspectRatio: "5 / 1" }}
+          />
         )}
       </div>
 
