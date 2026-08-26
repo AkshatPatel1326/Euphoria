@@ -9,11 +9,6 @@ import {
 } from "@/data/events";
 import { EventCard } from "@/components/euphoria/EventCard";
 import { EventDetailModal } from "@/components/euphoria/EventDetailModal";
-import {
-  detectTitleRow,
-  titleToObjectPosition,
-  loadImage,
-} from "@/lib/posterCrop";
 
 const validCategories: EventCategory[] = [
   "cultural",
@@ -22,7 +17,7 @@ const validCategories: EventCategory[] = [
   "sports",
 ];
 
-/* Category poster images for the hero banner — EXACT same assets as homepage category cards */
+/* Category poster images for the hero background */
 const categoryPosters: Record<EventCategory, string> = {
   cultural: "/assets/Cultural_.jpeg",
   "literary-management": "/assets/Literary___Management.jpeg",
@@ -30,46 +25,36 @@ const categoryPosters: Record<EventCategory, string> = {
   sports: "/assets/Sports_.jpeg",
 };
 
-
-
-/* ── Hook: detect poster title position → object-position string ── */
-function usePosterCrop(posterSrc: string | null) {
-  const [objectPos, setObjectPos] = useState<string>("50% 50%");
-
-  useEffect(() => {
-    if (!posterSrc) return;
-    let cancelled = false;
-
-    (async () => {
-      try {
-        const img = await loadImage(posterSrc);
-        if (cancelled) return;
-
-        // Analyse at a small size for speed
-        const ANALYSIS_W = 200;
-        const ANALYSIS_H = Math.round(200 / (img.naturalWidth / img.naturalHeight));
-
-        const canvas = document.createElement("canvas");
-        canvas.width = ANALYSIS_W;
-        canvas.height = ANALYSIS_H;
-        const ctx = canvas.getContext("2d")!;
-
-        const titleRow = detectTitleRow(canvas, ctx, img);
-        // Convert back to natural-image coordinate
-        const naturalTitleRow = (titleRow / ANALYSIS_H) * img.naturalHeight;
-        const pos = titleToObjectPosition(img.naturalHeight, naturalTitleRow);
-        if (!cancelled) setObjectPos(pos);
-      } catch {
-        // Fallback to center
-        if (!cancelled) setObjectPos("50% 50%");
-      }
-    })();
-
-    return () => { cancelled = true; };
-  }, [posterSrc]);
-
-  return objectPos;
-}
+/* ── Category hero title definitions ── */
+const categoryTitles: Record<
+  EventCategory,
+  { line1: string; line2: string; fontClass: string }
+> = {
+  cultural: {
+    line1: "CULTURAL",
+    line2: "EVENTS",
+    /* Short title → larger font */
+    fontClass: "text-[clamp(2rem,8vw,6rem)]",
+  },
+  "literary-management": {
+    line1: "LITERARY | MANAGEMENT",
+    line2: "EVENTS",
+    /* Medium title → medium font */
+    fontClass: "text-[clamp(1.4rem,5vw,3.8rem)]",
+  },
+  "science-tech": {
+    line1: "SCIENCE AND TECHNOLOGY",
+    line2: "EVENTS",
+    /* Long title → smaller font */
+    fontClass: "text-[clamp(1.2rem,4.2vw,3.2rem)]",
+  },
+  sports: {
+    line1: "SPORT-O-SPARK",
+    line2: "EVENTS",
+    /* Medium title → medium font */
+    fontClass: "text-[clamp(1.6rem,5.5vw,4.2rem)]",
+  },
+};
 
 /* ── Inner content component — keyed by category so it fully remounts ── */
 function CategoryContent({
@@ -87,7 +72,7 @@ function CategoryContent({
   navigate: (path: string) => void;
   onSelectEvent: (id: string) => void;
 }) {
-  const objectPos = usePosterCrop(posterSrc);
+  const title = categoryTitles[cat];
 
   return (
     <div className="min-h-screen bg-euphoria-dark text-white overflow-x-hidden">
@@ -121,30 +106,49 @@ function CategoryContent({
         </div>
       </div>
 
-      {/* Hero banner — aggressively cropped poster showing ONLY the category title */}
-      <div className="relative pt-16 overflow-hidden">
+      {/* ═══════════════════════════════════════════
+          CATEGORY HERO — poster background + text overlay
+          ═══════════════════════════════════════════ */}
+      <div className="relative pt-16 w-full overflow-hidden" style={{ height: "clamp(180px, 30vw, 420px)" }}>
+        {/* Background poster — blurred and darkened to hide branding */}
         {posterSrc ? (
-          <div
-            className="relative w-full overflow-hidden"
-            style={{ aspectRatio: "5 / 1" }}
-          >
+          <>
             <img
               src={posterSrc}
               alt=""
-              className="absolute inset-0 h-full w-full object-cover select-none pointer-events-none"
+              className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
               draggable={false}
-              style={{ objectPosition: objectPos }}
+              style={{
+                objectPosition: "50% 50%",
+                filter: "blur(20px) brightness(0.35) saturate(1.3)",
+                transform: "scale(1.15)",
+              }}
             />
-          </div>
+            {/* Extra dark overlay to ensure no branding bleeds through */}
+            <div className="absolute inset-0 bg-euphoria-dark/50" />
+          </>
         ) : (
-          <div
-            className={`relative w-full bg-gradient-to-br ${meta.gradient}`}
-            style={{ aspectRatio: "5 / 1" }}
-          />
+          <div className={`absolute inset-0 bg-gradient-to-br ${meta.gradient}`} />
         )}
+
+        {/* Centered category title — the ONLY foreground content */}
+        <div className="absolute inset-0 flex items-center justify-center px-4">
+          <div className="text-center select-none">
+            <h1
+              className={`${title.fontClass} font-black tracking-[0.06em] uppercase leading-[1.05] text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.15)]`}
+            >
+              {title.line1}
+            </h1>
+            <p
+              className="mt-1 text-[clamp(0.65rem,1.8vw,1.1rem)] font-light tracking-[0.35em] uppercase text-white/40"
+            >
+              {title.line2}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Events grid */}
+      {/* Events grid — UNTOUCHED */}
       <div className="relative z-10 mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8 pb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
           {categoryEvents.map((event, i) => (
