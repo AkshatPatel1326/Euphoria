@@ -25,13 +25,7 @@ const categoryPosters: Record<EventCategory, string> = {
   sports: "/assets/Sports_.jpeg",
 };
 
-/* Per-poster crop positions — tuned so only the main title is visible */
-const posterCrop: Record<EventCategory, { scale: string; position: string }> = {
-  cultural:        { scale: "scale(2.4)", position: "50% 52%" },
-  "literary-management": { scale: "scale(2.4)", position: "50% 50%" },
-  "science-tech":  { scale: "scale(2.4)", position: "50% 50%" },
-  sports:          { scale: "scale(2.4)", position: "50% 50%" },
-};
+
 
 /* ── Inner content component — keyed by category so it fully remounts ── */
 function CategoryContent({
@@ -81,31 +75,20 @@ function CategoryContent({
         </div>
       </div>
 
-      {/* Hero banner — cropped poster showing only the title */}
+      {/* Hero banner — poster cropped to show only the category title */}
       <div className="relative pt-16 overflow-hidden">
         {posterSrc ? (
-          <div className="relative w-full overflow-hidden" style={{ aspectRatio: "2.5 / 1" }}>
-            {/* Dark background behind the scaled poster */}
-            <div className="absolute inset-0 bg-euphoria-dark" />
+          <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3 / 1" }}>
             <img
               src={posterSrc}
               alt=""
-              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-              style={{
-                transform: posterCrop[cat].scale,
-                objectPosition: posterCrop[cat].position,
-                transformOrigin: "center center",
-              }}
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+              draggable={false}
+              style={{ objectPosition: "50% 50%" }}
             />
-            {/* Top mask — hides logos at the top of the poster */}
-            <div className="absolute top-0 left-0 right-0 h-[30%] bg-gradient-to-b from-euphoria-dark via-euphoria-dark/60 to-transparent pointer-events-none" />
-            {/* Bottom mask — hides "EVENTS" text at the bottom */}
-            <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-euphoria-dark via-euphoria-dark/60 to-transparent pointer-events-none" />
-            {/* Side masks */}
-            <div className="absolute inset-0 bg-gradient-to-r from-euphoria-dark/30 via-transparent to-euphoria-dark/30 pointer-events-none" />
           </div>
         ) : (
-          <div className={`relative w-full bg-gradient-to-br ${meta.gradient}`} style={{ aspectRatio: "2.5 / 1" }} />
+          <div className={`relative w-full bg-gradient-to-br ${meta.gradient}`} style={{ aspectRatio: "3 / 1" }} />
         )}
       </div>
 
