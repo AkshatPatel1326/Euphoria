@@ -60,20 +60,21 @@ function HeroBackground() {
         opacity={0.3}
         speed={45}
       />
+      {/* Subtle floating colour wash instead of broken image */}
       <motion.div
         initial={{ opacity: 0, scale: 1.05 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 2.5, delay: 0.3, ease: "easeOut" }}
         className="absolute inset-0"
       >
-        <img
-          src="/assets/images.jpg"
-          alt=""
-          aria-hidden="true"
-          className={`absolute inset-0 w-full h-full object-cover opacity-[0.04] ${
+        <div
+          className={`absolute inset-0 ${
             reducedMotion ? "" : "animate-float"
           }`}
-          style={{ filter: "blur(3px) saturate(0.3)" }}
+          style={{
+            background:
+              "radial-gradient(ellipse 40% 30% at 50% 50%, rgba(91,27,82,0.06) 0%, transparent 70%)",
+          }}
         />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-b from-euphoria-dark/80 via-transparent to-euphoria-dark" />

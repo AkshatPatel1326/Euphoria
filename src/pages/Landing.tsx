@@ -3,6 +3,7 @@ import { Hero } from "@/components/euphoria/Hero";
 import { About } from "@/components/euphoria/About";
 import { CategoryCards } from "@/components/euphoria/CategoryCards";
 import { Glimpses } from "@/components/euphoria/Glimpses";
+import { FAQ } from "@/components/euphoria/FAQ";
 import { Sponsors } from "@/components/euphoria/Sponsors";
 import { Footer } from "@/components/euphoria/Footer";
 import { SmoothCursor } from "@/components/magicui/smooth-cursor";
@@ -17,6 +18,7 @@ export default function Landing() {
         <About />
         <CategoryCards />
         <Glimpses />
+        <FAQ />
         <Sponsors />
       </main>
       <Footer />
