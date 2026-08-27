@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/euphoria/Navbar";
 import { Hero } from "@/components/euphoria/Hero";
+import { CinematicReveal } from "@/components/euphoria/CinematicReveal";
 import { About } from "@/components/euphoria/About";
 import { CategoryCards } from "@/components/euphoria/CategoryCards";
 import { Glimpses } from "@/components/euphoria/Glimpses";
@@ -14,6 +15,7 @@ export default function Landing() {
       <Navbar />
       <main>
         <Hero />
+        <CinematicReveal />
         <About />
         <CategoryCards />
         <Glimpses />
