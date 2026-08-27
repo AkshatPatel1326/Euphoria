@@ -58,66 +58,25 @@ export function Glimpses() {
             transition={{ duration: 1.0, delay: 0.3, ease: "easeOut" }}
             className="relative w-full aspect-video max-h-[600px] rounded-2xl overflow-hidden border border-white/[0.06] group cursor-pointer"
           >
-            {/* Video / Placeholder */}
-            {/* If a video asset exists, replace the placeholder div below with:
-                <video auto muted loop playsInline className="w-full h-full object-cover" src="/assets/past-euphoria.mp4" />
-            */}
-            <div className="absolute inset-0 bg-gradient-to-br from-euphoria-plum/40 via-euphoria-darker to-euphoria-teal/30" />
-
-            {/* Grid pattern */}
-            <div
-              className="absolute inset-0 opacity-[0.03]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(162,50,160,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(162,50,160,0.3) 1px, transparent 1px)",
-                backgroundSize: "60px 60px",
-              }}
-            />
-
-            {/* Atmospheric glow */}
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(162,50,160,0.08) 0%, transparent 60%)",
-              }}
-            />
-
-            {/* Play button */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={inView ? { scale: 1, opacity: 1 } : {}}
-                transition={{ duration: 0.6, delay: 0.8 }}
-                className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-white/15 flex items-center justify-center bg-white/[0.03] backdrop-blur-sm group-hover:border-euphoria-aqua/30 group-hover:bg-white/[0.06] transition-all duration-500"
-              >
-                <div className="w-0 h-0 border-l-[12px] border-l-white/60 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent ml-1.5 group-hover:border-l-euphoria-aqua/80 transition-colors duration-500" />
-              </motion.div>
-            </div>
-
-            {/* Overlay text */}
-            <div className="absolute inset-0 flex flex-col items-center justify-end p-6 sm:p-8">
-              <div className="text-center">
-                <span className="block text-[10px] sm:text-[11px] tracking-[0.5em] uppercase text-white/15 font-semibold mb-2">
-                  Past Euphoria
-                </span>
-                <span className="block text-[9px] tracking-[0.3em] uppercase text-white/10">
-                  Video Coming Soon
-                </span>
-              </div>
+            {/* YouTube embed */}
+            <div className="absolute inset-0 bg-black">
+              <iframe
+                src="https://www.youtube.com/embed/O8MIClJWYr4?rel=0&modestbranding=1&color=white"
+                title="Glimpses of Euphoria"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full border-0"
+              />
             </div>
 
             {/* Bottom gradient */}
-            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-euphoria-dark/70 to-transparent" />
-
-            {/* Hover overlay */}
-            <div className="absolute inset-0 bg-white/[0.01] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-euphoria-dark/50 to-transparent pointer-events-none z-10" />
 
             {/* Corner accents */}
-            <div className="absolute top-4 left-4 w-6 h-6 border-l border-t border-white/[0.06] rounded-tl-sm" />
-            <div className="absolute top-4 right-4 w-6 h-6 border-r border-t border-white/[0.06] rounded-tr-sm" />
-            <div className="absolute bottom-4 left-4 w-6 h-6 border-l border-b border-white/[0.06] rounded-bl-sm" />
-            <div className="absolute bottom-4 right-4 w-6 h-6 border-r border-b border-white/[0.06] rounded-br-sm" />
+            <div className="absolute top-4 left-4 w-6 h-6 border-l border-t border-white/[0.06] rounded-tl-sm pointer-events-none z-10" />
+            <div className="absolute top-4 right-4 w-6 h-6 border-r border-t border-white/[0.06] rounded-tr-sm pointer-events-none z-10" />
+            <div className="absolute bottom-4 left-4 w-6 h-6 border-l border-b border-white/[0.06] rounded-bl-sm pointer-events-none z-10" />
+            <div className="absolute bottom-4 right-4 w-6 h-6 border-r border-b border-white/[0.06] rounded-br-sm pointer-events-none z-10" />
           </motion.div>
         </BlurFade>
       </div>
