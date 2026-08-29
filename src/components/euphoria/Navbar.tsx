@@ -98,7 +98,7 @@ export function Navbar() {
         <div className="mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8">
           <div
             className={`flex items-center justify-between transition-all duration-500 ${
-              scrolled ? "h-14" : "h-16 md:h-20"
+              scrolled ? "h-16" : "h-16 md:h-20"
             }`}
           >
             {/* Brand */}
@@ -111,7 +111,7 @@ export function Navbar() {
               <img
                 src="/assets/Sage_euphoria_logp.png"
                 alt="SAGE Euphoria logo"
-                className="h-10 sm:h-12 md:h-14 w-auto object-contain transition-all duration-300 group-hover:opacity-100 opacity-90"
+                className="h-12 sm:h-14 md:h-16 lg:h-[68px] w-auto object-contain transition-all duration-300 group-hover:opacity-100 opacity-90"
               />
             </motion.button>
 
