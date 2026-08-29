@@ -111,14 +111,8 @@ export function Navbar() {
               <img
                 src="/assets/Sage_euphoria_logp.png"
                 alt="SAGE Euphoria logo"
-                className="h-8 sm:h-9 w-auto object-contain transition-all duration-300 group-hover:opacity-100 opacity-90"
+                className="h-10 sm:h-12 md:h-14 w-auto object-contain transition-all duration-300 group-hover:opacity-100 opacity-90"
               />
-              <span className="text-sm sm:text-base font-bold tracking-[0.15em] text-white/70 transition-colors duration-300 group-hover:text-white/90">
-                SAGE
-              </span>
-              <span className="text-sm sm:text-base font-light tracking-[0.15em] text-white/40 transition-colors duration-300 group-hover:text-white/60">
-                EUPHORIA
-              </span>
             </motion.button>
 
             {/* Desktop Nav */}

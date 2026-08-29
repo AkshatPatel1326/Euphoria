@@ -96,7 +96,7 @@ function CategoryVisual({
         {/* Center number watermark */}
         <div className="absolute inset-0 flex items-center justify-center">
           <span
-            className="text-[80px] sm:text-[100px] font-black opacity-[0.04] select-none"
+            className="text-[80px] sm:text-[100px] font-black opacity-[0.08] select-none"
             style={{ color: meta.color }}
           >
             {meta.number}
@@ -170,9 +170,9 @@ function CategoryRow({
           <span
             className="text-[65px] sm:text-[80px] md:text-[105px] lg:text-[130px] font-black leading-none select-none tracking-tighter"
             style={{
-              color: "transparent",
-              WebkitTextStroke: `1.5px ${meta.color}20`,
-              textShadow: `0 0 80px ${meta.color}08`,
+              color: `${meta.color}35`,
+              WebkitTextStroke: `2px ${meta.color}80`,
+              textShadow: `0 0 60px ${meta.color}25, 0 0 120px ${meta.color}10`,
             }}
           >
             {meta.number}
