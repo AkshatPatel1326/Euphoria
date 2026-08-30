@@ -188,12 +188,12 @@ function CategoryRow({
         </h3>
 
         {/* Keywords */}
-        <p className="mt-3 text-[11px] sm:text-xs tracking-[0.2em] uppercase text-white/25 font-light">
+        <p className="mt-3 text-[11px] sm:text-xs tracking-[0.2em] uppercase text-white/55 font-light">
           {meta.keywords}
         </p>
 
         {/* Description */}
-        <p className="mt-4 text-sm sm:text-base text-white/35 max-w-md leading-relaxed font-light">
+        <p className="mt-4 text-sm sm:text-base text-white/65 max-w-md leading-relaxed font-light">
           {meta.description}
         </p>
 
@@ -202,7 +202,7 @@ function CategoryRow({
           className={`mt-6 flex items-center gap-4 ${isEven ? "" : "lg:justify-end"}`}
           style={{ direction: "ltr" }}
         >
-          <span className="text-xs text-white/20 tracking-wider">
+          <span className="text-xs text-white/50 tracking-wider">
             {eventCount} events
           </span>
           <motion.button
@@ -261,7 +261,7 @@ export function CategoryCards() {
               Arena
             </span>
           </h2>
-          <p className="mt-5 text-sm sm:text-base text-white/30 max-w-xl leading-relaxed">
+          <p className="mt-5 text-sm sm:text-base text-white/65 max-w-xl leading-relaxed">
             Four disciplines. Over forty events. One standard-setting program.
           </p>
         </BlurFade>

@@ -25,7 +25,7 @@ export function About() {
           {/* Left — Large headline + copy */}
           <div className="lg:col-span-7">
             <BlurFade className="mb-6" delay={0} inViewMargin="-100px">
-              <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/50">
+              <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/60">
                 About
               </span>
             </BlurFade>
@@ -40,19 +40,19 @@ export function About() {
             </BlurFade>
 
             <BlurFade delay={0.3} inViewMargin="-100px" className="mt-8 sm:mt-10 space-y-5 max-w-xl">
-              <p className="text-base sm:text-lg text-white/40 leading-relaxed font-light">
+              <p className="text-base sm:text-lg text-white/72 leading-relaxed font-light">
                 SAGE Euphoria 2026 marks the fourth edition of SAGE University
                 Indore&apos;s flagship annual university fest — a three-day
                 celebration of art, music, culture, and innovation.
               </p>
-              <p className="text-base sm:text-lg text-white/40 leading-relaxed font-light">
+              <p className="text-base sm:text-lg text-white/72 leading-relaxed font-light">
                 Featuring live music, thrilling competitions, tech showcases,
                 dynamic forums, and high-energy performances, Euphoria brings
                 together thousands of students for an unforgettable experience
                 where diversity, creativity, and the emotions that colours bring
                 to life take centre stage.
               </p>
-              <p className="text-sm sm:text-base text-white/25 leading-relaxed font-light italic border-l-2 border-euphoria-gold/20 pl-5">
+              <p className="text-sm sm:text-base text-white/55 leading-relaxed font-light italic border-l-2 border-euphoria-gold/30 pl-5">
                 Joy of Colours — each colour representing a different expression of Euphoria.
               </p>
             </BlurFade>
@@ -72,11 +72,11 @@ export function About() {
                   className="flex items-baseline gap-4 py-5 border-b border-white/[0.04] last:border-b-0 group"
                 >
                   <span
-                    className={`text-3xl sm:text-4xl font-black ${h.accent} group-hover:text-white transition-colors duration-300 min-w-[100px]`}
+                    className={`text-3xl sm:text-4xl font-black ${h.accent.replace('/70', '/80')} group-hover:text-white transition-colors duration-300 min-w-[100px]`}
                   >
                     {h.value}
                   </span>
-                  <span className="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-white/20 font-medium">
+                  <span className="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-white/55 font-medium">
                     {h.label}
                   </span>
                 </div>
@@ -85,7 +85,7 @@ export function About() {
 
             {/* Historical reach */}
             <BlurFade delay={0.5} yOffset={15} blur={6} inViewMargin="-100px" className="mt-8">
-              <span className="text-[9px] tracking-[0.3em] uppercase text-white/15 font-semibold mb-3 block">
+              <span className="text-[9px] tracking-[0.3em] uppercase text-white/45 font-semibold mb-3 block">
                 Previous Edition — Digital Reach
               </span>
               <div className="space-y-2">
@@ -96,8 +96,8 @@ export function About() {
                   { value: "800K+", label: "Website Visits" },
                 ].map((stat) => (
                   <div key={stat.label} className="flex items-center justify-between py-2 border-b border-white/[0.03] last:border-b-0">
-                    <span className="text-base sm:text-lg font-bold text-white/30">{stat.value}</span>
-                    <span className="text-[9px] tracking-[0.2em] uppercase text-white/12">{stat.label}</span>
+                    <span className="text-base sm:text-lg font-bold text-white/55">{stat.value}</span>
+                    <span className="text-[9px] tracking-[0.2em] uppercase text-white/40">{stat.label}</span>
                   </div>
                 ))}
               </div>

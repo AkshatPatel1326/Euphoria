@@ -77,7 +77,7 @@ function FaqItem({
         >
           <span
             className={`text-sm sm:text-base font-medium tracking-wide transition-colors duration-300 ${
-              isOpen ? "text-white/80" : "text-white/40 group-hover:text-white/60"
+              isOpen ? "text-white/90" : "text-white/65 group-hover:text-white/80"
             }`}
           >
             {item.q}
@@ -119,7 +119,7 @@ function FaqItem({
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
               className="overflow-hidden"
             >
-              <p className="pb-5 sm:pb-6 text-sm sm:text-[15px] text-white/30 leading-relaxed font-light max-w-2xl">
+              <p className="pb-5 sm:pb-6 text-sm sm:text-[15px] text-white/65 leading-relaxed font-light max-w-2xl">
                 {item.a}
               </p>
             </motion.div>
@@ -168,7 +168,7 @@ export function FAQ() {
           {/* Left — heading */}
           <div className="lg:col-span-5">
             <BlurFade inViewMargin="-100px" className="mb-6">
-              <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/50">
+              <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/60">
                 Solutions for Your Curiosities
               </span>
             </BlurFade>
@@ -183,7 +183,7 @@ export function FAQ() {
             </BlurFade>
 
             <BlurFade delay={0.2} inViewMargin="-100px" className="mt-6">
-              <p className="text-sm sm:text-base text-white/25 max-w-sm leading-relaxed font-light">
+              <p className="text-sm sm:text-base text-white/60 max-w-sm leading-relaxed font-light">
                 Everything you need to know before the fest begins.
               </p>
             </BlurFade>

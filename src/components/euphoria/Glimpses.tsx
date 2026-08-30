@@ -32,7 +32,7 @@ export function Glimpses() {
       <div className="relative z-10 mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <BlurFade inViewMargin="-100px" className="mb-10 sm:mb-14 text-center">
-          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/50 mb-4">
+          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/60 mb-4">
             Past Editions — 2023 · 2024 · 2025
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight">
@@ -41,7 +41,7 @@ export function Glimpses() {
               Euphoria
             </span>
           </h2>
-          <p className="mt-5 text-sm sm:text-base text-white/30 max-w-xl mx-auto leading-relaxed">
+          <p className="mt-5 text-sm sm:text-base text-white/65 max-w-xl mx-auto leading-relaxed">
             Experience the energy, creativity, and unforgettable moments that define Euphoria.
           </p>
         </BlurFade>

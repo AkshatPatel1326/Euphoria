@@ -63,7 +63,7 @@ function EventPoster({ event }: { event: EuphoriaEvent }) {
       </div>
       <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/30 to-transparent" />
       <div className="absolute top-3 left-3">
-        <span className="text-[9px] font-semibold tracking-[0.2em] uppercase text-white/40 bg-black/20 backdrop-blur-sm rounded px-2 py-1">
+        <span className="text-[9px] font-semibold tracking-[0.2em] uppercase text-white/60 bg-black/30 backdrop-blur-sm rounded px-2 py-1">
           Poster TBA
         </span>
       </div>
@@ -100,13 +100,13 @@ export function EventCard({
           <h3 className="mt-2 text-sm sm:text-[15px] font-semibold text-white/85 leading-snug line-clamp-2 group-hover:text-white transition-colors">
             {event.name}
           </h3>
-          <p className="mt-1.5 text-xs text-white/30 leading-relaxed line-clamp-2">
+          <p className="mt-1.5 text-xs text-white/60 leading-relaxed line-clamp-2">
             {event.description}
           </p>
           <div className="mt-auto pt-3">
             <button
               onClick={onViewEvent}
-              className="w-full text-center py-2 text-[11px] font-semibold tracking-[0.15em] uppercase text-euphoria-aqua/60 border border-euphoria-aqua/15 rounded-md transition-all duration-300 hover:bg-euphoria-aqua/10 hover:border-euphoria-aqua/40 hover:text-euphoria-aqua"
+              className="w-full text-center py-2 text-[11px] font-semibold tracking-[0.15em] uppercase text-euphoria-aqua/75 border border-euphoria-aqua/25 rounded-md transition-all duration-300 hover:bg-euphoria-aqua/10 hover:border-euphoria-aqua/40 hover:text-euphoria-aqua"
             >
               View Event
             </button>

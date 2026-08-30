@@ -430,7 +430,7 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={heroSettled ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, delay: heroSettled ? 0.3 : 0 }}
-          className="mt-3 text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-white/25 max-w-md"
+          className="mt-3 text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-white/55 max-w-md"
         >
           Celebrating diversity, creativity, and the emotions that colours bring to life
         </motion.p>
@@ -457,7 +457,7 @@ export function Hero() {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => scrollTo("#about")}
-            className="px-7 sm:px-9 py-3 sm:py-3.5 text-white/40 font-medium tracking-[0.15em] uppercase text-[11px] sm:text-xs border border-white/10 rounded-lg transition-all duration-300 hover:text-white/70 hover:border-white/20 hover:bg-white/[0.02]"
+            className="px-7 sm:px-9 py-3 sm:py-3.5 text-white/60 font-medium tracking-[0.15em] uppercase text-[11px] sm:text-xs border border-white/10 rounded-lg transition-all duration-300 hover:text-white/80 hover:border-white/20 hover:bg-white/[0.02]"
           >
             Discover Euphoria
           </motion.button>
@@ -470,8 +470,7 @@ export function Hero() {
         animate={heroSettled ? { opacity: 1 } : { opacity: 0 }}
         transition={{ delay: 0.6, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      >
-        <span className="text-[9px] tracking-[0.35em] uppercase text-white/15">
+      >          <span className="text-[9px] tracking-[0.35em] uppercase text-white/40">
           Scroll
         </span>
         <div className="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center p-1">

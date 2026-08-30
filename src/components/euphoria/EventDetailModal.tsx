@@ -62,7 +62,7 @@ export function EventDetailModal({
               {/* Close */}
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-10 p-2 rounded-full text-white/30 hover:text-white/80 hover:bg-white/5 transition-all"
+                className="absolute top-4 right-4 z-10 p-2 rounded-full text-white/50 hover:text-white/90 hover:bg-white/5 transition-all"
                 aria-label="Close"
               >
                 <X className="size-5" />
@@ -112,7 +112,7 @@ export function EventDetailModal({
                 </h2>
 
                 {/* Description */}
-                <p className="text-sm text-white/40 leading-relaxed">
+                <p className="text-sm text-white/70 leading-relaxed">
                   {event.description}
                 </p>
 
@@ -131,10 +131,10 @@ export function EventDetailModal({
                       key={item.label}
                       className="flex items-start gap-3 text-sm"
                     >
-                      <span className="text-white/25 w-28 shrink-0 text-xs">
+                      <span className="text-white/55 w-28 shrink-0 text-xs">
                         {item.label}
                       </span>
-                      <span className={`text-xs ${item.label === "Registration Fee" ? "text-euphoria-aqua font-semibold" : "text-white/55"}`}>
+                      <span className={`text-xs ${item.label === "Registration Fee" ? "text-euphoria-aqua font-semibold" : "text-white/70"}`}>
                         {item.value}
                       </span>
                     </div>
@@ -143,10 +143,10 @@ export function EventDetailModal({
 
                 {/* Rules */}
                 <div className="glass-card rounded-xl p-4">
-                  <h4 className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/30 mb-2">
+                  <h4 className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/55 mb-2">
                     Rules &amp; Guidelines
                   </h4>
-                  <p className="text-xs text-white/30 leading-relaxed">
+                  <p className="text-xs text-white/60 leading-relaxed">
                     {event.rules}
                   </p>
                 </div>
@@ -163,7 +163,7 @@ export function EventDetailModal({
                     Register Now
                     <ChevronRight className="size-4" />
                   </button>
-                  <p className="text-center text-[10px] text-white/15">
+                  <p className="text-center text-[10px] text-white/45">
                     Entry Fee: {event.registrationFee}
                   </p>
                 </div>
@@ -171,7 +171,7 @@ export function EventDetailModal({
                 {/* Back */}
                 <button
                   onClick={onClose}
-                  className="w-full py-3 text-sm text-white/25 hover:text-white/50 transition-colors tracking-wider uppercase"
+                  className="w-full py-3 text-sm text-white/50 hover:text-white/70 transition-colors tracking-wider uppercase"
                 >
                   Back to events
                 </button>

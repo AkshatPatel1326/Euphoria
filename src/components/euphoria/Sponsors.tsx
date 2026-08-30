@@ -114,20 +114,20 @@ export function Sponsors() {
 
         {/* ── Editorial heading ─────────────────────────────── */}
         <BlurFade inViewMargin="-80px" className="text-center mb-16 sm:mb-20">
-          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.5em] uppercase text-euphoria-gold/40 mb-5">
+          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.5em] uppercase text-euphoria-gold/55 mb-5">
             Acknowledgements
           </span>
           <h2
             className="font-black tracking-tight leading-[0.9]"
             style={{ fontSize: "clamp(2rem, 5vw, 4rem)" }}
           >
-            <span className="block text-white/75">THE</span>
-            <span className="block text-white/75">FORCE BEHIND</span>
+            <span className="block text-white/85">THE</span>
+            <span className="block text-white/85">FORCE BEHIND</span>
             <span className="block bg-clip-text text-transparent bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua">
               EUPHORIA
             </span>
           </h2>
-          <p className="mt-6 text-xs sm:text-sm text-white/20 max-w-md mx-auto leading-relaxed">
+          <p className="mt-6 text-xs sm:text-sm text-white/55 max-w-md mx-auto leading-relaxed">
             Every great festival is powered by the belief of its partners.
             <br />
             These are the names that made Euphoria possible.
@@ -155,10 +155,10 @@ export function Sponsors() {
                 />
               </motion.div>
               <div className="text-center">
-                <p className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-white/35 group-hover:text-white/55 transition-colors duration-300">
+                <p className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-white/60 group-hover:text-white/80 transition-colors duration-300">
                   {sponsor.label}
                 </p>
-                <p className="text-[9px] sm:text-[10px] text-white/12 tracking-wider mt-1">
+                <p className="text-[9px] sm:text-[10px] text-white/40 tracking-wider mt-1">
                   {sponsor.sublabel}
                 </p>
               </div>
@@ -169,7 +169,7 @@ export function Sponsors() {
         {/* ── Divider line ─────────────────────────────────── */}
         <div className="flex items-center justify-center gap-4 mb-14">
           <div className="h-px flex-1 max-w-[120px] bg-gradient-to-r from-transparent to-white/[0.06]" />
-          <span className="text-[9px] tracking-[0.35em] uppercase text-white/12">
+          <span className="text-[9px] tracking-[0.35em] uppercase text-white/40">
             Past Sponsors &amp; Partners
           </span>
           <div className="h-px flex-1 max-w-[120px] bg-gradient-to-l from-transparent to-white/[0.06]" />
@@ -204,21 +204,21 @@ export function Sponsors() {
         <BlurFade delay={0.6} inViewMargin="-60px" className="text-center mt-16">
           <div className="flex items-center justify-center gap-3 mb-3">
             <div className="h-px w-8 bg-euphoria-purple/20" />
-            <span className="text-[9px] sm:text-[10px] font-semibold tracking-[0.5em] uppercase text-euphoria-purple/30">
+            <span className="text-[9px] sm:text-[10px] font-semibold tracking-[0.5em] uppercase text-euphoria-purple/50">
               Pro Night
             </span>
             <div className="h-px w-8 bg-euphoria-purple/20" />
           </div>
-          <p className="text-[10px] sm:text-[11px] text-white/12 tracking-wider">
+          <p className="text-[10px] sm:text-[11px] text-white/40 tracking-wider">
             Headliner artist to be announced
           </p>
         </BlurFade>
 
         {/* ── Partnership inquiry ──────────────────────────── */}
         <BlurFade delay={0.7} inViewMargin="-60px" className="text-center mt-8">
-          <p className="text-[9px] sm:text-[10px] text-white/10 tracking-[0.2em]">
+          <p className="text-[9px] sm:text-[10px] text-white/40 tracking-[0.2em]">
             For partnership inquiries:{" "}
-            <span className="text-euphoria-gold/25">sponsorship@sageuniversity.in</span>
+            <span className="text-euphoria-gold/55">sponsorship@sageuniversity.in</span>
           </p>
         </BlurFade>
       </div>

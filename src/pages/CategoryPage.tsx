@@ -140,7 +140,7 @@ function CategoryContent({
               {title.line1}
             </h1>
             <p
-              className="mt-1 text-[clamp(0.65rem,1.8vw,1.1rem)] font-light tracking-[0.35em] uppercase text-white/40"
+              className="mt-1 text-[clamp(0.65rem,1.8vw,1.1rem)] font-light tracking-[0.35em] uppercase text-white/55"
             >
               {title.line2}
             </p>
@@ -188,10 +188,10 @@ export default function CategoryPage() {
     return (
       <div className="min-h-screen bg-euphoria-dark flex items-center justify-center">
         <div className="text-center">
-          <p className="text-white/30 mb-4">Category not found.</p>
+          <p className="text-white/60 mb-4">Category not found.</p>
           <button
             onClick={() => navigate("/")}
-            className="text-euphoria-aqua/60 text-sm tracking-wider uppercase hover:text-euphoria-aqua transition-colors"
+            className="text-euphoria-aqua/75 text-sm tracking-wider uppercase hover:text-euphoria-aqua transition-colors"
           >
             Back to home
           </button>

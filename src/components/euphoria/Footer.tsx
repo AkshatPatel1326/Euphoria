@@ -204,17 +204,17 @@ export function Footer() {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-3 mb-3">
-                <span className="text-lg font-bold tracking-widest text-euphoria-aqua/50">
+                <span className="text-lg font-bold tracking-widest text-euphoria-aqua/65">
                   SAGE
                 </span>
-                <span className="text-lg font-light tracking-widest text-white/35">
+                <span className="text-lg font-light tracking-widest text-white/55">
                   Euphoria
                 </span>
-                <span className="text-[8px] font-semibold tracking-wider text-euphoria-gold/35 border border-euphoria-gold/15 rounded px-1.5 py-0.5">
+                <span className="text-[8px] font-semibold tracking-wider text-euphoria-gold/55 border border-euphoria-gold/25 rounded px-1.5 py-0.5">
                   2026
                 </span>
               </div>
-              <p className="text-[11px] text-white/20 max-w-xs leading-relaxed">
+              <p className="text-[11px] text-white/50 max-w-xs leading-relaxed">
                 SAGE University Indore&apos;s flagship annual festival — a
                 three-day celebration of culture, innovation, and sport.
               </p>
@@ -226,7 +226,7 @@ export function Footer() {
                 <button
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
-                  className="relative text-[11px] text-white/25 tracking-[0.15em] uppercase transition-colors duration-300 hover:text-euphoria-aqua/70 group"
+                  className="relative text-[11px] text-white/50 tracking-[0.15em] uppercase transition-colors duration-300 hover:text-euphoria-aqua/80 group"
                 >
                   {link.label}
                   <span className="absolute bottom-0 left-0 h-px w-0 bg-euphoria-aqua/30 transition-all duration-300 group-hover:w-full" />
@@ -240,21 +240,21 @@ export function Footer() {
         <BlurFade delay={0.2} inViewMargin="-40px" className="mb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <span className="text-[8px] tracking-[0.3em] uppercase text-white/30 font-semibold block mb-2">
+              <span className="text-[8px] tracking-[0.3em] uppercase text-white/55 font-semibold block mb-2">
                 Contact
               </span>
-              <p className="text-[11px] text-white/20 mb-0.5">
+              <p className="text-[11px] text-white/50 mb-0.5">
                 sage.euphoria@sageuniversity.in
               </p>
-              <p className="text-[11px] text-white/20">
+              <p className="text-[11px] text-white/50">
                 sponsorship@sageuniversity.in
               </p>
             </div>
             <div>
-              <span className="text-[8px] tracking-[0.3em] uppercase text-white/30 font-semibold block mb-2">
+              <span className="text-[8px] tracking-[0.3em] uppercase text-white/55 font-semibold block mb-2">
                 Follow Us
               </span>
-              <p className="text-[11px] text-white/20">
+              <p className="text-[11px] text-white/50">
                 Instagram: @sage.euphoria
               </p>
             </div>
@@ -266,7 +266,7 @@ export function Footer() {
           <span className="text-[8px] tracking-[0.3em] uppercase text-white/30 font-semibold block mb-2">
             About SAGE University
           </span>
-          <p className="text-[10px] text-white/20 leading-relaxed max-w-lg">
+          <p className="text-[10px] text-white/50 leading-relaxed max-w-lg">
             Established in 2007, SAGE University Indore is NAAC A+ accredited and
             approved by UGC and AICTE, offering 131 programs across 14
             multidisciplinary institutes.
@@ -275,10 +275,10 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-5 border-t border-white/[0.03]">
-          <p className="text-[9px] text-white/15 tracking-wider">
+          <p className="text-[9px] text-white/35 tracking-wider">
             &copy; 2026 SAGE Euphoria. All rights reserved.
           </p>
-          <p className="text-[9px] text-white/15 tracking-wider">
+          <p className="text-[9px] text-white/35 tracking-wider">
             SAGE University, Indore
           </p>
         </div>

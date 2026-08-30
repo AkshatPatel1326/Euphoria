@@ -56,7 +56,7 @@ export function Events() {
               Arena
             </span>
           </h2>
-          <p className="mt-4 text-sm sm:text-base text-white/30 max-w-xl mx-auto leading-relaxed">
+          <p className="mt-4 text-sm sm:text-base text-white/65 max-w-xl mx-auto leading-relaxed">
             A vibrant blend of art, music, culture, innovation, competitions, and performance —
             across four disciplines and over twenty-five events.
           </p>
@@ -73,7 +73,7 @@ export function Events() {
                 className={`relative px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-[11px] sm:text-xs font-semibold tracking-[0.12em] uppercase transition-all duration-300 ${
                   isActive
                     ? "bg-euphoria-aqua/15 text-euphoria-aqua border border-euphoria-aqua/40 shadow-[0_0_20px_rgba(62,238,213,0.1)]"
-                    : "text-white/30 border border-white/[0.06] hover:text-white/50 hover:border-white/10"
+                    : "text-white/55 border border-white/[0.06] hover:text-white/70 hover:border-white/10"
                 }`}
               >
                 {tabLabels[cat] || cat}
@@ -84,7 +84,7 @@ export function Events() {
 
         {/* Event count */}
         <div className="text-center mb-8">
-          <span className="text-xs text-white/15 tracking-wider">
+          <span className="text-xs text-white/45 tracking-wider">
             {filtered.length} event{filtered.length !== 1 ? "s" : ""}
           </span>
         </div>
