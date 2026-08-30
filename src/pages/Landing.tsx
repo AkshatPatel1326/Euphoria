@@ -4,6 +4,7 @@ import { About } from "@/components/euphoria/About";
 import { CategoryCards } from "@/components/euphoria/CategoryCards";
 import { Glimpses } from "@/components/euphoria/Glimpses";
 import { FAQ } from "@/components/euphoria/FAQ";
+import { Passes } from "@/components/euphoria/Passes";
 import { Sponsors } from "@/components/euphoria/Sponsors";
 import { Footer } from "@/components/euphoria/Footer";
 import { SmoothCursor } from "@/components/magicui/smooth-cursor";
@@ -19,6 +20,7 @@ export default function Landing() {
         <CategoryCards />
         <Glimpses />
         <FAQ />
+        <Passes />
         <Sponsors />
       </main>
       <Footer />
