@@ -398,7 +398,7 @@ export const events: EuphoriaEvent[] = [
     category: "science-tech",
     description:
       "A team-based innovation pitch competition for collaborative projects.",
-    poster: null,
+    poster: "/assets/Idea_spark.jpg",
     registrationStatus: "coming-soon",
     registrationFee: "₹199",
     date: "TBA",
@@ -419,7 +419,7 @@ export const events: EuphoriaEvent[] = [
     category: "science-tech",
     description:
       "A hands-on model and product-making competition across science, pharma, and agriculture.",
-    poster: null,
+    poster: "/assets/Model_Product_Making.jpeg",
     registrationStatus: "coming-soon",
     registrationFee: "₹249",
     date: "9 April 2026",
@@ -436,7 +436,7 @@ export const events: EuphoriaEvent[] = [
     category: "science-tech",
     description:
       "An oral and poster presentation competition for research across science domains.",
-    poster: null,
+    poster: "/assets/Oral_Poster_Presentation.jpeg",
     registrationStatus: "coming-soon",
     registrationFee: "₹249",
     date: "2 April 2026",
