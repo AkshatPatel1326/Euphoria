@@ -282,7 +282,7 @@ export const events: EuphoriaEvent[] = [
     category: "cultural",
     description:
       "The finalist round of Model Hunt showcasing the top selected models.",
-    poster: null,
+    poster: "/assets/Model_Hunt_Finalist.jpeg",
     registrationFee: "₹799",
     fee: 799,
     registrationType: "individual",
@@ -588,7 +588,7 @@ export const events: EuphoriaEvent[] = [
     category: "science-tech",
     description:
       "A LAN gaming tournament bringing together the best gamers on campus.",
-    poster: null,
+    poster: "/assets/Lan_Gaming.jpeg",
     registrationFee: "₹149",
     fee: 149,
     registrationType: "individual",
@@ -609,7 +609,7 @@ export const events: EuphoriaEvent[] = [
     category: "science-tech",
     description:
       "A robotics race competition where engineered bots navigate a track at speed.",
-    poster: null,
+    poster: "/assets/Robo_Race.jpeg",
     registrationFee: "₹149",
     fee: 149,
     registrationType: "individual",
@@ -630,7 +630,7 @@ export const events: EuphoriaEvent[] = [
     category: "science-tech",
     description:
       "A parallel coding competition testing programming speed, accuracy, and teamwork.",
-    poster: null,
+    poster: "/assets/Para_Coding.jpeg",
     registrationFee: "₹149",
     fee: 149,
     registrationType: "individual",
@@ -651,7 +651,7 @@ export const events: EuphoriaEvent[] = [
     category: "science-tech",
     description:
       "A cybersecurity and decoding challenge for tech enthusiasts.",
-    poster: null,
+    poster: "/assets/Decoder_Spyder.jpeg",
     registrationFee: "₹149",
     fee: 149,
     registrationType: "individual",
@@ -672,7 +672,7 @@ export const events: EuphoriaEvent[] = [
     category: "science-tech",
     description:
       "A bridge-making engineering competition testing structural design and load capacity.",
-    poster: null,
+    poster: "/assets/Bridge_Making.jpeg",
     registrationFee: "₹149",
     fee: 149,
     registrationType: "individual",
