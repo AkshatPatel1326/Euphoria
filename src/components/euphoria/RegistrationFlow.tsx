@@ -1,39 +1,33 @@
 import { useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronRight, ChevronLeft, Check, CreditCard, Smartphone, Building2, User, Mail, Phone, MapPin, GraduationCap, BookOpen, Calendar, Hash } from "lucide-react";
-import type { EuphoriaEvent } from "@/data/events";
+import {
+  X,
+  ChevronRight,
+  ChevronLeft,
+  Check,
+  CreditCard,
+  Smartphone,
+  Building2,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  GraduationCap,
+  BookOpen,
+  Calendar,
+  Hash,
+  AlertTriangle,
+  RotateCcw,
+  Loader2,
+} from "lucide-react";
+import type { EuphoriaEvent, ParticipantCategory, PaymentStatus } from "@/data/events";
 
 /* ── Helpers ── */
-function parseFee(fee: string): number {
-  return parseInt(fee.replace(/[₹,\s]/g, ""), 10) || 0;
-}
-
 function isTeamEvent(event: EuphoriaEvent): boolean {
-  const t = event.teamSize.toLowerCase();
-  return t.includes("member") || t.includes("pair") || t.includes("group") || t.includes("–");
+  return event.registrationType === "group" || event.maxTeamSize > 1;
 }
 
-type ParticipantType = "sage" | "other-college" | "general";
-
-interface ParticipantDetails {
-  fullName: string;
-  email: string;
-  phone: string;
-  enrollmentNumber?: string;
-  course?: string;
-  year?: string;
-  collegeName?: string;
-  city?: string;
-  teamName?: string;
-}
-
-interface TeamMember {
-  fullName: string;
-  email: string;
-  phone: string;
-}
-
-type Step = "summary" | "type" | "details" | "review" | "payment" | "confirmation";
+type Step = "summary" | "type" | "details" | "review" | "payment" | "pending" | "success" | "failed";
 
 const stepLabels: Record<Step, string> = {
   summary: "Event Summary",
@@ -41,21 +35,16 @@ const stepLabels: Record<Step, string> = {
   details: "Your Details",
   review: "Review",
   payment: "Payment",
-  confirmation: "Confirmation",
+  pending: "Processing",
+  success: "Registration Confirmed",
+  failed: "Payment Failed",
 };
 
-const participantTypes: { key: ParticipantType; label: string; sub: string; icon: typeof User }[] = [
+const participantTypes: { key: ParticipantCategory; label: string; sub: string; icon: typeof User }[] = [
   { key: "sage", label: "SAGE University Student", sub: "Currently enrolled at SAGE University Indore", icon: GraduationCap },
   { key: "other-college", label: "Other College Student", sub: "Student at a different institution", icon: BookOpen },
   { key: "general", label: "General Participant", sub: "Independent / open registration", icon: User },
 ];
-
-const categoryColor: Record<string, string> = {
-  cultural: "text-euphoria-purple",
-  "literary-management": "text-euphoria-gold",
-  "science-tech": "text-euphoria-aqua",
-  sports: "text-euphoria-teal",
-};
 
 const categoryLabel: Record<string, string> = {
   cultural: "Cultural",
@@ -101,7 +90,7 @@ function Input({
 }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/30">
+      <label className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/45">
         {label}
       </label>
       <div className="relative">
@@ -132,20 +121,33 @@ export function RegistrationFlow({
   onClose: () => void;
 }) {
   const [step, setStep] = useState<Step>("summary");
-  const [participantType, setParticipantType] = useState<ParticipantType | null>(null);
-  const [details, setDetails] = useState<ParticipantDetails>({
+  const [participantType, setParticipantType] = useState<ParticipantCategory | null>(null);
+  const [details, setDetails] = useState<{
+    fullName: string;
+    email: string;
+    phone: string;
+    scholarNumber?: string;
+    enrollmentNumber?: string;
+    course?: string;
+    year?: string;
+    collegeName?: string;
+    city?: string;
+  }>({
     fullName: "",
     email: "",
     phone: "",
   });
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [teamName, setTeamName] = useState("");
+  const [teamMembers, setTeamMembers] = useState<{ fullName: string; email: string; phone: string }[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus | null>(null);
 
-  const amount = useMemo(() => parseFee(event.registrationFee), [event.registrationFee]);
-  const team = useMemo(() => isTeamEvent(event), [event]);
+  /* Use centralized event.fee — no string parsing */
+  const amount = event.fee;
+  const team = isTeamEvent(event);
 
-  const updateDetail = useCallback((key: keyof ParticipantDetails, value: string) => {
+  const updateDetail = useCallback((key: string, value: string) => {
     setDetails((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => {
       const next = { ...prev };
@@ -162,7 +164,7 @@ export function RegistrationFlow({
     setTeamMembers((prev) => prev.filter((_, i) => i !== idx));
   }, []);
 
-  const updateTeamMember = useCallback((idx: number, key: keyof TeamMember, value: string) => {
+  const updateTeamMember = useCallback((idx: number, key: string, value: string) => {
     setTeamMembers((prev) => prev.map((m, i) => (i === idx ? { ...m, [key]: value } : m)));
   }, []);
 
@@ -182,6 +184,7 @@ export function RegistrationFlow({
       else if (!/^\d{10}$/.test(details.phone.replace(/\D/g, ""))) errs.phone = "Enter a valid 10-digit number";
 
       if (participantType === "sage") {
+        if (!details.scholarNumber?.trim()) errs.scholarNumber = "Scholar number is required";
         if (!details.enrollmentNumber?.trim()) errs.enrollmentNumber = "Enrollment number is required";
         if (!details.course?.trim()) errs.course = "Course is required";
         if (!details.year?.trim()) errs.year = "Year/Semester is required";
@@ -194,6 +197,21 @@ export function RegistrationFlow({
       if (participantType === "general") {
         if (!details.city?.trim()) errs.city = "City is required";
       }
+
+      /* Team validation */
+      if (team) {
+        if (!teamName.trim()) errs.teamName = "Team name is required";
+        if (event.minTeamSize > 0 && teamMembers.length < event.minTeamSize - 1) {
+          errs.teamMembers = `At least ${event.minTeamSize - 1} team member(s) required (including you as team leader)`;
+        }
+        for (let i = 0; i < teamMembers.length; i++) {
+          const m = teamMembers[i];
+          if (!m.fullName.trim()) errs[`member_${i}_name`] = "Name required";
+          if (!m.email.trim()) errs[`member_${i}_email`] = "Email required";
+          if (!m.phone.trim()) errs[`member_${i}_phone`] = "Phone required";
+          else if (!/^\d{10}$/.test(m.phone.replace(/\D/g, ""))) errs[`member_${i}_phone`] = "Invalid 10-digit number";
+        }
+      }
     }
 
     if (step === "payment" && !paymentMethod) {
@@ -202,17 +220,37 @@ export function RegistrationFlow({
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
-  }, [step, participantType, details, paymentMethod]);
+  }, [step, participantType, details, team, teamName, teamMembers, event, paymentMethod]);
 
   const next = useCallback(() => {
     if (!validate()) return;
-    const order: Step[] = ["summary", "type", "details", "review", "payment", "confirmation"];
+
+    if (step === "payment") {
+      /* Simulate payment processing */
+      setStep("pending");
+      setTimeout(() => {
+        /* In production: backend/Easebuzz callback determines the status */
+        /* For demo, randomly succeed (90%) or fail (10%) */
+        const success = Math.random() > 0.1;
+        setPaymentStatus(success ? "success" : "failed");
+        setStep(success ? "success" : "failed");
+      }, 2500);
+      return;
+    }
+
+    const order: Step[] = ["summary", "type", "details", "review", "payment"];
     const idx = order.indexOf(step);
     if (idx < order.length - 1) setStep(order[idx + 1]);
   }, [step, validate]);
 
   const prev = useCallback(() => {
-    const order: Step[] = ["summary", "type", "details", "review", "payment", "confirmation"];
+    if (step === "failed") {
+      /* Allow retry from payment step */
+      setPaymentStatus(null);
+      setStep("payment");
+      return;
+    }
+    const order: Step[] = ["summary", "type", "details", "review", "payment"];
     const idx = order.indexOf(step);
     if (idx > 0) setStep(order[idx - 1]);
   }, [step]);
@@ -220,7 +258,11 @@ export function RegistrationFlow({
   /* ── Step indicators ── */
   const allSteps: Step[] = ["summary", "type", "details", "review", "payment"];
   const currentIdx = allSteps.indexOf(step);
-  const progress = step === "confirmation" ? 100 : ((currentIdx + 1) / allSteps.length) * 100;
+  const progress =
+    step === "success" ? 100
+    : step === "failed" ? 85
+    : step === "pending" ? 90
+    : ((currentIdx + 1) / allSteps.length) * 100;
 
   return (
     <>
@@ -230,7 +272,7 @@ export function RegistrationFlow({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
-        onClick={onClose}
+        onClick={step !== "pending" ? onClose : undefined}
         className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm"
       />
 
@@ -245,26 +287,34 @@ export function RegistrationFlow({
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-white/[0.06]">
           <div>
-            <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-euphoria-aqua/50">
+            <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-euphoria-aqua/60">
               {stepLabels[step]}
             </p>
             <h3 className="text-sm font-semibold text-white/80 mt-0.5">
               {event.name}
             </h3>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-full text-white/30 hover:text-white/80 hover:bg-white/5 transition-all"
-            aria-label="Close registration"
-          >
-            <X className="size-5" />
-          </button>
+          {step !== "pending" && (
+            <button
+              onClick={onClose}
+              className="p-2 rounded-full text-white/50 hover:text-white/90 hover:bg-white/5 transition-all"
+              aria-label="Close registration"
+            >
+              <X className="size-5" />
+            </button>
+          )}
         </div>
 
         {/* ── Progress bar ── */}
         <div className="h-0.5 bg-white/[0.04]">
           <motion.div
-            className="h-full bg-gradient-to-r from-euphoria-aqua to-euphoria-purple"
+            className={`h-full ${
+              step === "success"
+                ? "bg-euphoria-aqua"
+                : step === "failed"
+                ? "bg-red-400"
+                : "bg-gradient-to-r from-euphoria-aqua to-euphoria-purple"
+            }`}
             initial={false}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.4, ease: "easeOut" }}
@@ -272,7 +322,7 @@ export function RegistrationFlow({
         </div>
 
         {/* ── Step indicators ── */}
-        {step !== "confirmation" && (
+        {step === "summary" || step === "type" || step === "details" || step === "review" || step === "payment" ? (
           <div className="flex items-center gap-1 px-5 sm:px-6 py-3 overflow-x-auto">
             {allSteps.map((s, i) => (
               <div key={s} className="flex items-center gap-1">
@@ -282,7 +332,7 @@ export function RegistrationFlow({
                       ? "bg-euphoria-aqua/20 text-euphoria-aqua"
                       : i === currentIdx
                       ? "bg-euphoria-aqua/30 text-euphoria-aqua ring-1 ring-euphoria-aqua/40"
-                      : "bg-white/[0.04] text-white/20"
+                      : "bg-white/[0.04] text-white/25"
                   }`}
                 >
                   {i < currentIdx ? <Check className="size-2.5" /> : i + 1}
@@ -293,7 +343,7 @@ export function RegistrationFlow({
               </div>
             ))}
           </div>
-        )}
+        ) : null}
 
         {/* ── Content ── */}
         <div className="flex-1 overflow-y-auto px-5 sm:px-6 py-5">
@@ -315,6 +365,9 @@ export function RegistrationFlow({
                 updateDetail={updateDetail}
                 errors={errors}
                 team={team}
+                event={event}
+                teamName={teamName}
+                setTeamName={setTeamName}
                 teamMembers={teamMembers}
                 addTeamMember={addTeamMember}
                 removeTeamMember={removeTeamMember}
@@ -328,6 +381,7 @@ export function RegistrationFlow({
                 participantType={participantType!}
                 details={details}
                 teamMembers={teamMembers}
+                teamName={teamName}
                 team={team}
               />
             )}
@@ -338,28 +392,43 @@ export function RegistrationFlow({
                 selected={paymentMethod}
                 onSelect={setPaymentMethod}
                 error={errors.paymentMethod}
+                team={team}
               />
             )}
-            {step === "confirmation" && (
-              <ConfirmationStep event={event} amount={amount} details={details} onClose={onClose} />
+            {step === "pending" && <PendingStep event={event} />}
+            {step === "success" && (
+              <SuccessStep
+                event={event}
+                amount={amount}
+                details={details}
+                participantType={participantType!}
+                onClose={onClose}
+              />
+            )}
+            {step === "failed" && (
+              <FailedStep
+                event={event}
+                onRetry={prev}
+                onClose={onClose}
+              />
             )}
           </StepContainer>
         </div>
 
         {/* ── Footer / Navigation ── */}
-        {step !== "confirmation" && (
+        {step !== "success" && step !== "failed" && step !== "pending" && (
           <div className="border-t border-white/[0.06] px-5 sm:px-6 py-4 flex items-center justify-between gap-3">
             {step === "summary" ? (
               <button
                 onClick={onClose}
-                className="px-4 py-2.5 text-xs text-white/30 hover:text-white/60 transition-colors tracking-wider uppercase"
+                className="px-4 py-2.5 text-xs text-white/50 hover:text-white/70 transition-colors tracking-wider uppercase"
               >
                 Close
               </button>
             ) : (
               <button
                 onClick={prev}
-                className="flex items-center gap-1.5 px-4 py-2.5 text-xs text-white/30 hover:text-white/60 transition-colors tracking-wider uppercase"
+                className="flex items-center gap-1.5 px-4 py-2.5 text-xs text-white/50 hover:text-white/70 transition-colors tracking-wider uppercase"
               >
                 <ChevronLeft className="size-3.5" />
                 Back
@@ -383,6 +452,28 @@ export function RegistrationFlow({
                 <ChevronRight className="size-3.5" />
               </button>
             )}
+          </div>
+        )}
+
+        {/* Failed step footer */}
+        {step === "failed" && (
+          <div className="border-t border-white/[0.06] px-5 sm:px-6 py-4 flex items-center justify-center gap-3">
+            <button
+              onClick={() => {
+                setPaymentStatus(null);
+                setStep("payment");
+              }}
+              className="flex items-center gap-2 px-6 py-2.5 text-xs font-semibold tracking-[0.15em] uppercase bg-gradient-to-r from-euphoria-aqua/80 to-euphoria-teal/80 text-white rounded-lg hover:from-euphoria-aqua hover:to-euphoria-teal transition-all duration-300"
+            >
+              <RotateCcw className="size-3.5" />
+              Try Again
+            </button>
+            <button
+              onClick={onClose}
+              className="px-6 py-2.5 text-xs text-white/50 hover:text-white/70 transition-colors tracking-wider uppercase"
+            >
+              Return to Registration
+            </button>
           </div>
         )}
       </motion.div>
@@ -411,7 +502,7 @@ function SummaryStep({
           Registration Overview
         </p>
         <h2 className="text-xl sm:text-2xl font-bold text-white">{event.name}</h2>
-        <p className="text-xs text-white/30">{categoryLabel[event.category]}</p>
+        <p className="text-xs text-white/55">{categoryLabel[event.category]}</p>
       </div>
 
       {/* Event poster */}
@@ -441,12 +532,12 @@ function SummaryStep({
                   : "bg-white/[0.03] border border-white/[0.05]"
               }`}
             >
-              <p className="text-[9px] font-semibold tracking-[0.2em] uppercase text-white/25 mb-1">
+              <p className="text-[9px] font-semibold tracking-[0.2em] uppercase text-white/40 mb-1">
                 {item.label}
               </p>
               <p
                 className={`text-sm font-medium ${
-                  item.highlight ? "text-euphoria-aqua" : "text-white/60"
+                  item.highlight ? "text-euphoria-aqua" : "text-white/70"
                 }`}
               >
                 {item.value}
@@ -456,13 +547,18 @@ function SummaryStep({
       </div>
 
       {team && (
-        <div className="glass-card rounded-xl p-4 text-center">
+        <div className="glass-card rounded-xl p-4 text-center space-y-2">
           <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-euphoria-purple/60">
             Team Event
           </p>
-          <p className="text-xs text-white/30 mt-1">
-            Team member details will be collected in the next steps.
+          <p className="text-xs text-white/55 leading-relaxed">
+            You are registering as the <span className="text-white/80 font-semibold">Team Leader</span>.
+            As Team Leader, you will enter all team member details during registration and make the
+            full payment on behalf of the team. Team members cannot be added after registration is submitted.
           </p>
+          <div className="text-[10px] text-white/35 space-x-2">
+            <span>Team size: {event.minTeamSize}–{event.maxTeamSize}</span>
+          </div>
         </div>
       )}
     </div>
@@ -475,8 +571,8 @@ function TypeStep({
   onSelect,
   error,
 }: {
-  selected: ParticipantType | null;
-  onSelect: (t: ParticipantType) => void;
+  selected: ParticipantCategory | null;
+  onSelect: (t: ParticipantCategory) => void;
   error?: string;
 }) {
   return (
@@ -517,12 +613,12 @@ function TypeStep({
                 <div className="flex-1">
                   <p
                     className={`text-sm font-semibold transition-colors ${
-                      active ? "text-white" : "text-white/60"
+                      active ? "text-white" : "text-white/65"
                     }`}
                   >
                     {pt.label}
                   </p>
-                  <p className="text-xs text-white/25 mt-0.5">{pt.sub}</p>
+                  <p className="text-xs text-white/40 mt-0.5">{pt.sub}</p>
                 </div>
                 <div
                   className={`size-5 rounded-full border-2 flex items-center justify-center transition-all ${
@@ -547,20 +643,36 @@ function DetailsStep({
   updateDetail,
   errors,
   team,
+  event,
+  teamName,
+  setTeamName,
   teamMembers,
   addTeamMember,
   removeTeamMember,
   updateTeamMember,
 }: {
-  participantType: ParticipantType;
-  details: ParticipantDetails;
-  updateDetail: (key: keyof ParticipantDetails, value: string) => void;
+  participantType: ParticipantCategory;
+  details: {
+    fullName: string;
+    email: string;
+    phone: string;
+    scholarNumber?: string;
+    enrollmentNumber?: string;
+    course?: string;
+    year?: string;
+    collegeName?: string;
+    city?: string;
+  };
+  updateDetail: (key: string, value: string) => void;
   errors: Record<string, string>;
   team: boolean;
-  teamMembers: TeamMember[];
+  event: EuphoriaEvent;
+  teamName: string;
+  setTeamName: (v: string) => void;
+  teamMembers: { fullName: string; email: string; phone: string }[];
   addTeamMember: () => void;
   removeTeamMember: (idx: number) => void;
-  updateTeamMember: (idx: number, key: keyof TeamMember, value: string) => void;
+  updateTeamMember: (idx: number, key: string, value: string) => void;
 }) {
   return (
     <div className="space-y-6">
@@ -603,8 +715,17 @@ function DetailsStep({
           error={errors.phone}
         />
 
+        {/* ── SAGE Student fields ── */}
         {participantType === "sage" && (
           <>
+            <Input
+              label="Scholar Number"
+              icon={Hash}
+              value={details.scholarNumber || ""}
+              onChange={(v) => updateDetail("scholarNumber", v)}
+              placeholder="Your scholar number"
+              error={errors.scholarNumber}
+            />
             <Input
               label="Enrollment Number"
               icon={Hash}
@@ -632,6 +753,7 @@ function DetailsStep({
           </>
         )}
 
+        {/* ── Other College Student fields ── */}
         {participantType === "other-college" && (
           <>
             <Input
@@ -661,6 +783,7 @@ function DetailsStep({
           </>
         )}
 
+        {/* ── General Participant fields ── */}
         {participantType === "general" && (
           <Input
             label="City"
@@ -673,14 +796,43 @@ function DetailsStep({
         )}
       </div>
 
-      {/* Team section */}
+      {/* ── Team section ── */}
       {team && (
         <div className="space-y-4 pt-2">
           <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+
+          {/* Team Leader notice */}
+          <div className="glass-card rounded-xl p-4 bg-euphoria-purple/[0.04] border border-euphoria-purple/10">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="size-4 text-euphoria-purple/70 mt-0.5 shrink-0" />
+              <div>
+                <p className="text-xs font-semibold text-white/75">Team Leader Registration</p>
+                <p className="text-[10px] text-white/45 mt-1 leading-relaxed">
+                  As the Team Leader, you are registering the entire team. Enter all team member details below.
+                  Team members cannot be added or modified after registration is submitted.
+                </p>
+                <p className="text-[10px] text-white/45 mt-1">
+                  The team leader completes the full payment on behalf of the team.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <Input
+            label="Team Name"
+            icon={User}
+            value={teamName}
+            onChange={(v) => setTeamName(v)}
+            placeholder="Enter your team name"
+            error={errors.teamName}
+          />
+
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-white/60">Team Members</p>
-              <p className="text-[10px] text-white/25 mt-0.5">Add your team member details</p>
+              <p className="text-xs font-semibold text-white/65">Team Members</p>
+              <p className="text-[10px] text-white/40 mt-0.5">
+                {event.minTeamSize > 1 ? `${event.minTeamSize}–${event.maxTeamSize} members total` : "Add your team member details"}
+              </p>
             </div>
             <button
               onClick={addTeamMember}
@@ -693,7 +845,7 @@ function DetailsStep({
           {teamMembers.map((member, idx) => (
             <div key={idx} className="glass-card rounded-xl p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/30">
+                <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/40">
                   Member {idx + 1}
                 </p>
                 <button
@@ -709,20 +861,33 @@ function DetailsStep({
                 placeholder="Full name"
                 className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white/80 placeholder-white/15 focus:outline-none focus:border-euphoria-aqua/40 transition-colors"
               />
+              {errors[`member_${idx}_name`] && (
+                <p className="text-[10px] text-red-400/80">{errors[`member_${idx}_name`]}</p>
+              )}
               <input
                 value={member.email}
                 onChange={(e) => updateTeamMember(idx, "email", e.target.value)}
                 placeholder="Email"
                 className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white/80 placeholder-white/15 focus:outline-none focus:border-euphoria-aqua/40 transition-colors"
               />
+              {errors[`member_${idx}_email`] && (
+                <p className="text-[10px] text-red-400/80">{errors[`member_${idx}_email`]}</p>
+              )}
               <input
                 value={member.phone}
                 onChange={(e) => updateTeamMember(idx, "phone", e.target.value)}
                 placeholder="Phone"
                 className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white/80 placeholder-white/15 focus:outline-none focus:border-euphoria-aqua/40 transition-colors"
               />
+              {errors[`member_${idx}_phone`] && (
+                <p className="text-[10px] text-red-400/80">{errors[`member_${idx}_phone`]}</p>
+              )}
             </div>
           ))}
+
+          {errors.teamMembers && (
+            <p className="text-[10px] text-red-400/80 text-center">{errors.teamMembers}</p>
+          )}
         </div>
       )}
     </div>
@@ -736,13 +901,25 @@ function ReviewStep({
   participantType,
   details,
   teamMembers,
+  teamName,
   team,
 }: {
   event: EuphoriaEvent;
   amount: number;
-  participantType: ParticipantType;
-  details: ParticipantDetails;
-  teamMembers: TeamMember[];
+  participantType: ParticipantCategory;
+  details: {
+    fullName: string;
+    email: string;
+    phone: string;
+    scholarNumber?: string;
+    enrollmentNumber?: string;
+    course?: string;
+    year?: string;
+    collegeName?: string;
+    city?: string;
+  };
+  teamMembers: { fullName: string; email: string; phone: string }[];
+  teamName: string;
   team: boolean;
 }) {
   const typeLabel =
@@ -771,6 +948,7 @@ function ReviewStep({
           { label: "Phone", value: details.phone },
           ...(participantType === "sage"
             ? [
+                { label: "Scholar No.", value: details.scholarNumber || "" },
                 { label: "Enrollment", value: details.enrollmentNumber || "" },
                 { label: "Course", value: details.course || "" },
                 { label: "Year", value: details.year || "" },
@@ -793,23 +971,40 @@ function ReviewStep({
               key={r.label}
               className="flex items-start justify-between gap-4 py-2.5 border-b border-white/[0.04]"
             >
-              <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-white/25 shrink-0">
+              <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-white/40 shrink-0">
                 {r.label}
               </span>
-              <span className="text-xs text-white/60 text-right">{r.value}</span>
+              <span className="text-xs text-white/70 text-right">{r.value}</span>
             </div>
           ))}
       </div>
 
-      {team && teamMembers.length > 0 && (
-        <div className="space-y-2">
-          <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/25">
+      {team && (
+        <div className="space-y-3">
+          <div className="glass-card rounded-xl p-4 bg-euphoria-purple/[0.04] border border-euphoria-purple/10">
+            <p className="text-xs font-semibold text-white/75">Team Leader: {details.fullName}</p>
+            <p className="text-[10px] text-white/40 mt-1">
+              The team leader completes the registration and makes the full payment on behalf of the team.
+              Team members cannot be added after registration.
+            </p>
+          </div>
+
+          {teamName && (
+            <div className="py-2 border-b border-white/[0.04]">
+              <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-white/40">
+                Team Name
+              </span>
+              <span className="text-xs text-white/70 ml-4">{teamName}</span>
+            </div>
+          )}
+
+          <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/40">
             Team Members ({teamMembers.length})
           </p>
           {teamMembers.map((m, i) => (
             <div key={i} className="glass-card rounded-lg p-3">
-              <p className="text-xs text-white/50">{m.fullName || `Member ${i + 1}`}</p>
-              <p className="text-[10px] text-white/25">{m.email} · {m.phone}</p>
+              <p className="text-xs text-white/65">{m.fullName || `Member ${i + 1}`}</p>
+              <p className="text-[10px] text-white/40">{m.email} · {m.phone}</p>
             </div>
           ))}
         </div>
@@ -819,10 +1014,13 @@ function ReviewStep({
       <div className="glass-card rounded-xl p-5 bg-euphoria-aqua/[0.04] border border-euphoria-aqua/10">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/30">
+            <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/40">
               Total Payable
             </p>
-            <p className="text-[10px] text-white/20 mt-0.5">Entry fee for {event.name}</p>
+            <p className="text-[10px] text-white/30 mt-0.5">
+              Entry fee for {event.name}
+              {team ? " (team)" : ""}
+            </p>
           </div>
           <p className="text-2xl font-bold text-euphoria-aqua">
             ₹{amount.toLocaleString("en-IN")}
@@ -840,12 +1038,14 @@ function PaymentStep({
   selected,
   onSelect,
   error,
+  team,
 }: {
   event: EuphoriaEvent;
   amount: number;
   selected: string | null;
   onSelect: (m: string) => void;
   error?: string;
+  team: boolean;
 }) {
   const methods = [
     { key: "upi", label: "UPI", sub: "Google Pay, PhonePe, Paytm", icon: Smartphone },
@@ -860,17 +1060,22 @@ function PaymentStep({
           EUPHORIA 2026
         </p>
         <h2 className="text-lg sm:text-xl font-bold text-white">Secure Payment</h2>
-        <p className="text-xs text-white/30">{event.name}</p>
+        <p className="text-xs text-white/55">{event.name}</p>
       </div>
 
       {/* Amount display */}
       <div className="text-center py-5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-        <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/25 mb-2">
+        <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/40 mb-2">
           Amount Payable
         </p>
         <p className="text-3xl sm:text-4xl font-black text-euphoria-aqua">
           ₹{amount.toLocaleString("en-IN")}
         </p>
+        {team && (
+          <p className="text-[10px] text-white/40 mt-2">
+            Total team payment — handled by Team Leader
+          </p>
+        )}
       </div>
 
       {error && (
@@ -879,7 +1084,7 @@ function PaymentStep({
 
       {/* Payment methods */}
       <div className="space-y-3">
-        <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/25">
+        <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/40">
           Select Payment Method
         </p>
         {methods.map((m) => {
@@ -904,10 +1109,10 @@ function PaymentStep({
                   <Icon className={`size-4 ${active ? "text-euphoria-aqua" : "text-white/25"}`} />
                 </div>
                 <div className="flex-1">
-                  <p className={`text-sm font-medium ${active ? "text-white" : "text-white/50"}`}>
+                  <p className={`text-sm font-medium ${active ? "text-white" : "text-white/55"}`}>
                     {m.label}
                   </p>
-                  <p className="text-[10px] text-white/20">{m.sub}</p>
+                  <p className="text-[10px] text-white/30">{m.sub}</p>
                 </div>
                 <div
                   className={`size-4 rounded-full border flex items-center justify-center ${
@@ -922,27 +1127,66 @@ function PaymentStep({
         })}
       </div>
 
-      <p className="text-center text-[10px] text-white/15 leading-relaxed">
-        This is a frontend demo. No real payment will be processed.
-        <br />
-        A production version will integrate Razorpay or similar gateway.
+      <p className="text-center text-[10px] text-white/25 leading-relaxed">
+        Payment will be processed through Easebuzz gateway. This is a frontend demo — no real payment will be charged.
       </p>
     </div>
   );
 }
 
-/* ── Step 6: Confirmation ── */
-function ConfirmationStep({
+/* ── Step 6: Payment Pending ── */
+function PendingStep({ event }: { event: EuphoriaEvent }) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[40vh] text-center space-y-6 py-8">
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+        className="size-16 rounded-full bg-euphoria-aqua/10 border border-euphoria-aqua/20 flex items-center justify-center"
+      >
+        <Loader2 className="size-8 text-euphoria-aqua" />
+      </motion.div>
+
+      <div className="space-y-2">
+        <h2 className="text-lg sm:text-xl font-bold text-white">Processing Payment</h2>
+        <p className="text-sm text-white/55">
+          Please do not refresh or close this page.
+        </p>
+        <p className="text-xs text-white/35">
+          Redirecting to payment gateway...
+        </p>
+      </div>
+
+      <div className="glass-card rounded-xl p-4 max-w-sm">
+        <p className="text-[10px] text-white/40 leading-relaxed">
+          Your registration is being processed. In production, this step connects to the
+          Easebuzz payment gateway for UPI / Card / Net Banking transactions.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ── Step 7: Payment Success ── */
+function SuccessStep({
   event,
   amount,
   details,
+  participantType,
   onClose,
 }: {
   event: EuphoriaEvent;
   amount: number;
-  details: ParticipantDetails;
+  details: { fullName: string; email: string; phone: string };
+  participantType: ParticipantCategory;
   onClose: () => void;
 }) {
+  const typeLabel =
+    participantType === "sage"
+      ? "SAGE University Student"
+      : participantType === "other-college"
+      ? "Other College Student"
+      : "General Participant";
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-8 py-8">
       {/* Success icon */}
@@ -969,10 +1213,10 @@ function ConfirmationStep({
         className="space-y-2"
       >
         <h2 className="text-xl sm:text-2xl font-bold text-white">
-          PAYMENT DEMO COMPLETE
+          Payment Successful
         </h2>
-        <p className="text-sm text-white/30">
-          Your registration details are ready for submission.
+        <p className="text-sm text-white/55">
+          Your registration has been confirmed.
         </p>
       </motion.div>
 
@@ -984,37 +1228,42 @@ function ConfirmationStep({
         className="glass-card rounded-xl p-5 space-y-3 w-full max-w-sm"
       >
         <div className="flex justify-between text-xs">
-          <span className="text-white/25">Event</span>
-          <span className="text-white/60 text-right">{event.name}</span>
+          <span className="text-white/40">Event</span>
+          <span className="text-white/70 text-right">{event.name}</span>
         </div>
         <div className="flex justify-between text-xs">
-          <span className="text-white/25">Participant</span>
-          <span className="text-white/60">{details.fullName}</span>
+          <span className="text-white/40">Participant</span>
+          <span className="text-white/70">{details.fullName}</span>
         </div>
         <div className="flex justify-between text-xs">
-          <span className="text-white/25">Email</span>
-          <span className="text-white/60">{details.email}</span>
+          <span className="text-white/40">Category</span>
+          <span className="text-white/70">{typeLabel}</span>
+        </div>
+        <div className="flex justify-between text-xs">
+          <span className="text-white/40">Email</span>
+          <span className="text-white/70">{details.email}</span>
         </div>
         <div className="h-px bg-white/[0.06]" />
         <div className="flex justify-between text-sm font-semibold">
-          <span className="text-white/40">Amount</span>
+          <span className="text-white/50">Amount Paid</span>
           <span className="text-euphoria-aqua">₹{amount.toLocaleString("en-IN")}</span>
         </div>
       </motion.div>
 
-      {/* Demo notice */}
+      {/* Notice */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7, duration: 0.4 }}
         className="glass-card rounded-xl p-4 max-w-sm"
       >
-        <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-euphoria-gold/50 mb-1">
-          Frontend Demo Notice
+        <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-euphoria-gold/55 mb-1">
+          Confirmation Notice
         </p>
-        <p className="text-xs text-white/25 leading-relaxed">
-          This is a demonstration of the registration and payment flow.
-          No real payment has been processed. In production, this will connect to a payment gateway.
+        <p className="text-xs text-white/45 leading-relaxed">
+          Your registration details have been recorded. A confirmation will be sent to your email.
+          This is a frontend demo — in production, the backend will verify payment with Easebuzz
+          before confirming registration.
         </p>
       </motion.div>
 
@@ -1023,10 +1272,86 @@ function ConfirmationStep({
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8, duration: 0.4 }}
         onClick={onClose}
-        className="px-8 py-3 text-xs font-semibold tracking-[0.15em] uppercase bg-white/[0.06] text-white/60 rounded-lg hover:bg-white/[0.1] hover:text-white transition-all duration-300 border border-white/[0.08]"
+        className="px-8 py-3 text-xs font-semibold tracking-[0.15em] uppercase bg-white/[0.06] text-white/65 rounded-lg hover:bg-white/[0.1] hover:text-white transition-all duration-300 border border-white/[0.08]"
       >
         Back to Events
       </motion.button>
+    </div>
+  );
+}
+
+/* ── Step 8: Payment Failed ── */
+function FailedStep({
+  event,
+  onRetry,
+  onClose,
+}: {
+  event: EuphoriaEvent;
+  onRetry: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-8 py-8">
+      {/* Failed icon */}
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+        className="size-20 rounded-full bg-red-400/10 border border-red-400/20 flex items-center justify-center"
+      >
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+        >
+          <X className="size-10 text-red-400" />
+        </motion.div>
+      </motion.div>
+
+      {/* Title */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.4 }}
+        className="space-y-2"
+      >
+        <h2 className="text-xl sm:text-2xl font-bold text-white">
+          Payment Failed
+        </h2>
+        <p className="text-sm text-white/55">
+          Something went wrong while processing your payment.
+        </p>
+      </motion.div>
+
+      {/* Info card */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.4 }}
+        className="glass-card rounded-xl p-5 space-y-3 w-full max-w-sm"
+      >
+        <div className="flex justify-between text-xs">
+          <span className="text-white/40">Event</span>
+          <span className="text-white/70 text-right">{event.name}</span>
+        </div>
+        <div className="h-px bg-white/[0.06]" />
+        <p className="text-xs text-white/45 leading-relaxed">
+          Your registration has not been completed. No payment has been charged.
+          You can try again or return to the registration form.
+        </p>
+      </motion.div>
+
+      {/* Actions are in the footer — handled by the main component */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6, duration: 0.4 }}
+        className="text-center"
+      >
+        <p className="text-xs text-white/40">
+          If the issue persists, please contact the event helpdesk.
+        </p>
+      </motion.div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronRight } from "lucide-react";
+import { X, ChevronRight, Lock } from "lucide-react";
 import type { EuphoriaEvent } from "@/data/events";
 import { RegistrationFlow } from "./RegistrationFlow";
 
@@ -35,6 +35,7 @@ export function EventDetailModal({
   const [showRegistration, setShowRegistration] = useState(false);
 
   const handleRegister = () => setShowRegistration(true);
+  const isRegOpen = event?.registrationOpen ?? false;
 
   return (
     <>
@@ -82,7 +83,7 @@ export function EventDetailModal({
                   >
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-20 h-20 rounded-full border-2 border-white/[0.06] flex items-center justify-center">
-                        <span className="text-2xl font-black text-white/10">
+                        <span className="text-2xl font-black text-white/15">
                           {event.name
                             .split("—")[0]
                             .split(" ")
@@ -119,7 +120,7 @@ export function EventDetailModal({
                 {/* Details */}
                 <div className="space-y-3">
                   {[
-                    { label: "Registration Fee", value: event.registrationFee },
+                    { label: "Entry Fee", value: `₹${event.fee.toLocaleString("en-IN")}`, isFee: true },
                     { label: "Date", value: event.date },
                     { label: "Day", value: event.day },
                     { label: "Time", value: event.time },
@@ -134,7 +135,7 @@ export function EventDetailModal({
                       <span className="text-white/55 w-28 shrink-0 text-xs">
                         {item.label}
                       </span>
-                      <span className={`text-xs ${item.label === "Registration Fee" ? "text-euphoria-aqua font-semibold" : "text-white/70"}`}>
+                      <span className={`text-xs ${item.isFee ? "text-euphoria-aqua font-semibold" : "text-white/70"}`}>
                         {item.value}
                       </span>
                     </div>
@@ -146,7 +147,7 @@ export function EventDetailModal({
                   <h4 className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/55 mb-2">
                     Rules &amp; Guidelines
                   </h4>
-                  <p className="text-xs text-white/60 leading-relaxed">
+                  <p className="text-xs text-white/65 leading-relaxed">
                     {event.rules}
                   </p>
                 </div>
@@ -156,22 +157,34 @@ export function EventDetailModal({
 
                 {/* Registration CTA */}
                 <div className="space-y-3">
-                  <button
-                    onClick={handleRegister}
-                    className="w-full flex items-center justify-center gap-2 py-3.5 text-sm font-semibold tracking-[0.15em] uppercase bg-gradient-to-r from-euphoria-aqua/80 to-euphoria-teal/80 text-white rounded-xl hover:from-euphoria-aqua hover:to-euphoria-teal transition-all duration-300 shadow-lg shadow-euphoria-aqua/10 hover:shadow-euphoria-aqua/20 hover:scale-[1.01] active:scale-[0.99]"
-                  >
-                    Register Now
-                    <ChevronRight className="size-4" />
-                  </button>
-                  <p className="text-center text-[10px] text-white/45">
-                    Entry Fee: {event.registrationFee}
+                  {isRegOpen ? (
+                    <button
+                      onClick={handleRegister}
+                      className="w-full flex items-center justify-center gap-2 py-3.5 text-sm font-semibold tracking-[0.15em] uppercase bg-gradient-to-r from-euphoria-aqua/80 to-euphoria-teal/80 text-white rounded-xl hover:from-euphoria-aqua hover:to-euphoria-teal transition-all duration-300 shadow-lg shadow-euphoria-aqua/10 hover:shadow-euphoria-aqua/20 hover:scale-[1.01] active:scale-[0.99]"
+                    >
+                      Register Now
+                      <ChevronRight className="size-4" />
+                    </button>
+                  ) : (
+                    <div className="w-full flex items-center justify-center gap-2 py-3.5 text-sm font-semibold tracking-[0.15em] uppercase bg-white/[0.04] text-white/30 rounded-xl border border-white/[0.06] cursor-not-allowed">
+                      <Lock className="size-4" />
+                      Registrations Closed
+                    </div>
+                  )}
+                  <p className="text-center text-[10px] text-white/50">
+                    Entry Fee: ₹{event.fee.toLocaleString("en-IN")}
+                    {!isRegOpen && (
+                      <span className="block mt-1 text-white/35">
+                        Registration will open soon. Follow our social media for updates.
+                      </span>
+                    )}
                   </p>
                 </div>
 
                 {/* Back */}
                 <button
                   onClick={onClose}
-                  className="w-full py-3 text-sm text-white/50 hover:text-white/70 transition-colors tracking-wider uppercase"
+                  className="w-full py-3 text-sm text-white/55 hover:text-white/70 transition-colors tracking-wider uppercase"
                 >
                   Back to events
                 </button>
