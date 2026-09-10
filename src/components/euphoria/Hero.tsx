@@ -1,0 +1,486 @@
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { LightRays } from "@/components/magicui/light-rays";
+import { Particles } from "@/components/magicui/particles";
+import { Marquee, MarqueeItem } from "@/components/magicui/marquee";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
+
+/* ── Cinematic animated background ──────────────────────────── */
+function HeroBackground() {
+  const reducedMotion = useReducedMotion();
+
+  return (
+    <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <div className="absolute inset-0 bg-euphoria-dark" />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(91, 27, 82, 0.35) 0%, transparent 60%)",
+        }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 50% 60% at 20% 60%, rgba(162, 50, 160, 0.10) 0%, transparent 50%)",
+        }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 50% 50% at 75% 70%, rgba(23, 111, 99, 0.15) 0%, transparent 50%)",
+        }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 30% 30% at 80% 20%, rgba(62, 238, 213, 0.03) 0%, transparent 40%)",
+        }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 25% 25% at 15% 25%, rgba(175, 153, 71, 0.04) 0%, transparent 40%)",
+        }}
+      />
+      <LightRays
+        colors={[
+          "rgba(162, 50, 160, 0.06)",
+          "rgba(91, 27, 82, 0.08)",
+          "rgba(23, 111, 99, 0.05)",
+          "rgba(175, 153, 71, 0.03)",
+          "rgba(62, 238, 213, 0.02)",
+        ]}
+        rayCount={14}
+        opacity={0.3}
+        speed={45}
+      />
+      {/* Subtle floating colour wash instead of broken image */}
+      <motion.div
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 2.5, delay: 0.3, ease: "easeOut" }}
+        className="absolute inset-0"
+      >
+        <div
+          className={`absolute inset-0 ${
+            reducedMotion ? "" : "animate-float"
+          }`}
+          style={{
+            background:
+              "radial-gradient(ellipse 40% 30% at 50% 50%, rgba(91,27,82,0.06) 0%, transparent 70%)",
+          }}
+        />
+      </motion.div>
+      <div className="absolute inset-0 bg-gradient-to-b from-euphoria-dark/80 via-transparent to-euphoria-dark" />
+      <div className="absolute inset-0 bg-gradient-to-r from-euphoria-dark/60 via-transparent to-euphoria-dark/60" />
+      <div className="noise-overlay absolute inset-0" />
+    </div>
+  );
+}
+
+/* ── "JOY OF COLOURS" cinematic reveal ───────────────────────
+ *
+ *  ACT 1 (phase 0→1→2): Enter + hold
+ *    opacity 0→1, blur 12px→0, scale 0.94→1  (0.8s ease)
+ *    then hold
+ *
+ *  ACT 2 (phase 2→3): Exit
+ *    opacity 1→0, blur 0→6px, scale 1→1.03   (0.6s ease-in)
+ *
+ *  No vertical movement whatsoever.
+ *  ────────────────────────────────────────────────────────────── */
+function ColourReveal({ phase }: { phase: number }) {
+  const reducedMotion = useReducedMotion();
+
+  /*
+   * phase 0 = dark (waiting)
+   * phase 1 = entering (0.8s blur→sharp, scale 0.94→1)
+   * phase 2 = holding (fully visible)
+   * phase 3 = exiting (0.6s fade out, scale 1→1.03, blur→subtle)
+   * phase 4 = gone (hero content shown)
+   */
+
+  const isDark = phase <= 0;
+  const isEntering = phase === 1;
+  const isHolding = phase === 2;
+  const isExiting = phase === 3;
+
+  const textOpacity = isDark ? 0 : isExiting ? 0 : 1;
+  const textScale = isDark ? 0.94 : isExiting ? 1.03 : 1;
+  const textBlur = isDark ? "blur(12px)" : isExiting ? "blur(6px)" : "blur(0px)";
+
+  const textTransition = isEntering
+    ? "all 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)"
+    : isExiting
+      ? "all 0.6s ease-in"
+      : "all 0.15s ease";
+
+  const glowOpacity = isDark ? 0 : isExiting ? 0 : 1;
+  const glowTransition = isEntering
+    ? "opacity 1.2s ease-out"
+    : isExiting
+      ? "opacity 0.6s ease-in"
+      : "opacity 0.15s ease";
+
+  if (reducedMotion || phase >= 4) {
+    return null;
+  }
+
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20" aria-hidden="true">
+      {/* Flowing colour glows behind the text */}
+      <div
+        className="absolute inset-0"
+        style={{ opacity: glowOpacity, transition: glowTransition }}
+      >
+        {/* Gold */}
+        <motion.div
+          animate={{ x: [0, 40, -20, 0], y: [0, -30, 20, 0], scale: [1, 1.15, 0.95, 1] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute"
+          style={{
+            left: "25%", top: "35%", width: "280px", height: "280px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(175,153,71,0.18) 0%, transparent 70%)",
+            filter: "blur(60px)",
+          }}
+        />
+        {/* Purple */}
+        <motion.div
+          animate={{ x: [0, -35, 25, 0], y: [0, 25, -20, 0], scale: [1, 0.9, 1.1, 1] }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          className="absolute"
+          style={{
+            right: "20%", top: "30%", width: "300px", height: "300px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(162,50,160,0.16) 0%, transparent 70%)",
+            filter: "blur(65px)",
+          }}
+        />
+        {/* Teal */}
+        <motion.div
+          animate={{ x: [0, 30, -15, 0], y: [0, -20, 35, 0], scale: [1, 1.05, 0.92, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute"
+          style={{
+            left: "15%", top: "25%", width: "220px", height: "220px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(23,111,99,0.15) 0%, transparent 70%)",
+            filter: "blur(55px)",
+          }}
+        />
+        {/* Aqua */}
+        <motion.div
+          animate={{ x: [0, -25, 30, 0], y: [0, 30, -10, 0], scale: [1, 1.08, 0.95, 1] }}
+          transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+          className="absolute"
+          style={{
+            right: "30%", bottom: "30%", width: "200px", height: "200px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(62,238,213,0.12) 0%, transparent 70%)",
+            filter: "blur(50px)",
+          }}
+        />
+        {/* Magenta */}
+        <motion.div
+          animate={{ x: [0, 20, -30, 0], y: [0, -25, 15, 0], scale: [1, 0.95, 1.12, 1] }}
+          transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+          className="absolute"
+          style={{
+            left: "40%", top: "40%", width: "260px", height: "260px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(180,40,140,0.10) 0%, transparent 70%)",
+            filter: "blur(60px)",
+          }}
+        />
+      </div>
+
+      {/* "JOY OF COLOURS" — one cohesive centered group, zero vertical movement */}
+      <div
+        style={{
+          opacity: textOpacity,
+          transform: `scale(${textScale})`,
+          filter: textBlur,
+          transition: textTransition,
+        }}
+        className="text-center select-none"
+      >
+        <span className="block text-[7vw] sm:text-[5.5vw] md:text-[4vw] lg:text-[3.2vw] font-black tracking-[0.12em] text-white/80">
+          JOY OF
+        </span>
+        <span className="block text-[10vw] sm:text-[8.5vw] md:text-[6vw] lg:text-[5vw] font-black tracking-[0.08em] bg-clip-text text-transparent bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua">
+          COLOURS
+        </span>
+        <span className="block mt-3 text-[9px] sm:text-[10px] tracking-[0.5em] uppercase text-white/15">
+          SAGE Euphoria 2026
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ── Oversized background marquee typography ──────────────────── */
+function MarqueeTypography() {
+  const reducedMotion = useReducedMotion();
+  const text = "SAGE EUPHORIA  ·  ";
+
+  if (reducedMotion) {
+    return (
+      <div
+        className="absolute inset-0 flex items-center overflow-hidden pointer-events-none select-none"
+        aria-hidden="true"
+        style={{ opacity: 0.03 }}
+      >
+        <span              className="text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[12vw] font-black tracking-wider whitespace-nowrap"
+          style={{
+            WebkitTextStroke: "2px rgba(162, 50, 160, 0.20)",
+            color: "transparent",
+            textShadow: "0 0 80px rgba(162, 50, 160, 0.05)",
+          }}
+        >
+          {text}
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="absolute inset-0 flex items-center overflow-hidden pointer-events-none select-none"
+      aria-hidden="true"
+      style={{ opacity: 0.035 }}
+    >
+      <Marquee speed={40} direction="left" pauseOnHover={false}>
+        {Array.from({ length: 8 }).map((_, i) => (
+          <MarqueeItem key={i}>
+            <span
+              className="text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[12vw] font-black tracking-wider mx-0"
+              style={{
+                WebkitTextStroke: "2px rgba(162, 50, 160, 0.22)",
+                color: "transparent",
+                textShadow: "0 0 100px rgba(162, 50, 160, 0.06)",
+              }}
+            >
+              {text}
+            </span>
+          </MarqueeItem>
+        ))}
+      </Marquee>
+    </div>
+  );
+}
+
+/* ── Orbital decorative ring ────────────────────────────────── */
+function OrbitalRing() {
+  const reducedMotion = useReducedMotion();
+
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
+      <div
+        className={`w-[450px] h-[450px] sm:w-[560px] sm:h-[560px] md:w-[700px] md:h-[700px] lg:w-[850px] lg:h-[850px] rounded-full border border-euphoria-purple/[0.04] ${
+          reducedMotion ? "" : "animate-spin-slow"
+        }`}
+        style={{ animationDuration: "40s" }}
+      >
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-euphoria-aqua/25" />
+      </div>
+      <div
+        className={`absolute w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[540px] md:h-[540px] lg:w-[660px] lg:h-[660px] rounded-full border border-euphoria-gold/[0.04] ${
+          reducedMotion ? "" : "animate-spin-slow"
+        }`}
+        style={{ animationDuration: "55s", animationDirection: "reverse" }}
+      >
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-1 h-1 rounded-full bg-euphoria-gold/20" />
+      </div>
+    </div>
+  );
+}
+
+/* ── Main Hero ──────────────────────────────────────────────── */
+export function Hero() {
+  const heroRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
+
+  /*
+   * Strict sequential choreography:
+   *
+   * 0.0s  phase 0  Dark atmospheric background
+   * 0.7s  phase 1  JOY OF COLOURS enters  (0.8s transition)
+   * 1.5s  phase 2  JOY OF COLOURS holds
+   * 2.2s  phase 3  JOY OF COLOURS exits   (0.6s transition)
+   * 2.8s  phase 4  Breathing gap — both invisible
+   * 3.0s  phase 5  SAGE EUPHORIA enters    (0.9s transition)
+   * 3.9s  phase 6  SAGE EUPHORIA settled — tagline + CTA stagger in
+   */
+  const [introPhase, setIntroPhase] = useState<number>(() =>
+    reducedMotion ? 6 : 0
+  );
+
+  useEffect(() => {
+    if (reducedMotion) return;
+
+    const timers = [
+      setTimeout(() => setIntroPhase(1), 700),   // 0.7s  JOY OF COLOURS enters
+      setTimeout(() => setIntroPhase(2), 1500),   // 1.5s  holds
+      setTimeout(() => setIntroPhase(3), 2200),   // 2.2s  JOY OF COLOURS exits
+      setTimeout(() => setIntroPhase(4), 2800),   // 2.8s  breathing gap
+      setTimeout(() => setIntroPhase(5), 3000),   // 3.0s  SAGE EUPHORIA enters
+      setTimeout(() => setIntroPhase(6), 3900),   // 3.9s  settled
+    ];
+
+    return () => timers.forEach(clearTimeout);
+  }, [reducedMotion]);
+
+  const heroReady = introPhase >= 5;
+  const heroSettled = introPhase >= 6;
+
+  const scrollTo = (id: string) => {
+    document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <section
+      id="home"
+      ref={heroRef}
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+    >
+      <HeroBackground />
+      <MarqueeTypography />
+      <OrbitalRing />
+
+      {/* Magic UI Particles */}
+      <Particles
+        count={25}
+        colors={[
+          "rgba(62, 238, 213, 0.18)",
+          "rgba(175, 153, 71, 0.15)",
+          "rgba(162, 50, 160, 0.10)",
+          "rgba(23, 111, 99, 0.12)",
+        ]}
+        maxSize={2}
+        speed={0.6}
+      />
+
+      {/* ── ACT 1+2: "JOY OF COLOURS" reveal ── */}
+      <ColourReveal phase={introPhase} />
+
+      {/* ── ACT 3: SAGE EUPHORIA hero — same center position, no vertical movement ── */}
+      <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 max-w-[1536px] mx-auto">
+        {/* Large written SAGE EUPHORIA typography — enters from center, scale+opacity only */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={
+            heroReady
+              ? { opacity: 1, scale: 1 }
+              : { opacity: 0, scale: 0.96 }
+          }
+          transition={{
+            duration: 0.9,
+            delay: heroReady ? 0 : 0,
+            ease: [0.25, 0.1, 0.25, 1],
+          }}
+          className="mb-4 sm:mb-6 w-full"
+          style={{ filter: heroReady ? "blur(0px)" : "blur(10px)", transition: "filter 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)" }}
+        >
+          <h1 className="tracking-tight">
+            <span className="block text-[9vw] sm:text-[7.7vw] md:text-[6.3vw] lg:text-[5vw] font-black text-white/90 leading-[0.88]">
+              SAGE
+            </span>
+            <span className="block text-[11vw] sm:text-[9vw] md:text-[7.2vw] lg:text-[5.9vw] font-black text-transparent bg-clip-text bg-gradient-to-r from-euphoria-gold via-euphoria-purple to-euphoria-aqua leading-[1.15]">
+              Euphoria
+            </span>
+          </h1>
+        </motion.div>
+
+        {/* Year badge */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={heroSettled ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: heroSettled ? 0 : 0 }}
+          className="mb-5 sm:mb-6"
+        >
+          <span className="inline-block px-4 py-1.5 text-[9px] sm:text-[10px] font-semibold tracking-[0.4em] uppercase text-euphoria-gold/70 border border-euphoria-gold/20 rounded-full bg-euphoria-gold/[0.04]">
+            2026 Edition
+          </span>
+        </motion.div>
+
+        {/* Theme — Joy of Colours */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={heroSettled ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: heroSettled ? 0.15 : 0 }}
+          className="text-sm sm:text-base md:text-lg font-light tracking-[0.2em] uppercase"
+        >
+          <AnimatedGradientText
+            gradient="linear-gradient(90deg, #AF9947, #A232A0, #176F63, #3EEED5, #AF9947)"
+            speed={4}
+          >
+            Joy of Colours
+          </AnimatedGradientText>
+        </motion.p>
+
+        {/* Subtext */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={heroSettled ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: heroSettled ? 0.3 : 0 }}
+          className="mt-3 text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-white/55 max-w-md"
+        >
+          Celebrating diversity, creativity, and the emotions that colours bring to life
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={heroSettled ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: heroSettled ? 0.45 : 0 }}
+          className="mt-10 sm:mt-14 flex flex-col sm:flex-row gap-4"
+        >
+          <ShimmerButton
+            shimmerColor="rgba(62, 238, 213, 0.35)"
+            shimmerDuration="3s"
+            background="rgba(62, 238, 213, 0.08)"
+            className="px-7 sm:px-9 py-3 sm:py-3.5"
+            onClick={() => scrollTo("#events")}
+          >
+            <span className="text-euphoria-aqua font-semibold tracking-[0.2em] uppercase text-xs sm:text-sm">
+              Explore Events
+            </span>
+          </ShimmerButton>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => scrollTo("#about")}
+            className="px-7 sm:px-9 py-3 sm:py-3.5 text-white/60 font-medium tracking-[0.15em] uppercase text-[11px] sm:text-xs border border-white/10 rounded-lg transition-all duration-300 hover:text-white/80 hover:border-white/20 hover:bg-white/[0.02]"
+          >
+            Discover Euphoria
+          </motion.button>
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={heroSettled ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ delay: 0.6, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+      >          <span className="text-[9px] tracking-[0.35em] uppercase text-white/40">
+          Scroll
+        </span>
+        <div className="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center p-1">
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            className="w-1 h-2 rounded-full bg-euphoria-aqua/40"
+          />
+        </div>
+      </motion.div>
+    </section>
+  );
+}

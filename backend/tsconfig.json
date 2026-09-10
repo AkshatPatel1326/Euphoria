@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./"
+  },
+  "include": ["src/**/*", "prisma/**/*", "prisma7.config.ts"],
+  "exclude": ["node_modules", "dist", "src/test-guest-flow.ts", "src/test-verification.ts"]
+}

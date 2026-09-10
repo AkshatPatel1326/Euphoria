@@ -1,0 +1,14 @@
+node_modules
+
+# Keep environment variables out of version control
+.env
+.env.local
+.env.*.local
+
+# Explicitly allow the example/template file — it must be committed
+!.env.example
+
+/generated/prisma
+
+# Compiled output (contains transpiled copies of source files — not needed in VCS)
+dist

@@ -1,0 +1,1193 @@
+import "dotenv/config";
+import { PrismaPg } from "@prisma/adapter-pg";
+import {
+  PrismaClient,
+  Role,
+  RegistrationType,
+  EventStatus,
+  PassStatus,
+} from "../generated/prisma/client";
+import bcrypt from "bcryptjs";
+import crypto from "node:crypto";
+
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error("DATABASE_URL environment variable is required in .env");
+}
+
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
+
+/* ═══════════════════════════════════════════════════════════════
+   1. CATEGORIES (Extracted from src/data/events.ts categoryMeta)
+   ═══════════════════════════════════════════════════════════════ */
+const categories = [
+  {
+    id: "cultural",
+    slug: "cultural",
+    name: "Cultural",
+    number: "01",
+    color: "#A232A0",
+    description:
+      "Dance, music, fashion, and visual arts — where raw talent meets the stage.",
+    keywords: "Dance · Music · Fashion · Performance",
+    posterUrl: "/assets/Cultural_.jpeg",
+  },
+  {
+    id: "literary-management",
+    slug: "literary-management",
+    name: "Literary & Management",
+    number: "02",
+    color: "#AF9947",
+    description:
+      "Debate, strategy, branding, and innovation — where ideas are sharpened.",
+    keywords: "Ideas · Strategy · Debate · Marketing",
+    posterUrl: "/assets/Literary___Management.jpeg",
+  },
+  {
+    id: "science-tech",
+    slug: "science-tech",
+    name: "Science & Technology",
+    number: "03",
+    color: "#3EEED5",
+    description: "Innovation, research, and AI — where the future is built.",
+    keywords: "Innovation · AI · Science · Technology",
+    posterUrl: "/assets/Science_and_Technology.jpeg",
+  },
+  {
+    id: "sports",
+    slug: "sports",
+    name: "Sports",
+    number: "04",
+    color: "#176F63",
+    description:
+      "Competition, endurance, and strategy — where champions are made.",
+    keywords: "Competition · Strength · Skill · Teamwork",
+    posterUrl: "/assets/Sports_.jpeg",
+  },
+];
+
+/* ═══════════════════════════════════════════════════════════════
+   2. PASSES (Extracted from src/components/euphoria/Passes.tsx)
+   ═══════════════════════════════════════════════════════════════ */
+const euphoriaPass = {
+  id: "euphoria-2026-general",
+  slug: "euphoria-2026-general",
+  name: "EUPHORIA 2026",
+  subtitle: "GENERAL PASS",
+  tagline: "Your entry into the celebration.",
+  price: 299,
+  status: PassStatus.AVAILABLE,
+
+  audiences: [
+    "SAGE University students",
+    "Students from other colleges",
+    "General public / outsiders",
+  ],
+  features: [
+    "Access to the Euphoria festival experience",
+    "Entry to eligible events and activities",
+    "Festival updates and announcements",
+    "Access to designated festival areas",
+    "More details to be announced",
+  ],
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   3. SPONSORS (Extracted from src/components/euphoria/Sponsors.tsx)
+   ═══════════════════════════════════════════════════════════════ */
+const sponsors = [
+  // Featured sponsors
+  {
+    id: "sponsor-featured-1",
+    name: "SAGE Euphoria 2026",
+    logoUrl: "/assets/Sage_euphoria_logp.png",
+    tier: "Flagship University Fest",
+    isFeatured: true,
+    order: 1,
+  },
+  {
+    id: "sponsor-featured-2",
+    name: "Radio SAGE",
+    logoUrl: "/assets/Past_Sponsors__14_.png",
+    tier: "Official Media Partner",
+    isFeatured: true,
+    order: 2,
+  },
+  // Partner & Past sponsors
+  { id: "sponsor-past-7", name: "Partner Sponsor 7", logoUrl: "/assets/Past_Sponsors__7_.png", tier: "Event Partner", isFeatured: false, order: 3 },
+  { id: "sponsor-past-8", name: "Partner Sponsor 8", logoUrl: "/assets/Past_Sponsors__8_.png", tier: "Event Partner", isFeatured: false, order: 4 },
+  { id: "sponsor-past-9", name: "Partner Sponsor 9", logoUrl: "/assets/Past_Sponsors__9_.png", tier: "Event Partner", isFeatured: false, order: 5 },
+  { id: "sponsor-past-12", name: "Partner Sponsor 12", logoUrl: "/assets/Past_Sponsors__12_.png", tier: "Event Partner", isFeatured: false, order: 6 },
+  { id: "sponsor-past-21", name: "Partner Sponsor 21", logoUrl: "/assets/Past_Sponsors__21_.png", tier: "Event Partner", isFeatured: false, order: 7 },
+  { id: "sponsor-past-22", name: "Partner Sponsor 22", logoUrl: "/assets/Past_Sponsors__22_.png", tier: "Event Partner", isFeatured: false, order: 8 },
+  { id: "sponsor-past-23", name: "Partner Sponsor 23", logoUrl: "/assets/Past_Sponsors__23_.png", tier: "Event Partner", isFeatured: false, order: 9 },
+  { id: "sponsor-past-24", name: "Partner Sponsor 24", logoUrl: "/assets/Past_Sponsors__24_.png", tier: "Event Partner", isFeatured: false, order: 10 },
+  { id: "sponsor-past-26", name: "Partner Sponsor 26", logoUrl: "/assets/Past_Sponsors__26_.png", tier: "Event Partner", isFeatured: false, order: 11 },
+  { id: "sponsor-past-27", name: "Partner Sponsor 27", logoUrl: "/assets/Past_Sponsors__27_.png", tier: "Event Partner", isFeatured: false, order: 12 },
+  { id: "sponsor-past-29", name: "Partner Sponsor 29", logoUrl: "/assets/Past_Sponsors__29_.png", tier: "Event Partner", isFeatured: false, order: 13 },
+  { id: "sponsor-past-30", name: "Partner Sponsor 30", logoUrl: "/assets/Past_Sponsors__30_.png", tier: "Event Partner", isFeatured: false, order: 14 },
+  { id: "sponsor-past-39", name: "Partner Sponsor 39", logoUrl: "/assets/Past_Sponsors__39_.png", tier: "Event Partner", isFeatured: false, order: 15 },
+  { id: "sponsor-past-jh", name: "JH Partner", logoUrl: "/assets/JH.png", tier: "Associate Partner", isFeatured: false, order: 16 },
+  { id: "sponsor-past-re", name: "RE Partner", logoUrl: "/assets/RE.png", tier: "Associate Partner", isFeatured: false, order: 17 },
+];
+
+/* ═══════════════════════════════════════════════════════════════
+   4. EVENTS (All 43 events extracted verbatim from src/data/events.ts)
+   ═══════════════════════════════════════════════════════════════ */
+interface RawEvent {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  poster: string | null;
+  fee: number;
+  registrationType: "individual" | "group";
+  minTeamSize: number;
+  maxTeamSize: number;
+  registrationOpen: boolean;
+  date: string;
+  day: string;
+  time: string;
+  venue: string;
+  teamSize: string;
+  prizes: string;
+  rules: string;
+}
+
+const rawEvents: RawEvent[] = [
+  // ── Cultural (10 events) ──
+  {
+    id: "cultural-1",
+    name: "Move & Groove — Solo Dance Competition",
+    category: "cultural",
+    description: "A solo dance competition celebrating artistry, rhythm, and stage presence.",
+    poster: "/assets/Move___Groove_Solo.jpg",
+    fee: 299,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "8 April 2026",
+    day: "Wednesday",
+    time: "11:00 AM to 2:00 PM",
+    venue: "Kalpvriksha Auditorium",
+    teamSize: "Individual",
+    prizes: "1st: ₹3,100 | 2nd: ₹2,100",
+    rules: "Solo performers only. Two rounds: preliminary and final.",
+  },
+  {
+    id: "cultural-2",
+    name: "Move & Groove — Group Dance Competition",
+    category: "cultural",
+    description: "Choreographed group performances judged on synchronization, creativity, and impact.",
+    poster: "/assets/Move___Groove_Group.jpg",
+    fee: 899,
+    registrationType: "group",
+    minTeamSize: 5,
+    maxTeamSize: 15,
+    registrationOpen: true,
+    date: "8 April 2026",
+    day: "Wednesday",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "5–15 members",
+    prizes: "1st: ₹5,100 | 2nd: ₹3,100",
+    rules: "Groups of 5 to 15. Original choreography preferred.",
+  },
+  {
+    id: "cultural-3",
+    name: "Swar Fiesta — Solo Singing Competition",
+    category: "cultural",
+    description: "A solo singing competition for vocalists who command the stage with range and emotion.",
+    poster: "/assets/Singing.jpg",
+    fee: 299,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "8 April 2026",
+    day: "Wednesday",
+    time: "2:00 PM to 4:00 PM",
+    venue: "Kalpvriksha Auditorium",
+    teamSize: "Individual",
+    prizes: "1st: ₹3,100 | 2nd: ₹2,100",
+    rules: "Solo vocals only. Two rounds: elimination and finale.",
+  },
+  {
+    id: "cultural-4",
+    name: "Battle of Bands",
+    category: "cultural",
+    description: "Live band performances competing for the title of best ensemble on campus.",
+    poster: "/assets/Battle_of_bands.jpg",
+    fee: 2499,
+    registrationType: "group",
+    minTeamSize: 4,
+    maxTeamSize: 8,
+    registrationOpen: true,
+    date: "9 April 2026",
+    day: "Thursday",
+    time: "10:00 AM to 1:00 PM",
+    venue: "Kalpvriksha Auditorium",
+    teamSize: "4–8 members",
+    prizes: "1st: ₹10,000",
+    rules: "Live performance required. Minimum 4, maximum 8 members.",
+  },
+  {
+    id: "cultural-5",
+    name: "Fashion-Fiesta — Designer Solo (Single Dress)",
+    category: "cultural",
+    description: "Solo runway competition for models presenting a single original dress design.",
+    poster: "/assets/Fashion_Fiesta.jpg",
+    fee: 999,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "9 April 2026",
+    day: "Thursday",
+    time: "7:00 PM Onwards",
+    venue: "Phase 2 Ground",
+    teamSize: "Individual",
+    prizes: "Mr. Euphoria: ₹2,100 | Ms. Euphoria: ₹2,100",
+    rules: "Solo runway walk with a single original dress design.",
+  },
+  {
+    id: "cultural-6",
+    name: "Fashion-Fiesta — Graduation Student IOD",
+    category: "cultural",
+    description: "A fashion showcase for graduation students in the Institute of Design.",
+    poster: null,
+    fee: 2499,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual",
+    prizes: "1st: ₹5,100",
+    rules: "Open to graduation students of IOD.",
+  },
+  {
+    id: "cultural-7",
+    name: "Fashion-Fiesta — Designer (Max. 6 Dress)",
+    category: "cultural",
+    description: "A design showcase where emerging fashion talent presents up to six original pieces.",
+    poster: null,
+    fee: 4999,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual or Pair",
+    prizes: "TBA",
+    rules: "Present up to 6 original pieces. Theme provided 48 hours before event.",
+  },
+  {
+    id: "cultural-8",
+    name: "Model Hunt — Audition",
+    category: "cultural",
+    description: "Open auditions for aspiring models seeking their break into the spotlight.",
+    poster: "/assets/Model_Hunt.jpg",
+    fee: 199,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "10:30 AM Onwards",
+    venue: "Kalpvriksha Auditorium",
+    teamSize: "Individual",
+    prizes: "Audition — Advancement to Finalist round",
+    rules: "Open to all. Walk, introduction, and talent round.",
+  },
+  {
+    id: "cultural-9",
+    name: "Model Hunt — Finalist",
+    category: "cultural",
+    description: "The finalist round of Model Hunt showcasing the top selected models.",
+    poster: "/assets/Model_Hunt_Finalist.jpeg",
+    fee: 799,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual",
+    prizes: "TBA",
+    rules: "Selected finalists from Model Hunt Audition round.",
+  },
+  {
+    id: "cultural-10",
+    name: "Reel and Photography Competition",
+    category: "cultural",
+    description: "A visual storytelling competition spanning reels, photography, and short-form content.",
+    poster: "/assets/Reel_Making.jpg",
+    fee: 199,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "6 April 2026 to 10 April 2026",
+    day: "TBA",
+    time: "Whole Day",
+    venue: "TBA",
+    teamSize: "Individual or Pair",
+    prizes: "₹1,100",
+    rules: "Submit 1 reel (60–90 seconds) and 5 photographs. Theme: Euphoria on campus.",
+  },
+
+  // ── Literary & Management (7 events) ──
+  {
+    id: "lit-1",
+    name: "Crack the Clue — Treasure Hunt",
+    category: "literary-management",
+    description: "A multi-stage campus treasure hunt testing observation, logic, and speed.",
+    poster: "/assets/Crack_the_Clue.jpg",
+    fee: 999,
+    registrationType: "group",
+    minTeamSize: 2,
+    maxTeamSize: 4,
+    registrationOpen: true,
+    date: "8 April 2026",
+    day: "Wednesday",
+    time: "11:00 AM Onwards",
+    venue: "A Block Central Stage",
+    teamSize: "2–4 members",
+    prizes: "1st: ₹3,100",
+    rules: "Teams of 2–4. Multi-stage clues across campus. First to solve all wins.",
+  },
+  {
+    id: "lit-2",
+    name: "Bid To Win — IPL Auction",
+    category: "literary-management",
+    description: "A simulated IPL auction where teams compete to build the strongest squad under budget.",
+    poster: "/assets/Bid_to_win.jpg",
+    fee: 499,
+    registrationType: "group",
+    minTeamSize: 3,
+    maxTeamSize: 5,
+    registrationOpen: true,
+    date: "9 April 2026",
+    day: "Thursday",
+    time: "1:00 PM to 4:00 PM",
+    venue: "Vishwesvariya Auditorium",
+    teamSize: "3–5 members",
+    prizes: "1st: ₹5,000 | 2nd: ₹2,500",
+    rules: "Teams bid on fictional players with a fixed purse.",
+  },
+  {
+    id: "lit-3",
+    name: "Meme Battle: The Marketing War",
+    category: "literary-management",
+    description: "A marketing competition where strategy and humor combine to drive audience engagement.",
+    poster: "/assets/Meme_Battle.jpg",
+    fee: 250,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual or Pair",
+    prizes: "1st: ₹2,500 | 2nd: ₹1,000",
+    rules: "Create 3 original memes on a given brand/topic within 45 minutes.",
+  },
+  {
+    id: "lit-4",
+    name: "Battle of Brands",
+    category: "literary-management",
+    description: "Teams pitch and defend brand strategies in a competitive marketing showcase.",
+    poster: "/assets/Battle_of_brands.jpg.jpeg",
+    fee: 199,
+    registrationType: "group",
+    minTeamSize: 3,
+    maxTeamSize: 5,
+    registrationOpen: true,
+    date: "8 April 2026",
+    day: "Wednesday",
+    time: "TBA",
+    venue: "Seminar Hall, IMS",
+    teamSize: "3–5 members",
+    prizes: "1st: ₹2,500 | 2nd: ₹1,000",
+    rules: "Teams present a brand strategy for a fictional product.",
+  },
+  {
+    id: "lit-5",
+    name: "Idea Verse",
+    category: "literary-management",
+    description: "An innovation pitch competition where participants present original ideas to a panel.",
+    poster: "/assets/Idea_Verse.jpg",
+    fee: 250,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual or Pair",
+    prizes: "1st: ₹2,500 | 2nd: ₹1,000",
+    rules: "5-minute pitch + 5-minute Q&A. Ideas must address a real problem.",
+  },
+  {
+    id: "lit-6",
+    name: "The Great Debate — Debate Competition",
+    category: "literary-management",
+    description: "A formal debate competition for participants who argue with precision and conviction.",
+    poster: "/assets/The_great_debate.jpg",
+    fee: 249,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "9 April 2026",
+    day: "Thursday",
+    time: "11:00 AM to 1:00 PM",
+    venue: "MOOT Court B Block",
+    teamSize: "Individual or Pair",
+    prizes: "1st: ₹2,100 | 2nd: ₹1,100",
+    rules: "British Parliamentary format. Topics released 24 hours before.",
+  },
+  {
+    id: "lit-7",
+    name: "Vocal Ink — Slam Poetry",
+    category: "literary-management",
+    description: "A spoken-word competition where original poetry is performed live for a judging panel.",
+    poster: "/assets/VI.jpg",
+    fee: 249,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "10 April 2026",
+    day: "Friday",
+    time: "12:00 PM Onwards",
+    venue: "Kalpvriksha Auditorium",
+    teamSize: "Individual",
+    prizes: "1st: ₹2,100 | 2nd: ₹1,100",
+    rules: "Original work only. Judged on delivery, originality, and emotional impact.",
+  },
+
+  // ── Science & Technology (10 events) ──
+  {
+    id: "sci-1",
+    name: "IdeaSpark — Single",
+    category: "science-tech",
+    description: "A solo innovation pitch competition for individuals with a prototype or concept.",
+    poster: "/assets/Idea_spark.jpg",
+    fee: 99,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual",
+    prizes: "1st: ₹1,500 | 2nd: ₹1,000",
+    rules: "Solo presenters only. 7-minute pitch + 5-minute Q&A.",
+  },
+  {
+    id: "sci-2",
+    name: "IdeaSpark — Group",
+    category: "science-tech",
+    description: "A team-based innovation pitch competition for collaborative projects.",
+    poster: "/assets/Idea_spark.jpg",
+    fee: 199,
+    registrationType: "group",
+    minTeamSize: 2,
+    maxTeamSize: 5,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "2–5 members",
+    prizes: "1st: ₹2,500 | 2nd: ₹1,100",
+    rules: "Teams of 2–5. 10-minute pitch + 5-minute Q&A.",
+  },
+  {
+    id: "sci-3",
+    name: "Sci-Pha-Agro — Model/Product Making Presentation",
+    category: "science-tech",
+    description: "A hands-on model and product-making competition across science, pharma, and agriculture.",
+    poster: "/assets/Model_Product_Making.jpeg",
+    fee: 249,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "9 April 2026",
+    day: "Thursday",
+    time: "2:00 PM to 4:00 PM",
+    venue: "D Block, IOP",
+    teamSize: "Individual or Pair",
+    prizes: "1st: ₹2,100 | 2nd: ₹1,100",
+    rules: "Bring a working model or product prototype.",
+  },
+  {
+    id: "sci-4",
+    name: "Sci-Pha-Agro — Oral/Poster Presentation",
+    category: "science-tech",
+    description: "An oral and poster presentation competition for research across science domains.",
+    poster: "/assets/Oral_Poster_Presentation.jpeg",
+    fee: 249,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "2 April 2026",
+    day: "Thursday",
+    time: "2:00 PM to 4:00 PM",
+    venue: "D Block, IOP",
+    teamSize: "Individual or Pair",
+    prizes: "1st: ₹2,100 | 2nd: ₹1,100",
+    rules: "Poster size: A0. Oral presentation: 10 minutes + 5-minute Q&A.",
+  },
+  {
+    id: "sci-5",
+    name: "AI — Prompt Challenge",
+    category: "science-tech",
+    description: "A competition testing the ability to craft effective prompts for artificial intelligence systems.",
+    poster: "/assets/AI_Prompt.jpg",
+    fee: 149,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual",
+    prizes: "1st: ₹2,100 | 2nd: ₹1,100",
+    rules: "Three rounds of increasing difficulty.",
+  },
+  {
+    id: "sci-6",
+    name: "Lan Gamming",
+    category: "science-tech",
+    description: "A LAN gaming tournament bringing together the best gamers on campus.",
+    poster: "/assets/Lan_Gaming.jpeg",
+    fee: 149,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual",
+    prizes: "2nd: ₹2,100 | 2nd: ₹1,100",
+    rules: "Single elimination bracket. Game title TBA.",
+  },
+  {
+    id: "sci-7",
+    name: "Robo Race",
+    category: "science-tech",
+    description: "A robotics race competition where engineered bots navigate a track at speed.",
+    poster: "/assets/Robo_Race.jpeg",
+    fee: 149,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual or Pair",
+    prizes: "3rd: ₹2,100 | 2nd: ₹1,100",
+    rules: "Build and race a robot on a predefined track.",
+  },
+  {
+    id: "sci-8",
+    name: "Para Coading",
+    category: "science-tech",
+    description: "A parallel coding competition testing programming speed, accuracy, and teamwork.",
+    poster: "/assets/Para_Coding.jpeg",
+    fee: 149,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual or Pair",
+    prizes: "4th: ₹2,100 | 2nd: ₹1,100",
+    rules: "Solve coding challenges in parallel. Time limit enforced.",
+  },
+  {
+    id: "sci-9",
+    name: "Decoder Spyder",
+    category: "science-tech",
+    description: "A cybersecurity and decoding challenge for tech enthusiasts.",
+    poster: "/assets/Decoder_Spyder.jpeg",
+    fee: 149,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual or Pair",
+    prizes: "5th: ₹2,100 | 2nd: ₹1,100",
+    rules: "Multi-round decoding and cybersecurity challenge.",
+  },
+  {
+    id: "sci-10",
+    name: "Birdge Making",
+    category: "science-tech",
+    description: "A bridge-making engineering competition testing structural design and load capacity.",
+    poster: "/assets/Bridge_Making.jpeg",
+    fee: 149,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "TBA",
+    venue: "TBA",
+    teamSize: "Individual or Pair",
+    prizes: "6th: ₹2,100 | 2nd: ₹1,100",
+    rules: "Build a bridge from provided materials. Tested on load capacity.",
+  },
+
+  // ── Sports (16 events) ──
+  {
+    id: "sport-1",
+    name: "Cricket",
+    category: "sports",
+    description: "A tournament-format cricket competition open to all skill levels.",
+    poster: "/assets/Cricket.jpg",
+    fee: 1600,
+    registrationType: "group",
+    minTeamSize: 11,
+    maxTeamSize: 11,
+    registrationOpen: true,
+    date: "28 March 2026",
+    day: "Saturday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Ground",
+    teamSize: "11 members",
+    prizes: "Winner: ₹16,000 | Runner-up: ₹7,000",
+    rules: "T20 format. Teams of 11. Round-robin followed by knockout.",
+  },
+  {
+    id: "sport-2",
+    name: "Football",
+    category: "sports",
+    description: "A football tournament bringing together the best players on campus.",
+    poster: "/assets/Football.jpg",
+    fee: 1000,
+    registrationType: "group",
+    minTeamSize: 7,
+    maxTeamSize: 7,
+    registrationOpen: true,
+    date: "2 April 2026",
+    day: "Thursday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Ground",
+    teamSize: "7 members",
+    prizes: "Winner: ₹8,000 | Runner-up: ₹3,500",
+    rules: "7-a-side format. Round-robin followed by knockout.",
+  },
+  {
+    id: "sport-3",
+    name: "Basketball",
+    category: "sports",
+    description: "A basketball competition for teams ready to compete on the hardwood.",
+    poster: "/assets/BBasketball.jpg",
+    fee: 1000,
+    registrationType: "group",
+    minTeamSize: 5,
+    maxTeamSize: 5,
+    registrationOpen: true,
+    date: "1 April 2026",
+    day: "Wednesday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 1 Ground",
+    teamSize: "5 members",
+    prizes: "Winner: ₹6,000 | Runner-up: ₹3,000",
+    rules: "5-a-side. Round-robin followed by knockout.",
+  },
+  {
+    id: "sport-4",
+    name: "Kabaddi",
+    category: "sports",
+    description: "A high-energy kabaddi tournament for teams.",
+    poster: "/assets/Kabaddi.jpg",
+    fee: 800,
+    registrationType: "group",
+    minTeamSize: 7,
+    maxTeamSize: 7,
+    registrationOpen: true,
+    date: "1 April 2026",
+    day: "Wednesday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Ground",
+    teamSize: "7 members",
+    prizes: "Winner: ₹4,000 | Runner-up: ₹2,000",
+    rules: "7-a-side. Standard kabaddi rules. Round-robin followed by knockout.",
+  },
+  {
+    id: "sport-5",
+    name: "Carrom",
+    category: "sports",
+    description: "A carrom tournament testing precision, strategy, and composure.",
+    poster: "/assets/Carrom.jpg",
+    fee: 200,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "30 March 2026",
+    day: "Monday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Sports Complex",
+    teamSize: "Individual or Pair",
+    prizes: "Winner: ₹1,600 | Runner-up: ₹800",
+    rules: "Singles and doubles categories. Pool stage followed by knockout.",
+  },
+  {
+    id: "sport-6",
+    name: "Chess",
+    category: "sports",
+    description: "A chess competition for players who think several moves ahead.",
+    poster: "/assets/Chess.jpg",
+    fee: 200,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "30 March 2026",
+    day: "Monday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Sports Complex",
+    teamSize: "Individual",
+    prizes: "Winner: ₹1,600 | Runner-up: ₹800",
+    rules: "Swiss system. 15 minutes per player per game.",
+  },
+  {
+    id: "sport-7",
+    name: "Volleyball",
+    category: "sports",
+    description: "A volleyball tournament for teams competing at the net.",
+    poster: "/assets/Volleyball.jpg",
+    fee: 800,
+    registrationType: "group",
+    minTeamSize: 6,
+    maxTeamSize: 6,
+    registrationOpen: true,
+    date: "28 March 2026",
+    day: "Saturday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 1 Ground",
+    teamSize: "6 members",
+    prizes: "Winner: ₹4,000 | Runner-up: ₹2,000",
+    rules: "6-a-side. Best of 3 sets. Round-robin followed by knockout.",
+  },
+  {
+    id: "sport-8",
+    name: "Table-Tennis",
+    category: "sports",
+    description: "A table tennis competition for players with quick reflexes and sharp technique.",
+    poster: "/assets/Table_Tennis.jpg",
+    fee: 250,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "1 April 2026",
+    day: "Wednesday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Sports Complex",
+    teamSize: "Individual",
+    prizes: "Winner: ₹2,000 | Runner-up: ₹700",
+    rules: "Singles only. Pool stage followed by knockout. Best of 5 games.",
+  },
+  {
+    id: "sport-9",
+    name: "Badminton — Singles Men",
+    category: "sports",
+    description: "A men's singles badminton tournament on the court.",
+    poster: "/assets/Badminton_Mens.jpg",
+    fee: 300,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "30 March 2026",
+    day: "Monday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Sports Complex",
+    teamSize: "Individual",
+    prizes: "Winner: ₹3,000 | Runner-up: ₹1,500",
+    rules: "Singles format. Pool stage followed by knockout. Best of 3 games.",
+  },
+  {
+    id: "sport-10",
+    name: "Badminton — Doubles Men",
+    category: "sports",
+    description: "A men's doubles badminton tournament for team pairs.",
+    poster: "/assets/Badminton_Mens.jpg",
+    fee: 400,
+    registrationType: "group",
+    minTeamSize: 2,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Sports Complex",
+    teamSize: "Pair",
+    prizes: "Winner: ₹4,000 | Runner-up: ₹2,000",
+    rules: "Doubles format. Pool stage followed by knockout. Best of 3 games.",
+  },
+  {
+    id: "sport-11",
+    name: "Badminton — Singles Women",
+    category: "sports",
+    description: "A women's singles badminton tournament.",
+    poster: "/assets/Badminton_Womens.jpg",
+    fee: 200,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "3 April 2026",
+    day: "Friday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Sports Complex",
+    teamSize: "Individual",
+    prizes: "Winner: ₹2,000 | Runner-up: ₹1,000",
+    rules: "Singles format. Pool stage followed by knockout. Best of 3 games.",
+  },
+  {
+    id: "sport-12",
+    name: "Badminton — Doubles Women",
+    category: "sports",
+    description: "A women's doubles badminton tournament for team pairs.",
+    poster: "/assets/Badminton_Womens.jpg",
+    fee: 400,
+    registrationType: "group",
+    minTeamSize: 2,
+    maxTeamSize: 2,
+    registrationOpen: true,
+    date: "TBA",
+    day: "TBA",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Sports Complex",
+    teamSize: "Pair",
+    prizes: "Winner: ₹3,000 | Runner-up: ₹1,500",
+    rules: "Doubles format. Pool stage followed by knockout. Best of 3 games.",
+  },
+  {
+    id: "sport-13",
+    name: "Power Lifting",
+    category: "sports",
+    description: "A power lifting competition for athletes who train with purpose.",
+    poster: "/assets/Power_Lifting.jpg",
+    fee: 300,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "28 March 2026",
+    day: "Saturday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Sports Complex",
+    teamSize: "Individual",
+    prizes: "1st: ₹2,000 | 2nd: ₹1,000",
+    rules: "Squat, bench press, deadlift. Three attempts per lift.",
+  },
+  {
+    id: "sport-14",
+    name: "Weight Lifting",
+    category: "sports",
+    description: "A weight lifting competition testing strength and technique.",
+    poster: "/assets/Weight_Lifting.jpg",
+    fee: 300,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "28 March 2026",
+    day: "Saturday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Sports Complex",
+    teamSize: "Individual",
+    prizes: "1st: ₹2,000 | 2nd: ₹1,000",
+    rules: "Snatch and clean & jerk. Three attempts per lift.",
+  },
+  {
+    id: "sport-15",
+    name: "Arm Wrestling",
+    category: "sports",
+    description: "A one-on-one arm wrestling competition for the strongest on campus.",
+    poster: "/assets/Arm_Wresteling.jpg",
+    fee: 150,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "3 April 2026",
+    day: "Friday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Sports Complex",
+    teamSize: "Individual",
+    prizes: "1st: ₹1,200 | 2nd: ₹600",
+    rules: "Left hand and right hand categories. Single elimination.",
+  },
+  {
+    id: "sport-16",
+    name: "Snooker",
+    category: "sports",
+    description: "A snooker tournament for players who value precision and patience.",
+    poster: "/assets/Snooker.jpg",
+    fee: 500,
+    registrationType: "individual",
+    minTeamSize: 1,
+    maxTeamSize: 1,
+    registrationOpen: true,
+    date: "30 March 2026",
+    day: "Monday",
+    time: "8:30 AM to 4:30 PM",
+    venue: "Phase 2 Sports Complex",
+    teamSize: "Individual",
+    prizes: "1st: ₹5,000 | 2nd: ₹2,000",
+    rules: "Single elimination. Frames format.",
+  },
+];
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN SEED EXECUTION
+   ═══════════════════════════════════════════════════════════════ */
+async function main() {
+  console.log("🌱 Starting Euphoria Database Seeding...\n");
+
+  // 1. Seed Categories
+  console.log("📁 Seeding Categories...");
+  for (const cat of categories) {
+    await prisma.category.upsert({
+      where: { slug: cat.slug },
+      update: {
+        name: cat.name,
+        number: cat.number,
+        color: cat.color,
+        description: cat.description,
+        keywords: cat.keywords,
+        posterUrl: cat.posterUrl,
+      },
+      create: cat,
+    });
+  }
+  console.log(`   ✓ ${categories.length} Categories seeded.`);
+
+  // 2. Seed Default Admin User
+  console.log("👤 Seeding Default Admin User...");
+  const adminEmail = process.env.ADMIN_EMAIL || "admin@sageuniversity.in";
+  const adminName = process.env.ADMIN_NAME || "Euphoria Administrator";
+  let adminPassword = process.env.ADMIN_PASSWORD;
+  let isTempPassword = false;
+
+  if (!adminPassword || adminPassword.trim() === "") {
+    // Generate a secure random temporary password if not provided in environment
+    adminPassword = "Euphoria@" + crypto.randomBytes(6).toString("hex") + "!";
+    isTempPassword = true;
+  }
+
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(adminPassword, saltRounds);
+
+  const admin = await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {
+      name: adminName,
+      role: Role.ADMIN,
+      passwordHash,
+      isEmailVerified: true,
+    },
+    create: {
+      email: adminEmail,
+      name: adminName,
+      role: Role.ADMIN,
+      passwordHash,
+      isEmailVerified: true,
+      emailVerifiedAt: new Date(),
+    },
+  });
+  console.log(`   ✓ Admin user seeded (${admin.email}).`);
+  if (isTempPassword) {
+    console.log(`   ⚠️  NOTICE: No ADMIN_PASSWORD was set in .env.`);
+    console.log(`   🔑 Generated Temporary Admin Password: ${adminPassword}`);
+    console.log(`   👉 You can set ADMIN_PASSWORD in your local backend/.env to use a custom password.`);
+  }
+
+  // 3. Seed Festival Pass
+  console.log("🎟️  Seeding Festival Pass...");
+  await prisma.pass.upsert({
+    where: { slug: euphoriaPass.slug },
+    update: {
+      name: euphoriaPass.name,
+      subtitle: euphoriaPass.subtitle,
+      tagline: euphoriaPass.tagline,
+      price: euphoriaPass.price,
+      status: euphoriaPass.status,
+      audiences: euphoriaPass.audiences,
+      features: euphoriaPass.features,
+    },
+    create: euphoriaPass,
+  });
+  console.log(`   ✓ 1 Festival Pass seeded (${euphoriaPass.name} - ${euphoriaPass.subtitle}).`);
+
+  // 4. Seed Sponsors
+  console.log("🤝 Seeding Sponsors...");
+  for (const sponsor of sponsors) {
+    await prisma.sponsor.upsert({
+      where: { id: sponsor.id },
+      update: {
+        name: sponsor.name,
+        logoUrl: sponsor.logoUrl,
+        tier: sponsor.tier,
+        isFeatured: sponsor.isFeatured,
+        order: sponsor.order,
+      },
+      create: sponsor,
+    });
+  }
+  console.log(`   ✓ ${sponsors.length} Sponsors seeded.`);
+
+  // 5. Seed Events
+  console.log("🎯 Seeding Events (43 events)...");
+  let eventCount = 0;
+  for (const ev of rawEvents) {
+    await prisma.event.upsert({
+      where: { id: ev.id },
+      update: {
+        slug: ev.id,
+        name: ev.name,
+        description: ev.description,
+        posterUrl: ev.poster,
+        categoryId: ev.category,
+        fee: ev.fee,
+        registrationType:
+          ev.registrationType === "group"
+            ? RegistrationType.GROUP
+            : RegistrationType.INDIVIDUAL,
+        minTeamSize: ev.minTeamSize,
+        maxTeamSize: ev.maxTeamSize,
+        // NOTE: registrationOpen intentionally omitted from update to preserve live status on re-seed
+        status: EventStatus.PUBLISHED,
+        date: ev.date,
+        day: ev.day,
+        time: ev.time,
+        venue: ev.venue,
+        prizes: ev.prizes,
+        rules: ev.rules,
+      },
+      create: {
+        id: ev.id,
+        slug: ev.id,
+        name: ev.name,
+        description: ev.description,
+        posterUrl: ev.poster,
+        categoryId: ev.category,
+        fee: ev.fee,
+        registrationType:
+          ev.registrationType === "group"
+            ? RegistrationType.GROUP
+            : RegistrationType.INDIVIDUAL,
+        minTeamSize: ev.minTeamSize,
+        maxTeamSize: ev.maxTeamSize,
+        registrationOpen: ev.registrationOpen,
+        status: EventStatus.PUBLISHED,
+        date: ev.date,
+        day: ev.day,
+        time: ev.time,
+        venue: ev.venue,
+        prizes: ev.prizes,
+        rules: ev.rules,
+      },
+    });
+    eventCount++;
+  }
+  console.log(`   ✓ ${eventCount} Events seeded.`);
+
+  // 6. Seed Schedules (Events with confirmed venue and time)
+  console.log("📅 Seeding Event Schedules...");
+  let scheduleCount = 0;
+  for (const ev of rawEvents) {
+    if (ev.date !== "TBA" && ev.venue !== "TBA") {
+      const schedId = `sched-${ev.id}`;
+      await prisma.schedule.upsert({
+        where: { id: schedId },
+        update: {
+          eventId: ev.id,
+          title: ev.name,
+          day: `${ev.day} (${ev.date})`,
+          timeString: ev.time,
+          venue: ev.venue,
+        },
+        create: {
+          id: schedId,
+          eventId: ev.id,
+          title: ev.name,
+          day: `${ev.day} (${ev.date})`,
+          timeString: ev.time,
+          venue: ev.venue,
+        },
+      });
+      scheduleCount++;
+    }
+  }
+  console.log(`   ✓ ${scheduleCount} Schedules seeded.`);
+
+  // 7. Verify and Print Summary
+  console.log("\n📊 Verification Summary from Database:");
+  const dbUserCount = await prisma.user.count();
+  const dbCatCount = await prisma.category.count();
+  const dbEventCount = await prisma.event.count();
+  const dbPassCount = await prisma.pass.count();
+  const dbSponsorCount = await prisma.sponsor.count();
+  const dbSchedCount = await prisma.schedule.count();
+
+  console.log(`   • Users:      ${dbUserCount}`);
+  console.log(`   • Categories: ${dbCatCount}`);
+  console.log(`   • Events:     ${dbEventCount}`);
+  console.log(`   • Passes:     ${dbPassCount}`);
+  console.log(`   • Sponsors:   ${dbSponsorCount}`);
+  console.log(`   • Schedules:  ${dbSchedCount}`);
+  console.log("\n✨ Euphoria Database Seeding Completed Successfully!");
+}
+
+main()
+  .catch((e) => {
+    console.error("❌ Seeding failed with error:", e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

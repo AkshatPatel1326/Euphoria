@@ -1,0 +1,463 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  ORGANIZER
+  PARTICIPANT
+}
+
+enum ParticipantCategory {
+  SAGE
+  OTHER_COLLEGE
+  GENERAL
+}
+
+enum RegistrationType {
+  INDIVIDUAL
+  GROUP
+}
+
+enum RegistrationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  UPI
+  CARD
+  NETBANKING
+  OTHER
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  COMPLETED
+  CANCELLED
+}
+
+enum PassStatus {
+  COMING_SOON
+  AVAILABLE
+  SOLD_OUT
+  INACTIVE
+}
+
+enum ContactStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  ARCHIVED
+}
+
+// ─────────────────────────────────────────────────────────────
+// USER & AUTHENTICATION
+// ─────────────────────────────────────────────────────────────
+
+model User {
+  id           String  @id @default(cuid())
+  email        String  @unique
+  passwordHash String?
+  name         String
+  phone        String?
+  avatarUrl    String?
+  role         Role    @default(PARTICIPANT)
+
+  // Participant profile details (matches Euphoria registration form)
+  participantCategory ParticipantCategory?
+  scholarNumber       String?
+  enrollmentNumber    String?
+  collegeName         String?
+  course              String?
+  year                String?
+  city                String?
+
+  // Auth verification flags
+  isEmailVerified Boolean   @default(false)
+  emailVerifiedAt DateTime?
+
+  // Relations
+  organizedEvents Event[]        @relation("EventOrganizer")
+  registrations   Registration[]
+  ledTeams        Team[]         @relation("TeamLeader")
+  teamMemberships TeamMember[]
+  passPurchases   PassPurchase[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+// ─────────────────────────────────────────────────────────────
+// EVENT CATEGORIES
+// ─────────────────────────────────────────────────────────────
+
+model Category {
+  id          String  @id @default(cuid())
+  slug        String  @unique // e.g. "cultural", "literary-management", "science-tech", "sports"
+  name        String // e.g. "Cultural", "Literary & Management"
+  number      String? // e.g. "01", "02", "03", "04"
+  color       String? // e.g. "#A232A0"
+  description String? @db.Text
+  keywords    String? // e.g. "Dance · Music · Fashion · Performance"
+  posterUrl   String?
+
+  events Event[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+}
+
+// ─────────────────────────────────────────────────────────────
+// EVENTS
+// ─────────────────────────────────────────────────────────────
+
+model Event {
+  id          String  @id @default(cuid())
+  slug        String? @unique
+  name        String
+  description String  @db.Text
+  posterUrl   String?
+
+  // Category relation
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  // Optional organizer assignment
+  organizerId String?
+  organizer   User?   @relation("EventOrganizer", fields: [organizerId], references: [id], onDelete: SetNull)
+
+  // Registration & Fee details
+  fee                  Float            @default(0) // Centralized fee amount in INR
+  registrationType     RegistrationType @default(INDIVIDUAL)
+  minTeamSize          Int              @default(1)
+  maxTeamSize          Int              @default(1)
+  registrationOpen     Boolean          @default(false)
+  capacity             Int? // Maximum allowed registrations (null = unlimited)
+  registrationDeadline DateTime?
+
+  // Lifecycle status
+  status EventStatus @default(PUBLISHED)
+
+  // Schedule & Venue details
+  date  String? // e.g. "8 April 2026"
+  day   String? // e.g. "Wednesday"
+  time  String? // e.g. "11:00 AM to 2:00 PM"
+  venue String? // e.g. "Kalpvriksha Auditorium"
+
+  // Competition info
+  prizes String? // e.g. "1st: ₹3,100 | 2nd: ₹2,100"
+  rules  String? @db.Text
+
+  // Relations
+  schedules     Schedule[]
+  registrations Registration[]
+  teams         Team[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([status])
+  @@index([registrationOpen])
+}
+
+// ─────────────────────────────────────────────────────────────
+// SCHEDULE & TIMELINE
+// ─────────────────────────────────────────────────────────────
+
+model Schedule {
+  id      String  @id @default(cuid())
+  eventId String?
+  event   Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  title       String // e.g. "Solo Dance Elimination Round"
+  description String?   @db.Text
+  day         String? // e.g. "Day 1 - Wednesday"
+  date        DateTime?
+  startTime   DateTime?
+  endTime     DateTime?
+  timeString  String? // e.g. "11:00 AM to 2:00 PM"
+  venue       String? // e.g. "Kalpvriksha Auditorium"
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([eventId])
+  @@index([date])
+}
+
+// ─────────────────────────────────────────────────────────────
+// TEAMS & MEMBERS
+// ─────────────────────────────────────────────────────────────
+
+model Team {
+  id   String @id @default(cuid())
+  name String
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Restrict)
+
+  leaderId String?
+  leader   User?   @relation("TeamLeader", fields: [leaderId], references: [id], onDelete: SetNull)
+
+  leaderName  String?
+  leaderEmail String?
+  leaderPhone String?
+
+  members      TeamMember[]
+  registration Registration?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([eventId])
+  @@index([leaderId])
+}
+
+model TeamMember {
+  id     String @id @default(cuid())
+  teamId String
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  // Optional link if the team member has a registered account
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // Member details entered during team registration
+  fullName      String
+  email         String
+  phone         String
+  scholarNumber String?
+  collegeName   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([teamId])
+  @@index([userId])
+  @@index([email])
+}
+
+// ─────────────────────────────────────────────────────────────
+// REGISTRATIONS
+// ─────────────────────────────────────────────────────────────
+
+model Registration {
+  id                 String @id @default(cuid())
+  registrationNumber String @unique // e.g. "EUPH-2026-REG-XXXXX" for badge/tickets
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Restrict)
+
+  // Team reference (null if individual event)
+  teamId String? @unique
+  team   Team?   @relation(fields: [teamId], references: [id], onDelete: SetNull)
+
+  participantCategory ParticipantCategory
+  status              RegistrationStatus  @default(PENDING)
+
+  // Participant snapshot at registration time
+  fullName         String
+  email            String
+  phone            String
+  scholarNumber    String?
+  enrollmentNumber String?
+  collegeName      String?
+  course           String?
+  year             String?
+  city             String?
+
+  // Email verification tracking
+  isEmailVerified Boolean   @default(false)
+  emailVerifiedAt DateTime?
+
+  // Payment transaction
+  payment Payment?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([eventId])
+  @@index([status])
+  @@index([registrationNumber])
+  @@index([email])
+}
+
+// ─────────────────────────────────────────────────────────────
+// PAYMENTS & GATEWAY TRANSACTIONS
+// ─────────────────────────────────────────────────────────────
+
+model Payment {
+  id       String         @id @default(cuid())
+  amount   Float // In INR
+  currency String         @default("INR")
+  method   PaymentMethod?
+  status   PaymentStatus  @default(PENDING)
+
+  // Easebuzz / Gateway Identifiers
+  transactionId    String? @unique // Gateway transaction ID / Easebuzz txnid
+  gatewayReference String? // Easebuzz payment ID or bank ref
+  gatewayResponse  Json? // Full webhook payload for audit and dispute resolution
+
+  // Target of payment: Event Registration or Fest Pass
+  registrationId String?       @unique
+  registration   Registration? @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  passPurchaseId String?       @unique
+  passPurchase   PassPurchase? @relation(fields: [passPurchaseId], references: [id], onDelete: Cascade)
+
+  paidAt    DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([status])
+  @@index([transactionId])
+  @@index([gatewayReference])
+}
+
+// ─────────────────────────────────────────────────────────────
+// FESTIVAL PASSES
+// ─────────────────────────────────────────────────────────────
+
+model Pass {
+  id        String     @id @default(cuid())
+  slug      String     @unique // e.g. "euphoria-2026-general"
+  name      String // e.g. "EUPHORIA 2026"
+  subtitle  String? // e.g. "GENERAL PASS"
+  tagline   String? // e.g. "Your entry into the celebration."
+  price     Float? // null = coming soon / free / TBA
+  status    PassStatus @default(COMING_SOON)
+  features  String[] // Array of feature descriptions
+  audiences String[] // Target audiences
+
+  purchases PassPurchase[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([status])
+}
+
+model PassPurchase {
+  id         String @id @default(cuid())
+  passNumber String @unique // e.g. "EUPH-PASS-XXXXX"
+
+  passId String
+  pass   Pass   @relation(fields: [passId], references: [id], onDelete: Restrict)
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  fullName            String
+  email               String
+  phone               String
+  participantCategory ParticipantCategory
+  collegeName         String?
+  quantity            Int                 @default(1)
+
+  isEmailVerified Boolean            @default(false)
+  emailVerifiedAt DateTime?
+
+  status  RegistrationStatus @default(PENDING)
+  payment Payment?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([passId])
+  @@index([passNumber])
+  @@index([status])
+  @@index([email])
+}
+
+// ─────────────────────────────────────────────────────────────
+// EMAIL VERIFICATION OTP
+// ─────────────────────────────────────────────────────────────
+
+model VerificationOtp {
+  id        String   @id @default(cuid())
+  email     String
+  otpHash   String
+  purpose   String   // "EVENT_REGISTRATION" | "PASS_PURCHASE" | "GUEST_LOOKUP" | "REGISTRATION_PAYMENT" | "PASS_PAYMENT"
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([email, purpose])
+  @@index([expiresAt])
+}
+
+// ─────────────────────────────────────────────────────────────
+// CONTACT / ENQUIRIES & HELPDESK
+// ─────────────────────────────────────────────────────────────
+
+model ContactMessage {
+  id      String        @id @default(cuid())
+  name    String
+  email   String
+  phone   String?
+  subject String?
+  message String        @db.Text
+  status  ContactStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([email])
+}
+
+// ─────────────────────────────────────────────────────────────
+// SPONSORS & PARTNERS
+// ─────────────────────────────────────────────────────────────
+
+model Sponsor {
+  id         String  @id @default(cuid())
+  name       String // e.g. "Radio SAGE", "Title Sponsor"
+  logoUrl    String
+  tier       String? // e.g. "Flagship", "Media Partner", "Associate"
+  websiteUrl String?
+  order      Int     @default(0)
+  isFeatured Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isFeatured])
+  @@index([order])
+}
